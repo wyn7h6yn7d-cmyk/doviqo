@@ -17,11 +17,13 @@ export function Reveal({
   return (
     <motion.div
       className={cn(className)}
-      initial={reduce ? false : { opacity: 0, y: 12 }}
+      initial={reduce ? false : { opacity: 0, y: 14 }}
       whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-120px" }}
+      viewport={{ once: true, margin: "-140px" }}
       transition={
-        reduce ? undefined : { duration: 0.7, ease: [0.2, 0.9, 0.2, 1], delay }
+        reduce
+          ? undefined
+          : { duration: 0.85, ease: [0.16, 1, 0.3, 1], delay }
       }
     >
       {children}

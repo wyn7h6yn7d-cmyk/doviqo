@@ -17,13 +17,19 @@ export function SectionHeading({
   return (
     <div className={cn(isCenter ? "text-center" : "text-left", className)}>
       {eyebrow ? (
-        <p className="text-xs font-medium tracking-[0.18em] uppercase text-white/60">
+        <div
+          className={cn(
+            "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-medium tracking-[0.22em] uppercase text-white/62 backdrop-blur",
+            isCenter ? "mx-auto" : "",
+          )}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-white/35" />
           {eyebrow}
-        </p>
+        </div>
       ) : null}
       <h2
         className={cn(
-          "mt-3 text-balance text-2xl font-semibold tracking-tight text-white sm:text-3xl",
+          "mt-4 text-balance text-2xl font-semibold tracking-[-0.02em] text-white sm:text-4xl",
           isCenter ? "mx-auto max-w-2xl" : "max-w-2xl",
         )}
       >
@@ -32,8 +38,8 @@ export function SectionHeading({
       {description ? (
         <p
           className={cn(
-            "mt-3 text-pretty text-sm leading-7 text-white/65 sm:text-base",
-            isCenter ? "mx-auto max-w-2xl" : "max-w-2xl",
+            "mt-4 text-pretty text-sm leading-7 text-white/62 sm:text-[15px] sm:leading-7",
+            isCenter ? "mx-auto max-w-2xl" : "max-w-[56ch]",
           )}
         >
           {description}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
@@ -41,12 +41,14 @@ function Ribbon({
   z,
   tint,
   rotation,
+  segments = 220,
   speed = 0.12,
   radius = 1.55,
 }: {
   z: number;
   tint: string;
   rotation: [number, number, number];
+  segments?: number;
   speed?: number;
   radius?: number;
 }) {
@@ -64,8 +66,8 @@ function Ribbon({
   }, []);
 
   const geometry = useMemo(() => {
-    return new THREE.TubeGeometry(curve, 220, 0.12, 10, false);
-  }, [curve]);
+    return new THREE.TubeGeometry(curve, segments, 0.12, 10, false);
+  }, [curve, segments]);
 
   useFrame((state) => {
     if (!ref.current) return;
@@ -130,6 +132,7 @@ function ParallaxRig({ children }: { children: React.ReactNode }) {
 }
 
 function Scene() {
+  // default segments are set at callsites
   return (
     <ParallaxRig>
       <SoftGlow
@@ -177,6 +180,15 @@ function Scene() {
 
 export function HeroBackground3D() {
   const reduce = useReducedMotion();
+  const [isSmall, setIsSmall] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const apply = () => setIsSmall(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
 
   if (reduce) {
     return (
@@ -195,7 +207,7 @@ export function HeroBackground3D() {
     <div className="absolute inset-0" aria-hidden="true">
       <Canvas
         className="pointer-events-none"
-        dpr={[1, 1.5]}
+        dpr={isSmall ? [1, 1.25] : [1, 1.5]}
         camera={{ position: [0, 0, 4.2], fov: 42 }}
         gl={{
           antialias: false,
@@ -219,16 +231,49 @@ export function HeroBackground3D() {
           color="#8fffe3"
         />
 
-        <Scene />
+        {/* On small screens: keep it calmer + cheaper */}
+        {isSmall ? (
+          <ParallaxRig>
+            <SoftGlow
+              position={[-1.4, 0.7, -1.4]}
+              color="#a0aaff"
+              scale={3.8}
+              opacity={0.12}
+            />
+            <SoftGlow
+              position={[1.3, -0.2, -1.2]}
+              color="#78ffdc"
+              scale={3.3}
+              opacity={0.09}
+            />
+            <Ribbon
+              z={-1.6}
+              tint="#cfd6ff"
+              rotation={[0.2, 0.2, -0.1]}
+              speed={0.06}
+              segments={140}
+            />
+            <Ribbon
+              z={-0.8}
+              tint="#8fffe3"
+              rotation={[0.1, 0.35, 0.08]}
+              speed={0.09}
+              radius={1.45}
+              segments={140}
+            />
+          </ParallaxRig>
+        ) : (
+          <Scene />
+        )}
 
         <Sparkles
-          count={34}
-          size={1.7}
-          speed={0.22}
-          opacity={0.16}
+          count={isSmall ? 18 : 34}
+          size={isSmall ? 1.4 : 1.7}
+          speed={isSmall ? 0.18 : 0.22}
+          opacity={isSmall ? 0.12 : 0.16}
           scale={[8, 4.5, 6]}
           color="#cfd6ff"
-          noise={0.28}
+          noise={isSmall ? 0.22 : 0.28}
         />
       </Canvas>
     </div>

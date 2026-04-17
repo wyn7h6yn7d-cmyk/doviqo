@@ -20,7 +20,7 @@ const pains = [
 
 export function Problem() {
   return (
-    <section className="py-16 sm:py-20">
+    <section className="py-14 sm:py-18 lg:py-20">
       <Container>
         <Reveal>
           <SectionHeading

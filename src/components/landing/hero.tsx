@@ -212,16 +212,23 @@ function FloatingProductPreview({ reduce }: { reduce: boolean }) {
     : { y: [0, -8, 0], rotateZ: [0, 0.35, 0] };
 
   return (
-    <div className="relative mx-auto w-full max-w-[520px] md:max-w-none">
+    <div className="mx-auto w-full max-w-[560px] md:max-w-none">
       <div className="absolute -inset-10 -z-10 rounded-[40px] bg-white/[0.03] blur-2xl" />
-      <div className="relative [perspective:1200px]">
+      {/* Mobile/tablet: stack panels (no overlaps). Desktop: layered depth. */}
+      <div className="grid gap-4 sm:gap-5 lg:hidden">
+        <ActionItemsPanel />
+        <FollowUpPanel />
+        <OwnersPanel />
+      </div>
+
+      <div className="relative hidden lg:block [perspective:1200px]">
         <motion.div
           className="relative"
           animate={float}
           transition={
             reduce
               ? undefined
-              : { duration: 6.5, ease: "easeInOut", repeat: Infinity }
+              : { duration: 7.8, ease: [0.16, 1, 0.3, 1], repeat: Infinity }
           }
         >
           <div className="relative [transform:rotateY(-9deg)_rotateX(4deg)]">
@@ -258,7 +265,12 @@ function FloatingProductPreview({ reduce }: { reduce: boolean }) {
           transition={
             reduce
               ? undefined
-              : { duration: 8.2, ease: "easeInOut", repeat: Infinity, delay: 0.35 }
+              : {
+                  duration: 9.4,
+                  ease: [0.16, 1, 0.3, 1],
+                  repeat: Infinity,
+                  delay: 0.35,
+                }
           }
         >
           <div className="opacity-90 [transform:translateZ(-90px)]">
@@ -281,31 +293,31 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/55 to-black/85" />
       </div>
 
-      <Container className="noise relative pt-14 sm:pt-20">
-        <div className="grid items-center gap-10 pb-12 pt-10 md:grid-cols-[1.05fr_0.95fr] md:gap-10 md:pb-16">
+      <Container className="noise relative pt-12 sm:pt-18 lg:pt-20">
+        <div className="grid items-center gap-10 pb-10 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:pb-16">
           <div>
             <Reveal>
-              <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-white/70 backdrop-blur">
-                <span className="h-1.5 w-1.5 rounded-full bg-white/55" />
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-medium tracking-[0.20em] uppercase text-white/70 backdrop-blur">
+                <span className="h-1.5 w-1.5 rounded-full bg-white/45" />
                 Post-meeting execution for small teams
               </p>
             </Reveal>
 
             <Reveal delay={0.05}>
-              <h1 className="mt-5 text-balance text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl">
+              <h1 className="mt-6 text-balance text-4xl font-semibold leading-[1.02] tracking-[-0.03em] text-white sm:text-6xl">
                 Meetings end. Work slips. Doviqo fixes that.
               </h1>
             </Reveal>
 
             <Reveal delay={0.1}>
-              <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-white/68 sm:text-lg">
+              <p className="mt-6 max-w-xl text-pretty text-base leading-7 text-white/64 sm:text-[17px] sm:leading-8">
                 Turn meeting notes and transcripts into clear owners, deadlines,
                 follow-ups, and next steps in minutes.
               </p>
             </Reveal>
 
             <Reveal delay={0.15}>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button href="#cta" className="w-full sm:w-auto">
                   Get early access
                 </Button>
@@ -317,7 +329,7 @@ export function Hero() {
                   See how it works
                 </Button>
               </div>
-              <p className="mt-3 text-xs text-white/50">
+              <p className="mt-4 text-xs leading-6 text-white/50">
                 Built for small teams. No recorder. Just execution you can ship.
               </p>
             </Reveal>

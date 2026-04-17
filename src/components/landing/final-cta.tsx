@@ -14,7 +14,7 @@ export function FinalCta() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <section id="cta" className="py-16 sm:py-20">
+    <section id="cta" className="py-14 sm:py-18 lg:py-20">
       <Container>
         <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
           <Reveal className="lg:col-span-6">

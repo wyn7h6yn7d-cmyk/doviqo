@@ -6,20 +6,20 @@ type ButtonVariant = "primary" | "secondary" | "ghost";
 type ButtonSize = "sm" | "md";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25 focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-white text-black hover:bg-white/92 shadow-[0_10px_30px_rgba(0,0,0,0.40)] active:translate-y-[1px]",
+    "bg-white text-black shadow-[0_18px_55px_rgba(0,0,0,0.55)] hover:bg-white/92 hover:shadow-[0_22px_70px_rgba(0,0,0,0.60)] active:translate-y-[1px]",
   secondary:
-    "bg-white/8 text-white hover:bg-white/12 ring-1 ring-white/14 backdrop-blur active:translate-y-[1px]",
+    "bg-white/[0.06] text-white ring-1 ring-white/12 backdrop-blur hover:bg-white/[0.10] hover:ring-white/16 active:translate-y-[1px]",
   ghost:
-    "bg-transparent text-white/80 hover:text-white hover:bg-white/6 active:translate-y-[1px]",
+    "bg-transparent text-white/78 hover:text-white hover:bg-white/[0.06] active:translate-y-[1px]",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-10 px-4 text-sm",
-  md: "h-11 px-5 text-sm",
+  sm: "h-10 px-4 text-[13px]",
+  md: "h-11 px-5 text-[13px]",
 };
 
 export function Button({
