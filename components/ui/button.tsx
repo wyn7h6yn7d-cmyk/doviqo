@@ -6,20 +6,20 @@ type ButtonVariant = "primary" | "secondary" | "ghost";
 type ButtonSize = "sm" | "md";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25 focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex touch-manipulation items-center justify-center gap-2 rounded-full font-medium tracking-tight transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.32)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] disabled:pointer-events-none disabled:opacity-45 active:scale-[0.99]";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-white text-black shadow-[0_18px_55px_rgba(0,0,0,0.55)] hover:bg-white/92 hover:shadow-[0_22px_70px_rgba(0,0,0,0.60)] active:translate-y-[1px]",
+    "bg-[var(--fg)] text-white shadow-float hover:bg-[var(--fg-hover)] hover:shadow-[0_1px_0_rgba(255,255,255,0.12)_inset,0_14px_40px_-10px_rgba(79,70,229,0.22)]",
   secondary:
-    "bg-white/[0.06] text-white ring-1 ring-white/12 backdrop-blur hover:bg-white/[0.10] hover:ring-white/16 active:translate-y-[1px]",
+    "border border-[var(--border-strong)] bg-white text-[var(--fg)] shadow-soft-sm hover:border-[color-mix(in_srgb,var(--border-strong)_70%,rgb(var(--accent)))] hover:bg-[color-mix(in_srgb,white_96%,var(--surface-muted))] hover:shadow-soft-md",
   ghost:
-    "bg-transparent text-white/78 hover:text-white hover:bg-white/[0.06] active:translate-y-[1px]",
+    "bg-transparent text-[var(--foreground-muted)] hover:text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.06)]",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-10 px-4 text-[13px]",
-  md: "h-11 px-5 text-[13px]",
+  sm: "min-h-10 min-w-[2.5rem] px-4 text-[13px]",
+  md: "min-h-11 min-w-[2.75rem] px-5 text-[13px]",
 };
 
 export function Button({

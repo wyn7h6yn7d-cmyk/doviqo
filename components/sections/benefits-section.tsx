@@ -8,29 +8,47 @@ export function BenefitsSection() {
   return (
     <section
       id={benefits.id}
-      className="section-y border-t border-white/[0.05] bg-black/[0.12]"
-      aria-labelledby="why-heading"
+      className="section-y relative overflow-hidden border-b border-[var(--border)] bg-[var(--bg)]"
+      aria-labelledby="benefits-heading"
     >
-      <SectionContainer>
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_55%_at_20%_0%,rgb(var(--accent)/0.07),transparent_55%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/50 via-transparent to-[var(--bg)]"
+        aria-hidden
+      />
+
+      <SectionContainer className="relative">
         <Reveal>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-indigo-600">
+            {benefits.eyebrow}
+          </p>
           <h2
-            id="why-heading"
-            className="max-w-2xl text-balance text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl"
+            id="benefits-heading"
+            className="mt-3 max-w-3xl text-balance text-[1.65rem] font-semibold tracking-[-0.035em] text-[var(--fg)] sm:text-[1.85rem] lg:text-[2rem]"
           >
             {benefits.title}
           </h2>
-          <p className="mt-4 max-w-2xl text-pretty text-[15px] leading-relaxed text-white/55 sm:text-base">
-            {benefits.intro}
+          <p className="mt-4 max-w-2xl text-pretty text-[15px] leading-[1.65] text-[var(--foreground-muted)] sm:text-[17px]">
+            {benefits.lead}
           </p>
         </Reveal>
 
-        <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:gap-4">
+        <ul className="mt-12 grid gap-6 sm:grid-cols-2">
           {benefits.items.map((item, i) => (
-            <Reveal key={item.title} delay={i * 0.04}>
-              <li className="rounded-2xl border border-white/[0.07] bg-white/[0.02] px-5 py-4 sm:px-6 sm:py-5">
-                <p className="text-sm font-medium text-white/88">{item.title}</p>
-                <p className="mt-2 text-sm leading-relaxed text-white/52">
-                  {item.text}
+            <Reveal key={item.title} delay={0.06 * (i + 1)}>
+              <li className="h-full rounded-[1.1rem] border border-[var(--border)] bg-white p-6 shadow-float backdrop-blur-sm sm:p-7">
+                <div
+                  className="mb-4 h-px w-10 rounded-full bg-gradient-to-r from-indigo-500/80 to-indigo-300/40"
+                  aria-hidden
+                />
+                <h3 className="text-[17px] font-semibold leading-snug tracking-[-0.02em] text-[var(--fg)]">
+                  {item.title}
+                </h3>
+                <p className="mt-2.5 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+                  {item.body}
                 </p>
               </li>
             </Reveal>

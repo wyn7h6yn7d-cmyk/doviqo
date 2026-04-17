@@ -1,23 +1,31 @@
 @import "tailwindcss";
 
-/* ─── Doviqo design language — premium dark, calm, expensive ─── */
+/* ─── Doviqo — airy, cool-neutral, premium (no muddy charcoal) ─── */
 :root {
-  --bg: #09090b;
-  --surface: #111115;
-  --fg: #fafafa;
-  --foreground-muted: rgba(255, 255, 255, 0.68);
-  --border: rgba(255, 255, 255, 0.08);
+  --bg: #f6f8fc;
+  --bg-elevated: #fafbfd;
+  --bg-warm: #f9f8fc;
+  --surface: #ffffff;
+  --surface-muted: #eef2f9;
+  /* Pehme tumesinine, mitte söehall */
+  --fg: #1a2332;
+  --fg-hover: #2a3444;
+  --foreground-muted: #5a6478;
+  --foreground-subtle: #768090;
+  --border: rgba(15, 23, 42, 0.048);
+  --border-strong: rgba(15, 23, 42, 0.078);
+  --border-hairline: rgba(255, 255, 255, 0.65);
 
-  /* Muted blue-violet accent — not neon */
-  --accent: 139 145 196;
-  --accent-solid: rgb(139, 145, 196);
+  --accent: 79 70 229;
+  --accent-soft: rgba(79, 70, 229, 0.08);
 
-  /* Atmospheric sheen (tasteful, low luminance) */
-  --sheen-a: rgba(139, 145, 196, 0.09);
-  --sheen-b: rgba(255, 255, 255, 0.045);
-  --sheen-c: rgba(110, 120, 180, 0.05);
+  --sheen-a: rgba(79, 70, 229, 0.035);
+  --sheen-b: rgba(148, 163, 184, 0.045);
 
-  color-scheme: dark;
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.92) inset,
+    0 1px 2px rgba(15, 23, 42, 0.04), 0 20px 48px -16px rgba(15, 23, 42, 0.06);
+
+  color-scheme: light;
 }
 
 @theme inline {
@@ -48,30 +56,49 @@ body {
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: radial-gradient(
+      ellipse 120% 80% at 50% -20%,
+      rgb(var(--accent) / 0.045),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 90% 55% at 100% 0%,
+      rgba(129, 140, 248, 0.06),
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 70% 45% at 0% 100%,
+      rgba(255, 255, 255, 0.75),
+      transparent 55%
+    );
   color: var(--fg);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-/* Refined selection — accent tint, readable text */
+:focus-visible {
+  outline: 2px solid rgb(var(--accent) / 0.42);
+  outline-offset: 3px;
+}
+
 ::selection {
-  background: rgb(var(--accent) / 0.22);
+  background: rgb(var(--accent) / 0.12);
   color: var(--fg);
 }
 
-/* Clean, minimal scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  scrollbar-color: rgba(15, 23, 42, 0.09) transparent;
 }
 
 *::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
 }
 
 *::-webkit-scrollbar-track {
@@ -79,18 +106,14 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.08);
   border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.18);
-  background-clip: padding-box;
+  background: rgba(15, 23, 42, 0.14);
 }
 
-/* Subtle film grain — cheap, no extra requests */
 .noise {
   position: relative;
 }
@@ -99,25 +122,59 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.038;
+  opacity: 0.012;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
+  mix-blend-mode: multiply;
 }
 
-/* Kompaktne vertikaal — fokus, mitte lõputu tühimik */
+.mesh-grid {
+  background-image: linear-gradient(
+      rgba(15, 23, 42, 0.02) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(
+    80% 70% at 50% 40%,
+    black 22%,
+    transparent 100%
+  );
+}
+
+.bg-page-studio {
+  background: linear-gradient(
+    180deg,
+    var(--bg) 0%,
+    var(--bg-elevated) 44%,
+    var(--bg) 100%
+  );
+}
+
+main [id],
+section[id] {
+  scroll-margin-top: calc(3.75rem + env(safe-area-inset-top, 0px));
+}
+
+@media (min-width: 768px) {
+  main [id],
+  section[id] {
+    scroll-margin-top: calc(4rem + env(safe-area-inset-top, 0px));
+  }
+}
+
 .section-y {
-  padding-top: clamp(3rem, 5vw, 4rem);
-  padding-bottom: clamp(3rem, 5vw, 4rem);
+  padding-top: clamp(3.25rem, 5.5vw, 4.5rem);
+  padding-bottom: clamp(3.25rem, 5.5vw, 4.5rem);
 }
 @media (min-width: 640px) {
   .section-y {
-    padding-top: clamp(3.5rem, 5.5vw, 4.5rem);
-    padding-bottom: clamp(3.5rem, 5.5vw, 4.5rem);
+    padding-top: clamp(3.75rem, 6vw, 5.25rem);
+    padding-bottom: clamp(3.75rem, 6vw, 5.25rem);
   }
 }
 @media (min-width: 1024px) {
   .section-y {
-    padding-top: clamp(4rem, 6vw, 5rem);
-    padding-bottom: clamp(4rem, 6vw, 5rem);
+    padding-top: clamp(4.25rem, 6.5vw, 5.75rem);
+    padding-bottom: clamp(4.25rem, 6.5vw, 5.75rem);
   }
 }

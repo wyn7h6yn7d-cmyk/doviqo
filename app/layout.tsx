@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { siteMeta, skipLink } from "@/lib/site-content";
@@ -7,16 +7,25 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#f6f8fc",
+};
 
 export const metadata: Metadata = {
   title: siteMeta.title,
   description: siteMeta.description,
+  keywords: [...siteMeta.keywords],
   metadataBase: new URL("https://doviqo.com"),
   applicationName: "Doviqo",
   alternates: { canonical: "/" },
@@ -27,11 +36,17 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: "Doviqo",
+    locale: "et_EE",
   },
   twitter: {
     card: "summary_large_image",
     title: siteMeta.title,
     description: siteMeta.description,
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
   },
 };
 
@@ -48,7 +63,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-black focus:shadow-lg"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--fg)] focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent)/0.45)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]"
         >
           {skipLink}
         </a>

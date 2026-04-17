@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Kerge pind — ilma agressiivse hover’ita (launch-tase, mitte template). */
+/** Kerge pind — hele teema, kerge klaas. */
 export function Card({
   className,
   outerClassName,
@@ -14,12 +14,12 @@ export function Card({
     <div className={cn("relative", outerClassName)}>
       <div
         className={cn(
-          "relative rounded-2xl border border-white/[0.09] bg-white/[0.03] shadow-layer-1 backdrop-blur-md",
+          "relative rounded-2xl border border-[var(--border)] bg-white/95 shadow-float backdrop-blur-sm",
           className,
         )}
       >
-        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/[0.04]" />
-        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(380px_200px_at_20%_0%,rgba(255,255,255,0.05),transparent_58%)] opacity-70" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-[var(--border)]" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-surface-sheen opacity-80" />
         {children}
       </div>
     </div>
