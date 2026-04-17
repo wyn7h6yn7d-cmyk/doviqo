@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+/* ─── Doviqo design language — premium dark, calm, expensive ─── */
+:root {
+  --bg: #09090b;
+  --surface: #111115;
+  --fg: #fafafa;
+  --foreground-muted: rgba(255, 255, 255, 0.68);
+  --border: rgba(255, 255, 255, 0.08);
+
+  /* Muted blue-violet accent — not neon */
+  --accent: 139 145 196;
+  --accent-solid: rgb(139, 145, 196);
+
+  /* Atmospheric sheen (tasteful, low luminance) */
+  --sheen-a: rgba(139, 145, 196, 0.09);
+  --sheen-b: rgba(255, 255, 255, 0.045);
+  --sheen-c: rgba(110, 120, 180, 0.05);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-surface: var(--surface);
+  --color-muted-foreground: var(--foreground-muted);
+  --color-border: var(--border);
+  --color-accent: rgb(var(--accent) / <alpha-value>);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Refined selection — accent tint, readable text */
+::selection {
+  background: rgb(var(--accent) / 0.22);
+  color: var(--fg);
+}
+
+/* Clean, minimal scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+  background-clip: padding-box;
+}
+
+/* Subtle film grain — cheap, no extra requests */
+.noise {
+  position: relative;
+}
+.noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Section vertical rhythm — use on `<section>` wrappers */
+.section-y {
+  padding-top: clamp(3.75rem, 6vw, 5rem);
+  padding-bottom: clamp(3.75rem, 6vw, 5rem);
+}
+@media (min-width: 640px) {
+  .section-y {
+    padding-top: clamp(4.5rem, 7vw, 5.5rem);
+    padding-bottom: clamp(4.5rem, 7vw, 5.5rem);
+  }
+}
+@media (min-width: 1024px) {
+  .section-y {
+    padding-top: clamp(5rem, 8vw, 6rem);
+    padding-bottom: clamp(5rem, 8vw, 6rem);
+  }
+}
+
+/* Atmospheric glow accents — accent-forward, cinematic */
+.glow-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.glow-layer::before,
+.glow-layer::after {
+  content: "";
+  position: absolute;
+  filter: blur(44px);
+  opacity: 0.48;
+  transform: translateZ(0);
+}
+.glow-layer::before {
+  width: 680px;
+  height: 400px;
+  left: -240px;
+  top: -200px;
+  background: radial-gradient(
+    closest-side,
+    rgb(var(--accent) / 0.14),
+    transparent 72%
+  );
+}
+.glow-layer::after {
+  width: 560px;
+  height: 380px;
+  right: -220px;
+  top: -100px;
+  background: radial-gradient(
+    closest-side,
+    rgb(var(--accent) / 0.08),
+    transparent 74%
+  );
+}
