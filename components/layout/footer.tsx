@@ -1,14 +1,12 @@
+import { footer } from "@/lib/site-content";
 import { SectionContainer } from "@/components/layout/section-container";
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 py-10">
-      <SectionContainer className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-medium tracking-tight text-white/80">
-          Doviqo
-        </p>
-        <p className="text-xs text-white/45">
-          Doviqo — vestlustest selged järgmised sammud.
+    <footer className="border-t border-white/[0.08] py-10">
+      <SectionContainer>
+        <p className="text-center text-[13px] leading-relaxed text-white/45 sm:text-left">
+          {footer.tagline}
         </p>
       </SectionContainer>
     </footer>

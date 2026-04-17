@@ -1,6 +1,5 @@
 export type WaitlistFormValues = {
   email: string;
-  teamSize: "1" | "2-10" | "11-25" | "26-50" | "50+";
 };
 
 export type WaitlistSubmitResult =
@@ -11,23 +10,24 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim());
 }
 
-export function validateWaitlist(values: WaitlistFormValues) {
+export function validateWaitlist(
+  values: WaitlistFormValues,
+  messages: { empty: string; invalid: string },
+) {
   const errors: Partial<Record<keyof WaitlistFormValues, string>> = {};
   const email = values.email.trim();
-  if (!email) errors.email = "Sisesta e-posti aadress.";
-  else if (!isValidEmail(email))
-    errors.email = "Sisesta kehtiv töökasutaja e-post.";
+  if (!email) errors.email = messages.empty;
+  else if (!isValidEmail(email)) errors.email = messages.invalid;
   return errors;
 }
 
 /**
- * Placeholder submit function.
- * Later: replace with a real call (e.g. POST `/api/waitlist`) and persist to DB.
+ * Esialgne „submit“ — hiljem asenda päris API kõnega (nt POST /api/waitlist).
  */
 export async function submitWaitlist(
   values: WaitlistFormValues,
 ): Promise<WaitlistSubmitResult> {
   void values;
-  await new Promise((r) => setTimeout(r, 650));
+  await new Promise((r) => setTimeout(r, 700));
   return { ok: true };
 }

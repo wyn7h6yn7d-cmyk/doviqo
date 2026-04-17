@@ -1,12 +1,10 @@
-import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
-import { HeroSection } from "@/components/hero/hero-section";
-import { TrustStrip } from "@/components/sections/trust-strip";
-import { ProblemSection } from "@/components/sections/problem-section";
-import { HowItWorksSection } from "@/components/sections/how-it-works-section";
-import { ProductPreviewSection } from "@/components/sections/product-preview-section";
-import { WhyDoviqoSection } from "@/components/sections/why-doviqo-section";
-import { FinalCtaSection } from "@/components/sections/final-cta-section";
+import { Footer } from "@/components/layout/footer";
+import { HeroSection } from "@/components/sections/hero-section";
+import { DemoSection } from "@/components/sections/demo-section";
+import { HowSection } from "@/components/sections/how-section";
+import { BenefitsSection } from "@/components/sections/benefits-section";
+import { WaitlistSection } from "@/components/sections/waitlist-section";
 
 export default function Home() {
   return (
@@ -14,12 +12,10 @@ export default function Home() {
       <Navbar />
       <main id="main-content" tabIndex={-1}>
         <HeroSection />
-        <TrustStrip />
-        <ProblemSection />
-        <HowItWorksSection />
-        <ProductPreviewSection />
-        <WhyDoviqoSection />
-        <FinalCtaSection />
+        <DemoSection />
+        <HowSection />
+        <BenefitsSection />
+        <WaitlistSection />
       </main>
       <Footer />
     </div>

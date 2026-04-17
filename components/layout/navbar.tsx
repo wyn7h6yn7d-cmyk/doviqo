@@ -2,15 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { nav } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { SectionContainer } from "@/components/layout/section-container";
-
-const links = [
-  { href: "#product", label: "Toode" },
-  { href: "#how", label: "Kuidas see töötab" },
-  { href: "#why", label: "Miks Doviqo" },
-] as const;
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
@@ -37,7 +32,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => setScrolled(window.scrollY > 6);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -66,53 +61,48 @@ export function Navbar() {
       cn(
         "sticky top-0 z-50 border-b transition-[background-color,backdrop-filter,border-color] duration-300 ease-out",
         scrolled
-          ? "border-border bg-background/72 backdrop-blur-xl"
-          : "border-transparent bg-transparent",
+          ? "border-border/80 bg-background/78 backdrop-blur-xl"
+          : "border-transparent bg-background/40 backdrop-blur-sm",
       ),
     [scrolled],
   );
 
   return (
     <header className={shell}>
-      <SectionContainer className="flex h-14 items-center justify-between gap-4 sm:h-[3.75rem]">
+      <SectionContainer className="flex h-14 items-center justify-between gap-4 sm:h-[3.5rem]">
         <a
           href="#top"
-          className="shrink-0 text-[15px] font-semibold tracking-[-0.02em] text-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          aria-label="Doviqo avaleht"
+          className="text-[15px] font-semibold tracking-[-0.02em] text-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          aria-label={nav.homeAria}
         >
-          Doviqo
+          {nav.brand}
         </a>
 
         <nav
           className="hidden items-center gap-8 md:flex"
-          aria-label="Peamine navigeerimine"
+          aria-label={nav.navAria}
         >
-          {links.map((l) => (
+          {nav.links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="text-[13px] font-medium tracking-tight text-muted-foreground transition duration-200 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="text-[13px] font-medium text-muted-foreground transition hover:text-foreground"
             >
               {l.label}
             </a>
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2.5 sm:gap-3">
-          <Button
-            size="sm"
-            href="#cta"
-            className="md:inline-flex"
-          >
-            Varajane ligipääs
+        <div className="flex items-center gap-2">
+          <Button size="sm" href="#waitlist" className="hidden sm:inline-flex">
+            {nav.cta}
           </Button>
-
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/90 bg-surface/40 text-foreground transition hover:bg-surface/70 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-border/90 bg-surface/40 md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
-            aria-label={open ? "Sulge menüü" : "Ava menüü"}
+            aria-label={open ? nav.menuClose : nav.menuOpen}
             onClick={() => setOpen((v) => !v)}
           >
             <MenuIcon open={open} />
@@ -123,21 +113,26 @@ export function Navbar() {
       <div
         id="mobile-nav"
         className={cn(
-          "border-t border-border/60 bg-background/85 backdrop-blur-xl md:hidden",
+          "border-t border-border/60 bg-background/92 backdrop-blur-xl md:hidden",
           open ? "block" : "hidden",
         )}
       >
-        <SectionContainer className="flex flex-col gap-0.5 py-4">
-          {links.map((l) => (
+        <SectionContainer className="flex flex-col py-3">
+          {nav.links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="rounded-lg px-3 py-3 text-[15px] font-medium text-muted-foreground transition hover:bg-surface/60 hover:text-foreground"
+              className="rounded-lg px-3 py-3 text-[15px] font-medium text-muted-foreground hover:bg-surface/60 hover:text-foreground"
               onClick={() => setOpen(false)}
             >
               {l.label}
             </a>
           ))}
+          <div className="mt-2 px-3" onClick={() => setOpen(false)}>
+            <Button href="#waitlist" className="w-full">
+              {nav.cta}
+            </Button>
+          </div>
         </SectionContainer>
       </div>
     </header>
