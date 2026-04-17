@@ -1,23 +1,23 @@
 /**
  * Ootenimekirja tekstid — üks allikas kogu saidil.
- * Kasutus: WaitlistSection, nav CTA, hero teisese järjekorra link.
  */
 export const waitlist = {
   id: "waitlist",
-  title: "Liitu ootenimekirjaga",
+  title: "Jäta end ootenimekirja",
   lead:
-    "Doviqo on praegu varajases versioonis. Jäta oma e-post ja saad esimesena teada, kui avame ligipääsu täisversioonile.",
+    "Doviqo on veel varajases järgus. Jäta oma e-posti aadress ja saad teada kohe, kui täisversioon avaneb.",
   emailLabel: "E-post",
-  placeholder: "Sinu e-post",
-  hint: "Ei jaga sinu aadressi kolmandate osapooltega. Üks teade, mitte uudiskiri.",
-  submit: "Soovin ligipääsu",
+  placeholder: "nimi@ettevote.ee",
+  hint: "Aadressi ei müü edasi. Kirjutan ühe korra, kui on midagi olulist — mitte uudiskirja.",
+  submit: "Soovin juurdepääsu",
   submitting: "Saadan…",
-  successTitle: "Aitäh! Panime su nimekirja kirja.",
-  successBody:
-    "Kirjutame, kui täisversioon avaneb. Seniks võid Doviqo Studiot vabalt proovida.",
+  successTitle: "Aitäh — sind on kirjas.",
+  successBody: "",
   successCta: "Lisa teine aadress",
-  errorInvalid: "Palun sisesta korrektne e-posti aadress.",
-  errorEmpty: "Palun sisesta e-posti aadress.",
+  errorInvalid: "Palun kontrolli e-posti aadressi.",
+  errorEmpty: "Palun lisa e-posti aadress.",
   errorGeneric:
     "Ühendus ebaõnnestus. Proovi hetke pärast uuesti või kirjuta meile otse.",
+  /** Tekst ootenimekirja sektsiooni all lingiga Studiot proovima */
+  tryStudioLead: "Tahad kohe järgi proovida?",
 } as const;

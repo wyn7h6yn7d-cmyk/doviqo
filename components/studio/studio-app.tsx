@@ -24,7 +24,11 @@ import {
 } from "@/lib/studio/run-studio";
 import { transformStudioInput } from "@/lib/studio/service";
 import type { StudioTulemus } from "@/lib/studio/types";
-import { studioUi as t, sampleNotes } from "@/lib/studio/copy";
+import {
+  studioDemoPresets,
+  studioUi as t,
+  type StudioDemoPreset,
+} from "@/lib/studio/copy";
 import { Button } from "@/components/ui/button";
 import { SectionContainer } from "@/components/layout/section-container";
 import { StudioCopyButton } from "@/components/studio/studio-copy-button";
@@ -74,8 +78,8 @@ function LoadingStepsSync() {
             className={cn(
               "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold transition duration-300",
               done > i
-                ? "border-indigo-400/60 bg-indigo-50 text-indigo-800"
-                : "border-[var(--border-strong)] bg-white text-[var(--foreground-subtle)]",
+                ? "border-[rgb(var(--accent-cyan)/0.45)] bg-[rgb(var(--accent)/0.18)] text-[rgb(var(--accent-bright))]"
+                : "border-[var(--border-strong)] bg-[var(--surface-raised)] text-[var(--foreground-subtle)]",
             )}
             aria-hidden
           >
@@ -91,14 +95,14 @@ function LoadingStepsSync() {
 function LoadingPanel({ loadCycle }: { loadCycle: number }) {
   return (
     <div
-      className="rounded-[1.1rem] border border-[var(--border)] bg-white p-6 shadow-card"
+      className="glass-panel edge-lit rounded-xl p-6"
       role="status"
       aria-busy="true"
       aria-label={t.loadingTitle}
     >
       <div className="flex items-center gap-3">
         <span
-          className="inline-flex h-9 w-9 animate-spin rounded-full border-2 border-[var(--border-strong)] border-t-indigo-600"
+          className="inline-flex h-9 w-9 animate-spin rounded-full border-2 border-[var(--border-strong)] border-t-[rgb(var(--accent-bright))]"
           aria-hidden
         />
         <div className="min-w-0 flex-1">
@@ -106,10 +110,10 @@ function LoadingPanel({ loadCycle }: { loadCycle: number }) {
           <p className="mt-0.5 text-[13px] text-[var(--foreground-muted)]">
             {t.loadingHint}
           </p>
-          <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--surface-muted)_65%,white)]">
+          <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-[var(--surface-muted)]">
             <motion.div
               key={loadCycle}
-              className="h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600"
+              className="h-full rounded-full bg-gradient-to-r from-[rgb(124,92,255)] via-[rgb(99,102,241)] to-[rgb(34,211,238)]"
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
               transition={{
@@ -121,14 +125,6 @@ function LoadingPanel({ loadCycle }: { loadCycle: number }) {
         </div>
       </div>
       <LoadingStepsSync key={loadCycle} />
-      <div className="mt-8 space-y-3" aria-hidden>
-        <div className="h-3 w-2/3 animate-pulse rounded bg-[color-mix(in_srgb,var(--surface-muted)_80%,white)]" />
-        <div className="h-24 animate-pulse rounded-xl bg-[var(--surface-muted)]/80" />
-        <div className="grid grid-cols-2 gap-3">
-          <div className="h-20 animate-pulse rounded-xl bg-[var(--surface-muted)]/70" />
-          <div className="h-20 animate-pulse rounded-xl bg-[var(--surface-muted)]/70" />
-        </div>
-      </div>
     </div>
   );
 }
@@ -138,17 +134,15 @@ function TransformStrip({ result }: { result: StudioTulemus }) {
   return (
     <motion.div
       variants={itemVariants}
-      className="relative overflow-hidden rounded-[1.05rem] border border-[var(--border)] bg-gradient-to-br from-white via-[color-mix(in_srgb,white_88%,var(--surface-muted))] to-white px-5 py-4 shadow-float"
+      className="glass-panel edge-lit rounded-xl px-5 py-4"
     >
-      <div
-        className="pointer-events-none absolute -right-6 -top-8 h-24 w-24 rounded-full bg-indigo-400/10 blur-2xl"
-        aria-hidden
-      />
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-indigo-900/75">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[rgb(var(--accent-bright))]">
         {t.transformStripLabel}
       </p>
       <p className="mt-2 text-[16px] font-semibold tracking-[-0.025em] text-[var(--fg)]">
-        {s.rawLineCount} märkme rida → {s.structuredItemCount} tegevust
+        {t.transformSummaryLine
+          .replace("{raw}", String(s.rawLineCount))
+          .replace("{items}", String(s.structuredItemCount))}
       </p>
       <p className="mt-1.5 text-[13px] text-[var(--foreground-muted)]">
         {s.uniqueVastutajad} vastutajat · {s.tahtaegadega} tähtajaga ·{" "}
@@ -161,34 +155,52 @@ function TransformStrip({ result }: { result: StudioTulemus }) {
   );
 }
 
-function EmptyState({ onSample }: { onSample: () => void }) {
+function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[1.15rem] border border-dashed border-[var(--border-strong)] bg-[color-mix(in_srgb,white_96%,var(--bg-elevated))] px-6 py-14 text-center shadow-soft-sm">
-      <div
-        className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--border)] bg-white shadow-float"
-        aria-hidden
-      >
-        <svg
-          className="h-7 w-7 text-[rgb(var(--accent)/0.85)]"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-          />
-        </svg>
-      </div>
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[rgb(var(--accent)/0.25)] bg-[color-mix(in_srgb,var(--surface)_35%,transparent)] px-6 py-12 text-center backdrop-blur-sm">
       <p className="text-base font-semibold text-[var(--fg)]">{t.emptyTitle}</p>
       <p className="mt-2 max-w-md text-[14px] leading-relaxed text-[var(--foreground-muted)]">
         {t.emptyBody}
       </p>
-      <Button type="button" onClick={onSample} className="mt-6 min-h-11 px-6">
-        {t.emptyCta}
-      </Button>
+    </div>
+  );
+}
+
+function StudioPresetPicker({
+  activePresetId,
+  onApply,
+}: {
+  activePresetId: string | null;
+  onApply: (preset: StudioDemoPreset) => void;
+}) {
+  return (
+    <div role="group" aria-label={t.presetsGroupAria}>
+      <p className="text-[13px] font-semibold text-[var(--fg)]">{t.presetsSectionTitle}</p>
+      <p className="mt-1 text-[12px] leading-relaxed text-[var(--foreground-muted)]">
+        {t.presetsSectionLead}
+      </p>
+      <ul className="mt-3 flex flex-col gap-2">
+        {studioDemoPresets.map((p) => {
+          const selected = activePresetId === p.id;
+          return (
+            <li key={p.id}>
+              <button
+                type="button"
+                onClick={() => onApply(p)}
+                className={cn(
+                  "w-full rounded-xl border px-3 py-2.5 text-left text-[13px] font-medium leading-snug transition",
+                  selected
+                    ? "border-[rgb(var(--accent-cyan)/0.45)] bg-[rgb(var(--accent)/0.16)] text-[var(--fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-[rgb(var(--accent)/0.28)]"
+                    : "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_55%,transparent)] text-[var(--foreground-muted)] hover:border-[rgb(var(--accent)/0.38)] hover:text-[var(--fg)]",
+                )}
+                aria-current={selected ? "true" : undefined}
+              >
+                {p.title}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -205,8 +217,8 @@ function ResultSection({
   children: ReactNode;
 }) {
   return (
-    <section className="overflow-hidden rounded-[1.05rem] border border-[var(--border)] bg-white shadow-float">
-      <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-muted)_45%,white)] px-4 py-3">
+    <section className="glass-panel edge-lit overflow-hidden rounded-xl">
+      <div className="flex items-center justify-between gap-3 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_55%,transparent)] px-4 py-3">
         <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
           {title}
         </h2>
@@ -219,8 +231,8 @@ function ResultSection({
 
 function JarelkiriBlock({ result }: { result: StudioTulemus }) {
   return (
-    <section className="overflow-hidden rounded-[1.05rem] border border-[var(--border)] bg-white shadow-float">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-muted)_45%,white)] px-4 py-3">
+    <section className="glass-panel edge-lit overflow-hidden rounded-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_55%,transparent)] px-4 py-3">
         <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
           {t.sectionJarelkiri}
         </h2>
@@ -262,6 +274,21 @@ export function StudioApp() {
   const [loadCycle, setLoadCycle] = useState(0);
   const [result, setResult] = useState<StudioTulemus | null>(null);
 
+  const activePresetId = useMemo(() => {
+    const trimmed = input.trim();
+    if (!trimmed) return null;
+    for (const p of studioDemoPresets) {
+      if (p.body.trim() === trimmed) return p.id;
+    }
+    return null;
+  }, [input]);
+
+  const applyPreset = useCallback((preset: StudioDemoPreset) => {
+    setInput(preset.body);
+    setError(null);
+    setResult(null);
+  }, []);
+
   const runProcess = useCallback(async () => {
     const trimmed = input.trim();
     if (!trimmed) {
@@ -281,12 +308,6 @@ export function StudioApp() {
     }
   }, [input]);
 
-  const fillSample = useCallback(() => {
-    setInput(sampleNotes);
-    setError(null);
-    setResult(null);
-  }, []);
-
   const resetAll = useCallback(() => {
     setInput("");
     setResult(null);
@@ -303,31 +324,26 @@ export function StudioApp() {
 
   return (
     <div className="bg-page-studio flex min-h-screen flex-col">
-      <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 shadow-[0_1px_0_rgba(255,255,255,1)_inset,0_10px_40px_-16px_rgba(15,23,42,0.04)] backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg-elevated)_90%,transparent)]/95 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_16px_48px_-18px_rgba(0,0,0,0.55),0_0_40px_-24px_rgb(var(--accent)/0.12)] backdrop-blur-xl">
         <SectionContainer className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <h1 className="text-[1.35rem] font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-[1.45rem]">
+            <p className="text-gradient-accent text-[10px] font-semibold uppercase tracking-[0.14em]">
+              {t.studioEyebrow}
+            </p>
+            <h1 className="mt-2 text-[1.35rem] font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-[1.45rem]">
               {t.productName}
             </h1>
             <p className="mt-1 max-w-xl text-[13px] leading-relaxed text-[var(--foreground-muted)]">
               {t.workspaceSubtitle}
             </p>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <span className="inline-flex rounded-full border border-indigo-200/50 bg-indigo-50/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-indigo-900/85">
-                {t.demoBadge}
-              </span>
-              <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-[var(--foreground-subtle)]">
-                {t.localBadge}
-              </span>
-            </div>
           </div>
           <nav
             className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-medium"
-            aria-label="Studio navigeerimine"
+            aria-label={t.studioNavAria}
           >
             <Link
               href="/#waitlist"
-              className="text-indigo-600 transition hover:text-indigo-800"
+              className="text-[rgb(var(--accent-bright))] transition hover:text-[rgb(var(--accent-cyan))]"
             >
               {t.waitlistLink}
             </Link>
@@ -343,13 +359,10 @@ export function StudioApp() {
 
       <SectionContainer className="flex flex-1 flex-col py-8 sm:py-10">
         <div
-          className="mb-8 rounded-[1rem] border border-[var(--border)] bg-white px-4 py-3.5 text-[13px] leading-relaxed text-[var(--foreground-muted)] shadow-soft-sm"
+          className="glass-panel edge-lit mb-8 rounded-[1rem] px-4 py-3.5 text-[13px] leading-relaxed text-[var(--foreground-muted)]"
           role="note"
         >
-          <p>
-            <span className="font-semibold text-[var(--fg)]">{t.demoBadge}. </span>
-            {t.demoNotice}
-          </p>
+          <p>{t.demoNotice}</p>
         </div>
 
         <div className="grid flex-1 gap-8 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)] xl:gap-10">
@@ -359,13 +372,10 @@ export function StudioApp() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: DURATION.reveal, ease: EASE_PREMIUM }}
           >
-            <div className="rounded-[1.1rem] border border-[var(--border)] bg-white p-5 shadow-card sm:p-6">
+            <div className="glass-panel edge-lit rounded-xl p-5 sm:p-6">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
                   {t.inputLabel}
-                </p>
-                <p className="mt-1 text-sm font-semibold text-[var(--fg)]">
-                  {t.inputLabelLong}
                 </p>
               </div>
 
@@ -385,25 +395,33 @@ export function StudioApp() {
                 rows={18}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={
-                  error ? `${notesHintId} ${notesErrId}` : notesHintId
+                  error
+                    ? t.inputHint
+                      ? `${notesHintId} ${notesErrId}`
+                      : notesErrId
+                    : t.inputHint
+                      ? notesHintId
+                      : undefined
                 }
                 className={cn(
-                  "mt-4 min-h-[min(360px,50vh)] w-full resize-y rounded-xl border border-[var(--border-strong)] bg-white px-4 py-3 font-mono text-[13px] leading-relaxed text-[var(--fg)] shadow-[inset_0_1px_1px_rgba(15,23,42,0.03)]",
+                  "mt-4 min-h-[min(360px,50vh)] w-full resize-y rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] px-4 py-3 font-mono text-[13px] leading-relaxed text-[var(--fg)] shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] backdrop-blur-sm",
                   "placeholder:text-[var(--foreground-subtle)] outline-none transition",
-                  "hover:border-[color-mix(in_srgb,var(--border-strong)_75%,rgb(var(--accent)))]",
-                  "focus:border-[rgb(var(--accent)/0.38)] focus:shadow-[inset_0_1px_1px_rgba(15,23,42,0.02),0_0_0_3px_rgb(var(--accent)/0.1)]",
+                  "hover:border-[rgb(var(--accent)/0.35)]",
+                  "focus:border-[rgb(var(--accent-cyan)/0.45)] focus:shadow-[inset_0_1px_2px_rgba(0,0,0,0.4),0_0_0_3px_rgb(var(--accent)/0.15)]",
                   error &&
-                    "border-rose-300/90 focus:border-rose-400 focus:shadow-[inset_0_1px_1px_rgba(15,23,42,0.02),0_0_0_3px_rgba(244,63,94,0.12)]",
+                    "border-rose-400/70 focus:border-rose-400 focus:shadow-[inset_0_1px_2px_rgba(0,0,0,0.35),0_0_0_3px_rgba(244,63,94,0.2)]",
                 )}
                 spellCheck={false}
               />
 
-              <p
-                id={notesHintId}
-                className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-subtle)]"
-              >
-                {t.inputHint}
-              </p>
+              {t.inputHint ? (
+                <p
+                  id={notesHintId}
+                  className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-subtle)]"
+                >
+                  {t.inputHint}
+                </p>
+              ) : null}
 
               {error ? (
                 <p
@@ -415,19 +433,11 @@ export function StudioApp() {
                 </p>
               ) : null}
 
-              <div className="mt-5 rounded-xl border border-[color-mix(in_srgb,rgb(var(--accent))_14%,var(--border))] bg-[color-mix(in_srgb,var(--bg-elevated)_70%,white)] p-4 shadow-soft-sm sm:p-5">
-                <p className="text-[13px] font-semibold text-[var(--fg)]">{t.sampleTitle}</p>
-                <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--foreground-muted)]">
-                  {t.sampleBody}
-                </p>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={fillSample}
-                  className="mt-4 min-h-11"
-                >
-                  {t.sampleBtn}
-                </Button>
+              <div
+                id="studio-presets"
+                className="mt-5 rounded-xl border border-[rgb(var(--accent)/0.28)] bg-[color-mix(in_srgb,var(--surface-raised)_85%,transparent)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-5"
+              >
+                <StudioPresetPicker activePresetId={activePresetId} onApply={applyPreset} />
               </div>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -476,7 +486,7 @@ export function StudioApp() {
                   text={exportAll}
                   label={t.copyAll}
                   size="md"
-                  className="rounded-lg border border-indigo-200/70 bg-indigo-50/80 px-3 py-2 text-indigo-950/90 hover:bg-indigo-50"
+                  className="rounded-lg border border-[rgb(var(--accent)/0.35)] bg-[rgb(var(--accent)/0.12)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.18)]"
                 />
               ) : null}
             </div>
@@ -506,46 +516,60 @@ export function StudioApp() {
                     exit={{ opacity: 0 }}
                   >
                     <TransformStrip result={result} />
+
                     <motion.div variants={itemVariants}>
-                    <ResultSection
-                      title={t.sectionTegevused}
-                      copyText={formatTegevusedPlain(result)}
-                    >
-                      <div className="overflow-x-auto rounded-xl border border-[var(--border)]">
-                        <table className="w-full min-w-[480px] text-left text-[13px]">
-                          <thead>
-                            <tr className="border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-muted)_55%,white)] text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--foreground-subtle)]">
-                              <th className="px-3 py-2.5 font-medium">{t.tableTask}</th>
-                              <th className="w-[100px] px-3 py-2.5 font-medium">
-                                {t.tableOwner}
-                              </th>
-                              <th className="w-[104px] px-3 py-2.5 text-right font-medium">
-                                {t.tableDue}
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {result.tegevused.map((row, i) => (
-                              <tr
-                                key={`${row.kirjeldus}-${i}`}
-                                className="border-t border-[var(--border)] bg-white"
-                              >
-                                <td className="px-3 py-3 leading-snug text-[var(--fg)]">
-                                  {row.kirjeldus}
-                                </td>
-                                <td className="px-3 py-3 text-[var(--foreground-muted)]">
-                                  {row.vastutaja}
-                                </td>
-                                <td className="px-3 py-3 text-right tabular-nums text-[var(--foreground-subtle)]">
-                                  {row.tahtaeg}
-                                </td>
+                      <ResultSection
+                        title={t.sectionKokkuvote}
+                        copyText={result.kokkuvote}
+                      >
+                        <p className="whitespace-pre-wrap text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+                          {result.kokkuvote}
+                        </p>
+                      </ResultSection>
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                      <ResultSection
+                        title={t.sectionTegevused}
+                        copyText={formatTegevusedPlain(result)}
+                      >
+                        <div className="overflow-x-auto rounded-xl border border-[var(--border-strong)]">
+                          <table className="w-full min-w-[480px] text-left text-[13px]">
+                            <thead>
+                              <tr className="border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-muted)_75%,transparent)] text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--foreground-subtle)]">
+                                <th className="px-3 py-2.5 font-medium">
+                                  {t.tableTask}
+                                </th>
+                                <th className="w-[100px] px-3 py-2.5 font-medium">
+                                  {t.tableOwner}
+                                </th>
+                                <th className="w-[104px] px-3 py-2.5 text-right font-medium">
+                                  {t.tableDue}
+                                </th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </ResultSection>
-                  </motion.div>
+                            </thead>
+                            <tbody>
+                              {result.tegevused.map((row, i) => (
+                                <tr
+                                  key={`${row.kirjeldus}-${i}`}
+                                  className="border-t border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_70%,transparent)]"
+                                >
+                                  <td className="px-3 py-3 leading-snug text-[var(--fg)]">
+                                    {row.kirjeldus}
+                                  </td>
+                                  <td className="px-3 py-3 text-[var(--foreground-muted)]">
+                                    {row.vastutaja}
+                                  </td>
+                                  <td className="px-3 py-3 text-right tabular-nums text-[var(--foreground-subtle)]">
+                                    {row.tahtaeg}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </ResultSection>
+                    </motion.div>
 
                   <div className="grid gap-5 lg:grid-cols-2">
                     <motion.div variants={itemVariants}>
@@ -582,7 +606,7 @@ export function StudioApp() {
                         <ul className="space-y-4">
                           {result.tahtajad.map((g) => (
                             <li key={g.tahtaeg}>
-                              <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-indigo-900/80">
+                              <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[rgb(var(--accent-bright))]">
                                 {g.tahtaeg}
                               </p>
                               <ul className="mt-2 space-y-2 text-[13px] text-[var(--foreground-muted)]">
@@ -603,14 +627,6 @@ export function StudioApp() {
                   </div>
 
                   <motion.div variants={itemVariants}>
-                    <ResultSection title={t.sectionKokkuvote} copyText={result.kokkuvote}>
-                      <p className="text-[14px] leading-relaxed text-[var(--foreground-muted)]">
-                        {result.kokkuvote}
-                      </p>
-                    </ResultSection>
-                  </motion.div>
-
-                  <motion.div variants={itemVariants}>
                     <JarelkiriBlock result={result} />
                   </motion.div>
                 </motion.div>
@@ -622,7 +638,7 @@ export function StudioApp() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.28, ease: EASE_PREMIUM }}
                   >
-                    <EmptyState onSample={fillSample} />
+                    <EmptyState />
                   </motion.div>
                 )}
               </AnimatePresence>

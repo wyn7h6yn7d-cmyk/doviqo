@@ -1,34 +1,40 @@
 "use client";
 
-import { waitlist as copy } from "@/lib/site-content";
+import { motion, useReducedMotion } from "framer-motion";
+
+import { DURATION, EASE_PREMIUM } from "@/lib/constants";
+import { waitlist as copy, nav } from "@/lib/site-content";
+import { sectionUi } from "@/lib/ui";
 import { SectionContainer } from "@/components/layout/section-container";
-import { WaitlistForm } from "@/components/waitlist/waitlist-form";
+import { WaitlistSignup } from "@/components/waitlist";
+import { Button } from "@/components/ui/button";
 
 export function WaitlistSection() {
+  const reduce = useReducedMotion() ?? false;
+
   return (
     <section
       id={copy.id}
-      className="section-y relative overflow-hidden border-t border-[var(--border)] bg-[var(--bg)]"
+      className="section-y relative overflow-hidden border-t border-[var(--border-strong)] bg-[var(--bg-deep)]"
       aria-labelledby="waitlist-heading"
     >
+      <div className="ambient-orbs opacity-90" aria-hidden />
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(85%_60%_at_50%_0%,rgb(var(--accent)/0.11),transparent_58%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/50 via-[var(--bg)] to-[color-mix(in_srgb,var(--bg)_96%,rgb(var(--accent)))]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_60%_at_50%_100%,rgb(var(--accent)/0.14),transparent_55%)]"
         aria-hidden
       />
 
       <SectionContainer className="relative">
-        <div className="mx-auto max-w-lg">
+        <motion.div
+          className="mx-auto max-w-lg"
+          initial={reduce ? false : { opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-32px", amount: 0.2 }}
+          transition={{ duration: DURATION.reveal * 0.85, ease: EASE_PREMIUM }}
+        >
           <h2
             id="waitlist-heading"
-            className="text-balance text-center text-[1.65rem] font-semibold tracking-[-0.035em] text-[var(--fg)] sm:text-[1.85rem]"
+            className={`${sectionUi.titleLg} text-center`}
           >
             {copy.title}
           </h2>
@@ -36,10 +42,22 @@ export function WaitlistSection() {
             {copy.lead}
           </p>
 
-          <div className="mt-11">
-            <WaitlistForm variant="light" />
+          <div className="mt-10">
+            <WaitlistSignup variant="dark" />
           </div>
-        </div>
+
+          <p className="mt-10 text-center text-[13px] text-[var(--foreground-subtle)]">
+            {copy.tryStudioLead}{" "}
+            <Button
+              href="/studio"
+              variant="ghost"
+              size="sm"
+              className="inline-flex min-h-8 px-2 py-1 text-[13px] font-semibold text-[rgb(var(--accent-bright))] hover:bg-[rgb(var(--accent)/0.12)] hover:text-[rgb(var(--accent-cyan))]"
+            >
+              {nav.studioCta}
+            </Button>
+          </p>
+        </motion.div>
       </SectionContainer>
     </section>
   );

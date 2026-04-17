@@ -5,8 +5,15 @@ import type {
   TransformSummary,
   VastutajaInfo,
 } from "@/lib/studio/types";
+import {
+  buildEmailTeema,
+  buildJarelkiri,
+  buildKokkuvote,
+  inferMeetingTone,
+  isPresetTitleLine,
+} from "@/lib/studio/meeting-tone";
 
-/** Levinud eesnimed (tuvastus demo jaoks; hiljem API / sõnastik). */
+/** Levinud eesnimed + demo jaoks laiendatud nimekiri. */
 const EESNIMED = new Set([
   "Anna",
   "Martin",
@@ -24,6 +31,11 @@ const EESNIMED = new Set([
   "Sander",
   "Riin",
   "Liis",
+  "Elena",
+  "Andres",
+  "Nora",
+  "Kati",
+  "Mart",
   "Hendrik",
   "Kristiina",
   "Lisa",
@@ -41,7 +53,38 @@ const EESNIMED = new Set([
   "Mikk",
   "Triin",
   "Katre",
+  "Anu",
+  "Jaak",
+  "Inga",
+  "Timo",
+  "Keiu",
+  "Raido",
+  "Helen",
+  "Koit",
+  "Erki",
 ]);
+
+/** Sõnad, mis ei ole isikunimed (ka korduvad päistest). */
+const NIMI_BLOKEER = new Set([
+  "Analytics",
+  "Dashboard",
+  "Slack",
+  "Investori",
+  "Osalejad",
+  "Nädalakoosolek",
+  "Tiimikoosolek",
+  "Koosolek",
+  "Järgmine",
+  "Teams",
+  "Jira",
+  "Notion",
+]);
+
+function onLikelyEesnimi(w: string): boolean {
+  if (NIMI_BLOKEER.has(w)) return false;
+  if (w.length < 3 || w.length > 22) return false;
+  return /^[A-ZÕÄÖÜ][a-zõäöü'-]+$/.test(w);
+}
 
 function normalizeLine(raw: string): string {
   return raw.replace(/^[\s\-–—•*]+/, "").trim();
@@ -65,12 +108,27 @@ function onTyhiVoiPais(line: string): boolean {
   if (/^koosolek\s*[—–-]\s*.+$/i.test(l)) return true;
   if (/^koosolek$/i.test(l)) return true;
   if (/^järgmine\s+koosolek\b/i.test(l)) return true;
+  if (/^tiimikoosolek\b/i.test(l)) return true;
+  if (/^lisa\s*:\s*/i.test(l)) return true;
   return false;
 }
 
 /**
- * Tähtajad ja kuupäevad — spetsiifilisemad mustrid enne üldisemaid
- * (nt „homme“ ei tohi varastada „ülehomme“).
+ * Koosoleku pealkiri / päis — üks rida, harva tegevus.
+ * Ei filtreeri rida, kus on nimi või tähtaeg (need on tegevused).
+ */
+function onLikelyPealkiri(line: string): boolean {
+  const l = line.trim();
+  if (l.length > 140) return false;
+  if (/[—–-].{8,}/.test(l) && !/\b(teeb|saadab|koostab|vaatab|lõpetab|tuleb|uuendab|peab|hakkab)\b/i.test(l)) {
+    if (/^(?:tiimikoosolek|nädalakoosolek|koosolek)\b/i.test(l)) return true;
+    if (/^(?:müük|toode|projekt|sprint)\s*[—–-]/i.test(l)) return true;
+  }
+  return false;
+}
+
+/**
+ * Tähtajad — spetsiifilised mustrid enne üldisemaid (nt „ülehomme“ enne „homme“).
  */
 function leiaTahtaeg(text: string): string {
   const t = text.toLowerCase();
@@ -83,9 +141,10 @@ function leiaTahtaeg(text: string): string {
     return m ? `Q${m[1]}` : "Q1";
   }
 
-  if (/järgmisel\s+nädalal\b/.test(t)) return "järgmisel nädalal";
-  if (/järgmisse\s+nädalasse|järgmine\s+nädalasse\b/.test(t)) return "järgmine nädal";
-  if (/järgmine\s+nädal\b/.test(t)) return "järgmine nädal";
+  if (/\bjärgmisel\s+nädalal\b/.test(t)) return "järgmisel nädalal";
+  if (/\bjärgmisse\s+nädalasse\b/.test(t)) return "järgmine nädal";
+  if (/\bjärgmine\s+nädal\b/.test(t)) return "järgmine nädal";
+  if (/\bjärgmine\s+sprint\b/.test(t)) return "järgmine sprint";
 
   if (/selle\s+nädala\s+lõpuks|nädala\s+lõpuks/.test(t)) return "selle nädala lõpuks";
   if (/kuu\s+lõpuks|kuu\s+lõpus/.test(t)) return "kuu lõpuks";
@@ -100,21 +159,26 @@ function leiaTahtaeg(text: string): string {
     if (m) return `${m[1]} lõpuks`;
   }
 
-  if (/järgmine\s+(esmaspäev|teisipäev|kolmapäev|neljapäev|reede)/.test(t)) {
+  if (
+    /järgmine\s+(esmaspäev|teisipäev|kolmapäev|neljapäev|reede)/.test(t)
+  ) {
     const m = t.match(
       /järgmine\s+(esmaspäev|teisipäev|kolmapäev|neljapäev|reede)/i,
     );
     return m ? `järgmine ${m[1]!.toLowerCase()}` : "järgmine nädal";
   }
 
-  if (/järgmine\s+sprint|järgmises\s+sprintis/.test(t)) return "järgmine sprint";
-
-  if (/neljapäeval|neljapäevaks?|\bneljap\b/.test(t)) return "neljapäevaks";
-  if (/kolmapäevaks?|\bkolmap\b/.test(t)) return "kolmapäevaks";
-  if (/esmaspäevaks?|\besmasp\b/.test(t)) return "esmaspäevaks";
-  if (/teisipäevaks?/.test(t)) return "teisipäevaks";
+  if (/\besmaspäeval\b/.test(t)) return "esmaspäeval";
+  if (/\bteisipäeval\b/.test(t)) return "teisipäeval";
+  if (/\bkolmapäeval\b/.test(t)) return "kolmapäeval";
+  if (/\bneljapäeval\b/.test(t)) return "neljapäeval";
   if (/\breedel\b/.test(t)) return "reedel";
-  if (/reedeks|\breede\b(?!\w)/.test(t)) return "reedeks";
+  if (/\breedeks\b/.test(t)) return "reedeks";
+
+  if (/\bneljapäevaks\b/.test(t)) return "neljapäevaks";
+  if (/\bkolmapäevaks\b/.test(t)) return "kolmapäevaks";
+  if (/\besmaspäevaks\b/.test(t)) return "esmaspäevaks";
+  if (/\bteisipäevaks\b/.test(t)) return "teisipäevaks";
   if (/\blaupäevaks?\b/.test(t)) return "laupäevaks";
   if (/\bpühapäevaks?\b/.test(t)) return "pühapäevaks";
 
@@ -128,30 +192,36 @@ function leiaTahtaeg(text: string): string {
 }
 
 const EESNIMI_VERB =
-  /^([A-ZÕÄÖÜ][a-zõäöü]{2,})\s+(?:teeb|teeb\s+üle|saadab|võtab|viib|viima|vaatab|kinnitab|koostab|kirjutab|uuendab|täidab|korraldab|organiseerib|vastutab|tegeleb|teostab|valmistab|lisab|eemaldab|parandab|kontrollib|paigaldab|testib|ühendab|esitleb|koondab)\b/i;
+  /^([A-ZÕÄÖÜ][a-zõäöü'-]{2,})\s+(?:teeb|teeb\s+üle|saadab|võtab|viib|viima|vaatab|kinnitab|koostab|kirjutab|uuendab|täidab|korraldab|organiseerib|vastutab|tegeleb|teostab|valmistab|lisab|eemaldab|parandab|kontrollib|paigaldab|testib|ühendab|esitleb|koondab|lõpetab|lükkab|tuleb|peab|hakkab|jätkab|annab|küsib|koostada|saata|paneme|panen|toimetab|kavandab)\b/i;
 
 function leiaEesnimi(text: string): string | null {
-  const start = text.match(/^([A-ZÕÄÖÜ][a-zõäöü]{2,})\s*[—–\-:]\s*/);
-  if (start && EESNIMED.has(start[1]!)) return start[1]!;
+  const start = text.match(/^([A-ZÕÄÖÜ][a-zõäöü'-]{2,})\s*[—–\-:]\s*/);
+  if (start) {
+    const w = start[1]!;
+    if (EESNIMED.has(w) || onLikelyEesnimi(w)) return w;
+  }
 
   const leadVerb = text.match(EESNIMI_VERB);
-  if (leadVerb && EESNIMED.has(leadVerb[1]!)) return leadVerb[1]!;
+  if (leadVerb) {
+    const w = leadVerb[1]!;
+    if (EESNIMED.has(w) || onLikelyEesnimi(w)) return w;
+  }
 
   const tail = text.match(
-    /\s+(?:[-–—]\s*)?([A-ZÕÄÖÜ][a-zõäöü]{2,})\s*[.!?]?\s*$/,
+    /\s+(?:[-–—]\s*)?([A-ZÕÄÖÜ][a-zõäöü'-]{2,})\s*[.!?]?\s*$/,
   );
   if (
     tail &&
-    EESNIMED.has(tail[1]!) &&
+    (EESNIMED.has(tail[1]!) || onLikelyEesnimi(tail[1]!)) &&
     !/kolmapäev|neljapäev|esmaspäev|reedel|teisipäev/i.test(tail[1]!)
   )
     return tail[1]!;
 
-  const re = /\b([A-ZÕÄÖÜ][a-zõäöü]{2,})\b/g;
+  const re = /\b([A-ZÕÄÖÜ][a-zõäöü'-]{2,})\b/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(text)) !== null) {
     const n = m[1]!;
-    if (EESNIMED.has(n)) return n;
+    if (EESNIMED.has(n) || onLikelyEesnimi(n)) return n;
   }
   return null;
 }
@@ -169,7 +239,7 @@ function puhastaKirjeldus(line: string, eesnimi: string | null): string {
   }
 
   s = s.replace(
-    /\s*(?:neljapäevaks?|kolmapäevaks?|esmaspäevaks?|teisipäevaks?|reedeks?|\breedel\b|homme|ülehomme|täna|järgmisel\s+nädalal|järgmine\s+nädal|järgmisse\s+nädalasse|järgmine\s+sprint|selle\s+nädala\s+lõpuks|õhtuks|kuu\s+lõpuks).*$/i,
+    /\s*(?:neljapäeval|neljapäevaks?|kolmapäeval|kolmapäevaks?|esmaspäeval|esmaspäevaks?|teisipäeval|teisipäevaks?|reedel|reedeks|homme|ülehomme|täna|järgmisel\s+nädalal|järgmine\s+nädal|järgmisse\s+nädalasse|järgmine\s+sprint|selle\s+nädala\s+lõpuks|õhtuks|kuu\s+lõpuks).*$/i,
     "",
   );
   s = s.replace(/\b\d{1,2}\.\d{1,2}(?:\.\d{2,4})?\b.*$/i, "");
@@ -226,6 +296,31 @@ function ehitaVastutajad(tegevused: TegevusRida[]): VastutajaInfo[] {
   }));
 }
 
+/** Tähtaja rühmade järjestus (varajasem / kriitilisem eespool). */
+function tahtaegSortKey(s: string): number {
+  const order: Record<string, number> = {
+    täna: 1,
+    õhtuks: 2,
+    homme: 3,
+    ülehomme: 4,
+    reedel: 10,
+    reedeks: 11,
+    neljapäeval: 12,
+    neljapäevaks: 13,
+    kolmapäeval: 14,
+    kolmapäevaks: 15,
+    esmaspäeval: 16,
+    teisipäeval: 17,
+    "järgmine nädal": 30,
+    "järgmisel nädalal": 31,
+    "järgmine sprint": 32,
+  };
+  if (order[s]) return order[s]!;
+  if (s === "—") return 999;
+  if (/^\d{1,2}\.\d{1,2}/.test(s)) return 5;
+  return 50;
+}
+
 function ehitaTahtajad(tegevused: TegevusRida[]): TahtaegGrupp[] {
   const jarjestus: string[] = [];
   const map = new Map<string, TegevusRida[]>();
@@ -239,100 +334,14 @@ function ehitaTahtajad(tegevused: TegevusRida[]): TahtaegGrupp[] {
     map.get(key)!.push(row);
   }
 
-  return jarjestus.map((tahtaeg) => ({
+  const sorted = [...jarjestus].sort(
+    (a, b) => tahtaegSortKey(a) - tahtaegSortKey(b),
+  );
+
+  return sorted.map((tahtaeg) => ({
     tahtaeg,
     read: map.get(tahtaeg)!,
   }));
-}
-
-function ehitaKokkuvote(tegevused: TegevusRida[]): string {
-  if (tegevused.length === 0) return "";
-
-  const vastutajad = new Set(tegevused.map((x) => x.vastutaja));
-  const nimed = [...vastutajad];
-  const tahtaegadega = tegevused.filter((x) => x.tahtaeg !== "—");
-  const unikaalsedTahtajad = [
-    ...new Set(tahtaegadega.map((x) => x.tahtaeg)),
-  ].slice(0, 5);
-
-  const osa1 = `Koosoleku märkmetest koorusid ${tegevused.length} konkreetset sammu — need on kohe jagatavad tiimile või projektivaatesse ülekantavad.`;
-
-  let osa2: string;
-  if (nimed.length === 1 && nimed[0] === "Tiim") {
-    osa2 =
-      "Vastutajaid polnud ridadest automaatselt tuvastatud — märgi need käsitsi või lisa märkmetesse eesnimed (nt „Anna — …“).";
-  } else if (nimed.length <= 4) {
-    osa2 = `Vastutajad tekstis: ${nimed.join(", ")}.`;
-  } else {
-    osa2 = `Vastutajaid on ${nimed.length} — ülevaatusel tasub fookus panna prioriteetidele ja tähtaegadele.`;
-  }
-
-  let osa3: string;
-  if (unikaalsedTahtajad.length === 0) {
-    osa3 =
-      "Tähtajad ei tulnud märkmetest selgelt välja; lisa need kalendrisse või järgmise koosoleku päevakorda.";
-  } else if (unikaalsedTahtajad.length <= 3) {
-    osa3 = `Tähtajad, mis tekstist leidsin: ${unikaalsedTahtajad.join(", ")} — kinnita, et need vastavad tegelikule kokkuleppele.`;
-  } else {
-    osa3 = `Tähtajaid on mitu; iga tegevuse juures on tähtaeg eraldi välja toodud — kontrolli kriitilised kuupäevad üle.`;
-  }
-
-  const top3 = tegevused.slice(0, 3).map((r) => r.kirjeldus);
-  const osa4 =
-    top3.length > 0
-      ? `Esimesed prioriteedid töötluses: ${top3.map((k) => `„${luhikeUlesanne(k)}“`).join(", ")}.`
-      : "";
-
-  return [osa1, osa2, osa3, osa4].filter(Boolean).join(" ");
-}
-
-function kuupaevPealkirjas(): string {
-  try {
-    return new Intl.DateTimeFormat("et-EE", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }).format(new Date());
-  } catch {
-    return "";
-  }
-}
-
-function ehitaEmailTeema(): string {
-  const d = kuupaevPealkirjas();
-  return d
-    ? `Koosoleku järgmised sammud — ${d}`
-    : "Koosoleku järgmised sammud";
-}
-
-function jarelkiriMustand(
-  tegevused: TegevusRida[],
-  emailTeema: string,
-): string {
-  const intro = `Teema: ${emailTeema}
-
-Tere,
-
-Täname tänase arutelu eest. Panin kokku lühikese ülevaate järgmistest sammudest — vaata palun üle ja anna teada, kui midagi vajab täpsustamist või vastutaja vahetust.
-
-`;
-
-  const body = tegevused
-    .map((row, i) => {
-      const nr = i + 1;
-      const dl =
-        row.tahtaeg !== "—" ? ` — tähtaeg: ${row.tahtaeg}` : "";
-      return `${nr}. ${row.vastutaja}: ${row.kirjeldus}${dl}`;
-    })
-    .join("\n");
-
-  const outro = `
-
-Kui mõni tähtaeg või vastutaja vajab muutmist, vasta sellele kirjale või kirjuta meeskonna kanalisse — paneme paika järgmise sammu.
-
-Parimate soovidega`;
-
-  return intro + body + outro;
 }
 
 function ehitaSummary(
@@ -352,6 +361,16 @@ function ehitaSummary(
     uniqueVastutajad,
     tahtaegadega,
   };
+}
+
+function filtreeriTegevuseRead(merged: string[]): string[] {
+  const filtered = merged.filter((line) => {
+    if (onTyhiVoiPais(line)) return false;
+    if (onLikelyPealkiri(line)) return false;
+    if (isPresetTitleLine(line)) return false;
+    return true;
+  });
+  return filtered.length > 0 ? filtered : merged;
 }
 
 export function processMeetingNotes(raw: string): StudioTulemus {
@@ -375,12 +394,15 @@ export function processMeetingNotes(raw: string): StudioTulemus {
     };
   }
 
+  const tone = inferMeetingTone(trimmed);
+
   const split = trimmed.split(/\r?\n/);
   const merged = liidaRead(split);
+  const linesToUse = filtreeriTegevuseRead(merged);
 
   const tegevused: TegevusRida[] = [];
 
-  for (const line of merged) {
+  for (const line of linesToUse) {
     const tahtaeg = leiaTahtaeg(line);
     const eesnimi = leiaEesnimi(line);
     const vastutaja = eesnimi ?? "Tiim";
@@ -403,10 +425,10 @@ export function processMeetingNotes(raw: string): StudioTulemus {
 
   const vastutajad = ehitaVastutajad(tegevused);
   const tahtajad = ehitaTahtajad(tegevused);
-  const kokkuvote = ehitaKokkuvote(tegevused);
-  const emailTeema = ehitaEmailTeema();
-  const jarelkiri = jarelkiriMustand(tegevused, emailTeema);
-  const summary = ehitaSummary(trimmed, merged.length, tegevused);
+  const kokkuvote = buildKokkuvote(tegevused, tone);
+  const emailTeema = buildEmailTeema(tone);
+  const jarelkiri = buildJarelkiri(tegevused, emailTeema, tone);
+  const summary = ehitaSummary(trimmed, linesToUse.length, tegevused);
 
   return {
     tegevused,

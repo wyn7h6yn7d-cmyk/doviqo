@@ -36,7 +36,7 @@ export function StudioCopyButton({
       type="button"
       onClick={onCopy}
       className={cn(
-        "shrink-0 rounded-lg font-medium text-indigo-600 transition hover:bg-[rgb(var(--accent)/0.08)] hover:text-indigo-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.28)] focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+        "shrink-0 rounded-lg font-medium text-[rgb(var(--accent-bright))] transition hover:bg-[rgb(var(--accent)/0.12)] hover:text-[rgb(var(--accent-cyan))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent-cyan)/0.45)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]",
         size === "sm" ? "px-2 py-1 text-[11px]" : "px-3 py-1.5 text-[12px]",
         className,
       )}

@@ -3,11 +3,15 @@ import type {
   WaitlistSubmitResult,
 } from "@/lib/waitlist/types";
 
-const DELAY_MS = 750;
+const DELAY_MS = 520;
 
 /**
- * Praegu: simuleeritud viivitus (front-end).
- * Asenda hiljem: `POST /api/waitlist` või andmebaas (sama signatuur).
+ * Ootenimekirja saatmine — praegu ainult front-end (viivitus + OK).
+ *
+ * Ühendamiseks backendiga:
+ * 1. Loo `app/api/waitlist/route.ts` (või server action).
+ * 2. Asenda allolev plokk `fetch`-iga; hoia `SubmitWaitlistFn` signatuur.
+ * 3. Vea korral tagasta `{ ok: false, message: string }` (kasutajale kuvatav tekst või `"network"`).
  */
 export const submitWaitlist: SubmitWaitlistFn = async (
   values,

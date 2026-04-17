@@ -6,7 +6,7 @@ import { SectionContainer } from "@/components/layout/section-container";
 export function Footer() {
   return (
     <footer
-      className="border-t border-[var(--border)] bg-[color-mix(in_srgb,white_88%,var(--surface-muted))] py-11 sm:py-14"
+      className="relative overflow-hidden border-t border-[var(--border-strong)] bg-[linear-gradient(180deg,rgba(10,12,18,0.92)_0%,var(--bg-deep)_100%)] py-11 before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-[rgb(var(--accent)/0.25)] before:to-transparent sm:py-14"
       role="contentinfo"
     >
       <SectionContainer className="flex flex-col items-center justify-between gap-8 sm:flex-row sm:items-start">
@@ -19,7 +19,7 @@ export function Footer() {
         >
           <Link
             href="/studio"
-            className="text-[13px] font-medium text-indigo-600 transition hover:text-indigo-800"
+            className="text-[13px] font-medium text-[rgb(var(--accent-bright))] transition hover:text-[rgb(var(--accent-cyan))]"
           >
             {footer.studioLink}
           </Link>

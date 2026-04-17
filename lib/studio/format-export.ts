@@ -26,6 +26,10 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
     .join("\n\n");
 
   return [
+    "Kokkuvõte",
+    "—",
+    r.kokkuvote || "—",
+    "",
     "Tegevused",
     "—",
     tegevused || "—",
@@ -37,10 +41,6 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
     "Tähtajad",
     "—",
     tahtajad || "—",
-    "",
-    "Kokkuvõte",
-    "—",
-    r.kokkuvote,
     "",
     "Kirja teema",
     "—",

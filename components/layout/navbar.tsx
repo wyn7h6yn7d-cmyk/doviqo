@@ -29,9 +29,9 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 const marketingAnchors = [
-  { href: "/#product", label: "Tõestus" },
-  { href: "/#how", label: "Kuidas töötab" },
-  { href: "/#benefits", label: "Kasu" },
+  { href: "/#product", label: "Toode" },
+  { href: "/#how", label: "Kuidas see töötab" },
+  { href: "/#benefits", label: "Miks Doviqo" },
 ] as const;
 
 export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "studio" }) {
@@ -75,10 +75,10 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
   const shell = useMemo(
     () =>
       cn(
-        "sticky top-0 z-50 border-b transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "fixed inset-x-0 top-0 z-50 border-b transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
         scrolled
-          ? "border-[var(--border)] bg-white/92 shadow-[0_1px_0_rgba(255,255,255,0.95)_inset,0_8px_32px_-12px_rgba(15,23,42,0.04)] backdrop-blur-xl"
-          : "border-transparent bg-[color-mix(in_srgb,var(--bg)_88%,white)]/90 backdrop-blur-md",
+          ? "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg-elevated)_82%,transparent)]/95 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_12px_48px_-16px_rgba(0,0,0,0.55),0_0_40px_-20px_rgb(var(--accent)/0.12)] backdrop-blur-xl"
+          : "border-transparent bg-[color-mix(in_srgb,var(--bg-deep)_75%,transparent)]/88 backdrop-blur-md",
       ),
     [scrolled],
   );
@@ -86,6 +86,7 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
   const waitlistHref = "/#waitlist";
 
   return (
+    <>
     <header className={shell}>
       <SectionContainer className="flex h-14 items-center justify-between gap-4 sm:h-[3.5rem]">
         <Link
@@ -96,7 +97,7 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
           {nav.brand}
           {variant === "studio" ? (
             <span className="text-[12px] font-medium tracking-tight text-[var(--foreground-subtle)]">
-              Studio
+              {nav.studioBadge}
             </span>
           ) : null}
         </Link>
@@ -123,7 +124,7 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
                 href="/"
                 className="min-h-11 rounded-md px-1 py-2 text-[13px] font-medium text-[var(--foreground-muted)] transition hover:text-[var(--fg)]"
               >
-                Avaleht
+                {nav.backHome}
               </Link>
               {marketingAnchors.map((l) => (
                 <a
@@ -135,7 +136,7 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
                 </a>
               ))}
               <span className="text-[13px] font-medium text-[var(--fg)]">
-                Studio
+                {nav.studioBadge}
               </span>
             </>
           )}
@@ -144,14 +145,22 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
         <div className="flex items-center gap-2">
           <Button
             size="sm"
+            href="/studio"
+            className="hidden min-h-11 touch-manipulation sm:inline-flex"
+          >
+            {nav.studioCta}
+          </Button>
+          <Button
+            size="sm"
             href={waitlistHref}
+            variant="secondary"
             className="hidden min-h-11 touch-manipulation sm:inline-flex"
           >
             {nav.cta}
           </Button>
           <button
             type="button"
-            className="flex h-11 w-11 min-h-[44px] min-w-[44px] touch-manipulation items-center justify-center rounded-xl border border-[var(--border-strong)] bg-white/90 text-[var(--fg)] shadow-soft-sm transition hover:bg-white md:hidden"
+            className="flex h-11 w-11 min-h-[44px] min-w-[44px] touch-manipulation items-center justify-center rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] text-[var(--fg)] shadow-soft-sm backdrop-blur-sm transition hover:border-[rgb(var(--accent)/0.35)] hover:bg-[color-mix(in_srgb,var(--surface-raised)_90%,transparent)] md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? nav.menuClose : nav.menuOpen}
@@ -167,7 +176,7 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
         role="navigation"
         aria-label={nav.navAria}
         className={cn(
-          "border-t border-[var(--border)] bg-white/95 shadow-[0_12px_40px_-12px_rgba(15,23,42,0.08)] backdrop-blur-xl md:hidden",
+          "border-t border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg-elevated)_94%,transparent)]/98 shadow-[0_20px_56px_-20px_rgba(0,0,0,0.55)] backdrop-blur-xl md:hidden",
           open ? "block" : "hidden",
         )}
       >
@@ -177,7 +186,7 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
               <a
                 key={l.href}
                 href={l.href}
-                className="min-h-12 rounded-lg px-3 py-3 text-[15px] font-medium text-[var(--foreground-muted)] hover:bg-[color-mix(in_srgb,var(--surface-muted)_70%,white)] hover:text-[var(--fg)]"
+                className="min-h-12 rounded-lg px-3 py-3 text-[15px] font-medium text-[var(--foreground-muted)] hover:bg-[rgb(var(--accent)/0.08)] hover:text-[var(--fg)]"
                 onClick={() => setOpen(false)}
               >
                 {l.label}
@@ -187,33 +196,42 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
             <>
               <Link
                 href="/"
-                className="min-h-12 rounded-lg px-3 py-3 text-[15px] font-medium text-[var(--foreground-muted)] hover:bg-[color-mix(in_srgb,var(--surface-muted)_70%,white)] hover:text-[var(--fg)]"
+                className="min-h-12 rounded-lg px-3 py-3 text-[15px] font-medium text-[var(--foreground-muted)] hover:bg-[rgb(var(--accent)/0.08)] hover:text-[var(--fg)]"
                 onClick={() => setOpen(false)}
               >
-                Avaleht
+                {nav.backHome}
               </Link>
               {marketingAnchors.map((l) => (
                 <a
                   key={l.href}
                   href={l.href}
-                  className="min-h-12 rounded-lg px-3 py-3 text-[15px] font-medium text-[var(--foreground-muted)] hover:bg-[color-mix(in_srgb,var(--surface-muted)_70%,white)] hover:text-[var(--fg)]"
+                  className="min-h-12 rounded-lg px-3 py-3 text-[15px] font-medium text-[var(--foreground-muted)] hover:bg-[rgb(var(--accent)/0.08)] hover:text-[var(--fg)]"
                   onClick={() => setOpen(false)}
                 >
                   {l.label}
                 </a>
               ))}
               <span className="min-h-12 px-3 py-3 text-[15px] font-medium text-[var(--fg)]">
-                Studio
+                {nav.studioBadge}
               </span>
             </>
           )}
-          <div className="mt-2 px-3" onClick={() => setOpen(false)}>
-            <Button href={waitlistHref} className="w-full">
+          <div
+            className="mt-2 flex flex-col gap-2 px-3"
+            onClick={() => setOpen(false)}
+          >
+            <Button href="/studio" className="w-full">
+              {nav.studioCta}
+            </Button>
+            <Button href={waitlistHref} variant="secondary" className="w-full">
               {nav.cta}
             </Button>
           </div>
         </SectionContainer>
       </div>
     </header>
+    {/* Kompenseerib fikseeritud riba kõrguse, et sisu ei läheks menüü alla */}
+    <div className="h-14 shrink-0" aria-hidden />
+    </>
   );
 }

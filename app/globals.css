@@ -1,31 +1,42 @@
 @import "tailwindcss";
 
-/* ─── Doviqo — airy, cool-neutral, premium (no muddy charcoal) ─── */
+/* ─── Doviqo — premium dark: sügav slate, violet + cyan, kihid, sära ─── */
 :root {
-  --bg: #f6f8fc;
-  --bg-elevated: #fafbfd;
-  --bg-warm: #f9f8fc;
-  --surface: #ffffff;
-  --surface-muted: #eef2f9;
-  /* Pehme tumesinine, mitte söehall */
-  --fg: #1a2332;
-  --fg-hover: #2a3444;
-  --foreground-muted: #5a6478;
-  --foreground-subtle: #768090;
-  --border: rgba(15, 23, 42, 0.048);
-  --border-strong: rgba(15, 23, 42, 0.078);
-  --border-hairline: rgba(255, 255, 255, 0.65);
+  --bg: #080a10;
+  --bg-deep: #05060a;
+  --bg-elevated: #0e1119;
+  --bg-warm: #0a0c12;
+  --surface: #12161f;
+  --surface-raised: #171c28;
+  --surface-muted: #1c2432;
 
-  --accent: 79 70 229;
-  --accent-soft: rgba(79, 70, 229, 0.08);
+  --fg: #f4f7fc;
+  --fg-hover: #ffffff;
+  /* Tugevam kontrast kehavärvil — loetav, mitte muda */
+  --foreground-muted: #a8b9d0;
+  --foreground-subtle: #7d8fa8;
 
-  --sheen-a: rgba(79, 70, 229, 0.035);
-  --sheen-b: rgba(148, 163, 184, 0.045);
+  --border: rgba(148, 163, 184, 0.11);
+  --border-strong: rgba(186, 198, 214, 0.2);
+  --border-hairline: rgba(255, 255, 255, 0.06);
 
-  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.92) inset,
-    0 1px 2px rgba(15, 23, 42, 0.04), 0 20px 48px -16px rgba(15, 23, 42, 0.06);
+  /* Violet + cyan — elav, mitte muda */
+  --accent: 139 92 246;
+  --accent-bright: 167 139 250;
+  --accent-cyan: 34 211 238;
+  --accent-soft: rgba(139, 92, 246, 0.12);
 
-  color-scheme: light;
+  --sheen-a: rgba(139, 92, 246, 0.14);
+  --sheen-b: rgba(34, 211, 238, 0.08);
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.07) inset,
+    0 1px 2px rgba(0, 0, 0, 0.38), 0 24px 56px -22px rgba(0, 0, 0, 0.52);
+
+  /* Peenem sära kaartidel — vähem „mudane“ kuhjam */
+  --glow-violet: 0 0 56px -24px rgb(var(--accent) / 0.28);
+  --glow-cyan: 0 0 60px -15px rgb(var(--accent-cyan) / 0.35);
+
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -56,22 +67,23 @@ body {
 }
 
 body {
-  background-color: var(--bg);
+  background-color: var(--bg-deep);
   background-image: radial-gradient(
-      ellipse 120% 80% at 50% -20%,
-      rgb(var(--accent) / 0.045),
+      ellipse 100% 80% at 50% -25%,
+      rgb(var(--accent) / 0.2),
       transparent 58%
     ),
     radial-gradient(
-      ellipse 90% 55% at 100% 0%,
-      rgba(129, 140, 248, 0.06),
+      ellipse 70% 55% at 100% 5%,
+      rgb(var(--accent-cyan) / 0.1),
       transparent 52%
     ),
     radial-gradient(
-      ellipse 70% 45% at 0% 100%,
-      rgba(255, 255, 255, 0.75),
+      ellipse 55% 45% at 0% 85%,
+      rgb(var(--accent) / 0.08),
       transparent 55%
-    );
+    ),
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg) 38%, #0a0d14 100%);
   color: var(--fg);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
@@ -82,18 +94,18 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid rgb(var(--accent) / 0.42);
+  outline: 2px solid rgb(var(--accent-cyan) / 0.55);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: rgb(var(--accent) / 0.12);
+  background: rgb(var(--accent) / 0.35);
   color: var(--fg);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(15, 23, 42, 0.09) transparent;
+  scrollbar-color: rgba(148, 163, 184, 0.18) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -106,12 +118,70 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.08);
+  background: rgba(148, 163, 184, 0.15);
   border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(15, 23, 42, 0.14);
+  background: rgba(148, 163, 184, 0.28);
+}
+
+/* Ambient orbs — hero / sektsioonide taust */
+.ambient-orbs {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.ambient-orbs::before {
+  content: "";
+  position: absolute;
+  width: min(70vw, 520px);
+  height: min(70vw, 520px);
+  top: -18%;
+  right: -12%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgb(var(--accent) / 0.22) 0%,
+    transparent 68%
+  );
+  filter: blur(2px);
+}
+.ambient-orbs::after {
+  content: "";
+  position: absolute;
+  width: min(55vw, 420px);
+  height: min(55vw, 420px);
+  bottom: -8%;
+  left: -8%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgb(var(--accent-cyan) / 0.12) 0%,
+    transparent 70%
+  );
+  filter: blur(3px);
+}
+
+/* Klaas + servavalgus */
+.glass-panel {
+  background: linear-gradient(
+    155deg,
+    rgba(24, 28, 38, 0.92) 0%,
+    rgba(14, 17, 24, 0.82) 55%,
+    rgba(10, 12, 18, 0.76) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 20px 50px -18px rgba(0, 0, 0, 0.48), var(--glow-violet);
+}
+
+.edge-lit {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
 }
 
 .noise {
@@ -122,21 +192,21 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.012;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
 }
 
 .mesh-grid {
   background-image: linear-gradient(
-      rgba(15, 23, 42, 0.02) 1px,
+      rgba(148, 163, 184, 0.04) 1px,
       transparent 1px
     ),
-    linear-gradient(90deg, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
-  background-size: 56px 56px;
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
   mask-image: radial-gradient(
-    80% 70% at 50% 40%,
-    black 22%,
+    85% 70% at 50% 35%,
+    black 18%,
     transparent 100%
   );
 }
@@ -144,8 +214,9 @@ body {
 .bg-page-studio {
   background: linear-gradient(
     180deg,
-    var(--bg) 0%,
-    var(--bg-elevated) 44%,
+    var(--bg-deep) 0%,
+    var(--bg) 35%,
+    var(--bg-elevated) 55%,
     var(--bg) 100%
   );
 }
@@ -177,4 +248,39 @@ section[id] {
     padding-top: clamp(4.25rem, 6.5vw, 5.75rem);
     padding-bottom: clamp(4.25rem, 6.5vw, 5.75rem);
   }
+}
+
+/* Sektsioonide vahelduv sügavus (mitte ühtlane hall) */
+.section-surface {
+  background: linear-gradient(
+    180deg,
+    rgba(16, 20, 30, 0.72) 0%,
+    rgba(8, 10, 16, 0.28) 100%
+  );
+}
+.section-surface-alt {
+  background: linear-gradient(
+    195deg,
+    rgba(12, 14, 22, 0.5) 0%,
+    rgba(18, 22, 34, 0.42) 45%,
+    rgba(6, 8, 14, 0.55) 100%
+  );
+}
+
+/* Aktsenttekst — violet → cyan, tagasihoidlik */
+.text-gradient-accent {
+  background-image: linear-gradient(
+    115deg,
+    rgb(var(--accent-bright)) 0%,
+    rgb(var(--accent-cyan)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Peen servasära kaartidele */
+.card-edge {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 1px 0 rgba(255, 255, 255, 0.04) inset, var(--shadow-card);
 }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { siteMeta, skipLink } from "@/lib/site-content";
 import "./globals.css";
 
@@ -19,7 +20,7 @@ const geistMono = Geist_Mono({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f6f8fc",
+  themeColor: "#080a10",
 };
 
 export const metadata: Metadata = {
@@ -63,11 +64,12 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--fg)] focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent)/0.45)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-gradient-to-r focus:from-[rgb(124,92,255)] focus:to-[rgb(99,102,241)] focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:text-white focus:shadow-glow-accent focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent-cyan)/0.45)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]"
         >
           {skipLink}
         </a>
         {children}
+        <ScrollToTop />
       </body>
     </html>
   );

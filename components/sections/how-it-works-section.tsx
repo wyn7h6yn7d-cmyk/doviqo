@@ -1,52 +1,78 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
+
+import { DURATION, EASE_PREMIUM } from "@/lib/constants";
 import { howItWorks } from "@/lib/site-content";
+import { sectionUi } from "@/lib/ui";
 import { SectionContainer } from "@/components/layout/section-container";
-import { Reveal } from "@/components/motion/reveal";
 
 export function HowItWorksSection() {
+  const reduce = useReducedMotion() ?? false;
+
   return (
     <section
       id={howItWorks.id}
-      className="section-y border-b border-[var(--border)] bg-white"
+      className="section-y relative overflow-hidden border-b border-[var(--border-strong)] bg-[var(--bg)]"
       aria-labelledby="how-heading"
     >
-      <SectionContainer>
-        <Reveal>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-indigo-600">
-            {howItWorks.eyebrow}
-          </p>
-          <h2
-            id="how-heading"
-            className="mt-3 max-w-2xl text-balance text-[1.65rem] font-semibold tracking-[-0.035em] text-[var(--fg)] sm:text-[1.85rem] lg:text-[2rem]"
-          >
-            {howItWorks.title}
-          </h2>
-          <p className="mt-4 max-w-2xl text-pretty text-[15px] leading-[1.65] text-[var(--foreground-muted)] sm:text-[17px]">
-            {howItWorks.lead}
-          </p>
-        </Reveal>
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_50%_at_100%_30%,rgb(var(--accent)/0.08),transparent_55%)]"
+        aria-hidden
+      />
 
-        <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-          {howItWorks.steps.map((step, i) => (
-            <Reveal key={step.title} delay={0.05 * (i + 1)}>
-              <li className="relative flex flex-col rounded-[1.05rem] border border-[var(--border)] bg-white p-6 shadow-soft-sm">
-                <span
-                  className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--fg)] text-[13px] font-semibold text-white shadow-float"
-                  aria-hidden
+      <SectionContainer className="relative">
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px", amount: 0.2 }}
+          transition={{ duration: DURATION.reveal * 0.85, ease: EASE_PREMIUM }}
+        >
+          <div className="max-w-2xl">
+            {howItWorks.eyebrow ? (
+              <p className={sectionUi.eyebrow}>{howItWorks.eyebrow}</p>
+            ) : null}
+            <h2
+              id="how-heading"
+              className={`${sectionUi.titleLg} ${howItWorks.eyebrow ? "mt-3" : ""}`}
+            >
+              {howItWorks.title}
+            </h2>
+            {howItWorks.lead ? (
+              <p className={sectionUi.lead}>{howItWorks.lead}</p>
+            ) : null}
+          </div>
+
+          <div className="relative mt-10 max-w-3xl">
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-[rgb(var(--accent)/0.4)] to-transparent"
+              aria-hidden
+            />
+            <ol className="divide-y divide-[var(--border-strong)] rounded-2xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-raised)_72%,transparent)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-sm">
+              {howItWorks.steps.map((step, i) => (
+                <li
+                  key={step.title}
+                  className="flex gap-5 px-4 py-6 sm:gap-8 sm:px-6 sm:py-7"
                 >
-                  {i + 1}
-                </span>
-                <h3 className="text-[16px] font-semibold leading-snug tracking-[-0.02em] text-[var(--fg)]">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
-                  {step.body}
-                </p>
-              </li>
-            </Reveal>
-          ))}
-        </ol>
+                  <span
+                    className="w-8 shrink-0 pt-0.5 text-right text-[13px] font-semibold tabular-nums text-[rgb(var(--accent-cyan))]"
+                    aria-hidden
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="text-[16px] font-semibold leading-snug tracking-[-0.02em] text-[var(--fg)]">
+                      {step.title}
+                    </h3>
+                    <p className="mt-1.5 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+                      {step.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </motion.div>
       </SectionContainer>
     </section>
   );
