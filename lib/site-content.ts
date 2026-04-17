@@ -1,19 +1,20 @@
 /**
- * Doviqo — avalehe tekstid.
+ * Doviqo — avalehe tekstid (koosolekujärgne tegevus, mitte märkmerakendus).
  */
 
 export const siteMeta = {
-  title: "Doviqo — koosoleku järel tegevuseks",
+  title: "Doviqo — koosolekujärgne tegevusplaan",
   description:
-    "Väikestele tiimidele: koosoleku märkmed või üleskirjutus muutuvad tegevuste nimekirjaks, vastutajateks, tähtaegadeks ja valmis järelkirjaks. Pole salvesti ega üldine märkmerakendus — vaid tööriist, mis koosoleku lõppedes sammu ette annab.",
+    "Väikestele tiimidele: muuda pärast koosolekut segadus tegevusteks, vastutajateks, tähtaegadeks ja saatmisvalmis järelkirjaks. Doviqo ei salvesta märkmeid — see teeb töö, mis saab pärast koosolekut.",
   keywords: [
     "koosolek",
-    "märkmed",
-    "üleskirjutus",
-    "tegevused",
-    "järelkiri",
-    "väike tiim",
     "järeltegevus",
+    "tegevuskava",
+    "järelkiri",
+    "vastutaja",
+    "tähtaeg",
+    "väike tiim",
+    "üleskirjutus",
   ],
 } as const;
 
@@ -23,36 +24,33 @@ export const nav = {
     { href: "#product", label: "Toode" },
     { href: "#how", label: "Kuidas see töötab" },
     { href: "#benefits", label: "Miks Doviqo" },
-    { href: "/studio", label: "Prooviversioon" },
+    { href: "/studio", label: "Studio" },
   ] as const,
-  studioCta: "Proovi brauseris",
+  studioCta: "Ava Studio",
   cta: "Ootenimekiri",
   homeAria: "Doviqo avaleht",
   navAria: "Põhinavigatsioon",
   menuOpen: "Ava menüü",
   menuClose: "Sulge menüü",
-  /** Studio päises logo kõrval */
-  studioBadge: "Prooviversioon",
-  /** Studio päises lingi tekst avalehele */
+  studioBadge: "Studio",
   backHome: "Avaleht",
 } as const;
 
 export const hero = {
-  eyebrow: "Koosoleku järel: plaan selgeks",
-  headline:
-    "Koosoleku märkmed tegevusteks, vastutajateks ja järelkirjaks — ilma tühja kokkuvõtte kirjutamiseta.",
+  eyebrow: "Pärast koosolekut, mitte märkmete hulgas",
+  headline: "Koosoleku märkmed ei vii tööd edasi. Järgmised sammud viivad.",
   subheadline:
-    "Üks töövoog: kleebid sisse märkmed või üleskirjutuse ja saad tegevused, vastutajad, tähtajad, lühikokkuvõtte ning saatmiseks valmis järelkirja.",
+    "Doviqo aitab väikestel tiimidel muuta märkmed, üleskirjutused ja koosoleku sisu tegevusteks, vastutajateks, tähtaegadeks ja saatmisvalmis järelkirjaks — ilma tühja kokkuvõtte kirjutamiseta.",
   clarification:
-    "See pole salvesti ega üldine märkmerakendus. See on tööriist koosoleku järel — et otsused ei jääks paberile.",
-  primaryCta: "Proovi brauseris",
+    "Doviqo ei ole koht, kus märkmed „elavad“. See on koht, kus selgineb, mis pärast koosolekut tegelikult juhtub — struktuur, vastutus ja järelkiri.",
+  primaryCta: "Ava Studio",
   secondaryCta: "Ootenimekiri",
   helper:
-    "Demot käivitad kohe brauseris. Ootenimekirjas saad teada, kui täisversioon tuleb.",
+    "Studio demo töötab brauseris. Ootenimekirjaga saad teada, kui täisversioon valmis on.",
 } as const;
 
 export const heroPreview = {
-  messyLabel: "Segased märkmed",
+  messyLabel: "Segane koosolekujärgne sisend",
   messyLines: [
     "anna — onboarding tekst… kolmapäev??",
     "martin acme pakkumine neljap",
@@ -60,8 +58,8 @@ export const heroPreview = {
     "analüütika võlg → järgmine nädal",
     "kiri tervele tiimile pärast koosolekut",
   ],
-  rawTextBadge: "Toores tekst",
-  outLabel: "Ühtlane väljund",
+  rawTextBadge: "Toores sisend",
+  outLabel: "Selge tegevusplaan",
   actionsTitle: "Tegevused",
   actions: [
     { owner: "Anna", task: "Onboardingi e-kirja tekst", due: "kolmapäevaks" },
@@ -71,53 +69,53 @@ export const heroPreview = {
   deadlinesTitle: "Tähtajad",
   deadlinesSummary: "homme · neljapäevaks · järgmine nädal",
   emailTitle: "Järelkiri",
-  emailSubject: "Pärast koosolekut — järgmised sammud",
+  emailSubject: "Järgmised sammud pärast koosolekut",
   emailPreview: `Tere,
 
-Aitäh arutelu eest. Allpool on järgmised sammud, vastutajad ja tähtajad — palun vaata ringi…`,
+Siin on kokkulepitud järgmised sammud, vastutajad ja tähtajad — palun vaata ringi…`,
 } as const;
 
 export const productProof = {
   id: "product",
-  title: "Tekst sisse, plaan välja",
-  lead: "Siin on sama loogika lühidalt: märkmed või üleskirjutus läbivad töötluse ja muutuvad tegevusteks, tähtaegadeks ning valmis järelkirjaks.",
+  title: "Teave sisse, järgmised sammud välja",
+  lead: "Märkmerakendused hoiavad infot. Doviqo teeb järgmise sammu selgeks: tegevused, omanikud, tähtajad ja valmis järelkiri — see töö tuleb pärast koosolekut niikuinii.",
   inputStep: {
     label: "Sisend",
-    body: "Märkmed või üleskirjutus — täpselt nii, nagu need päriselt välja tulevad.",
+    body: "Märkmed või üleskirjutus — nii, nagu need päriselt välja tulevad.",
   },
   processStep: {
-    label: "Töötlus",
-    body: "Doviqo eraldab ridadest tegevused, vastutajad ja tähtajad ning paneb kokku kokkuvõtte.",
+    label: "Struktuur",
+    body: "Doviqo eraldab tegevused, vastutajad ja tähtajad ning paneb kokku kokkuvõtte ja järelkirja.",
   },
   outputStep: {
     label: "Väljund",
     items: [
-      "Tegevused vastutajatega",
+      "Tegevused ja vastutajad",
       "Tähtajad ühes vaates",
-      "Valmis järelkiri (ka teemaga)",
+      "Saatmisvalmis järelkiri (ka teemaga)",
     ] as const,
   },
-  cta: "Proovi brauseris",
-  ctaHint: "Avab Doviqo Studio — töötab kohe siinsamas brauseris.",
+  cta: "Ava Studio",
+  ctaHint: "Avab Doviqo Studio — koosolekujärgne demo otse brauseris.",
 } as const;
 
 export const howItWorks = {
   id: "how",
   eyebrow: "" as const,
   title: "Kuidas see töötab",
-  lead: "Kolm sammu: märkmed sisse, ülevaade, siis edasiandmine.",
+  lead: "Kolm sammu: sisu sisse, plaan välja, siis edasiandmine.",
   steps: [
     {
-      title: "Lisa märkmed",
-      body: "Kasuta olemasolevaid märkmeid või koosoleku üleskirjutust.",
+      title: "Lisa koosoleku sisu",
+      body: "Kleebi märkmed või üleskirjutus — mitte „ilusaks“ kirjutades.",
     },
     {
-      title: "Vaata järgmised sammud üle",
-      body: "Näed tegevusi, vastutajaid ja tähtaegu ühes kohas.",
+      title: "Saa tegevusplaan ja vastutus",
+      body: "Näed tegevusi, vastutajaid ja tähtaegu ühes vaates.",
     },
     {
-      title: "Edasta ja mine töö juurde tagasi",
-      body: "Kasuta kokkuvõtet ja järelkirja kohe pärast koosolekut.",
+      title: "Jaga ja mine töö juurde",
+      body: "Kopeeri järelkiri või kokkuvõte — vähem käsitsi meelde tuletamist.",
     },
   ] as const,
 } as const;
@@ -127,23 +125,23 @@ export const benefits = {
   eyebrow: "" as const,
   title: "Miks see väikese tiimi jaoks mõistlik on",
   lead:
-    "Vähem korraldust pärast koosolekut — rohkem tegevust, mis tegelikult edasi läheb.",
+    "Vähem segadust pärast koosolekut — rohkem tegevust, mis tegelikult edasi läheb.",
   items: [
     {
-      title: "Vähem sama järelkirja nullist",
-      body: "Sa ei pea iga kord uuesti algusest kirjutama, mida juba märkmetes oli.",
+      title: "Vähem järelkirja nullist",
+      body: "Ei pea iga kord uuesti kirjutama, mida märkmetes juba oli — struktuur tuleb ette.",
     },
     {
-      title: "Kes teeb, mis ajaks",
-      body: "Vastutajad ja tähtajad on kohe näha — vähem segadust.",
+      title: "Kes, mis, millal",
+      body: "Vastutus ja tähtajad on kohe näha — vähem „kes seda tegi?“.",
     },
     {
       title: "Vähem ununenud punkte",
-      body: "Olulised järgmised sammud ei kao chati või märkmete alla ära.",
+      body: "Järgmised sammud ei kao chati või dokumendi lõppu.",
     },
     {
       title: "Kiirem järeltegevus",
-      body: "Kokkuvõte ja järelkiri valmis siis, kui koosolek veel meeles on.",
+      body: "Plaan valmis siis, kui koosolek veel meeles on.",
     },
   ] as const,
 } as const;
@@ -152,7 +150,7 @@ export { waitlist } from "@/lib/waitlist/messages";
 
 export const footer = {
   tagline:
-    "Doviqo — koosoleku märkmed tegevuseks, vastutajateks ja järelkirjaks.",
+    "Doviqo — koosolekujärgne tegevus: järgmised sammud, vastutajad, järelkiri.",
   navLabel: "Jaluse lingid",
   studioLink: "Doviqo Studio",
   waitlistLink: "Ootenimekiri",

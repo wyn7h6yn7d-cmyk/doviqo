@@ -69,7 +69,7 @@ export function buildEmailTeema(tone: MeetingToneId): string {
     case "sales-call":
       return `Müügikõne — järeltegevused, materjalid ja tähtajad${suffix}`;
     case "project-status":
-      return `Projekti seisuülevaade — täitmine ja verstapostid${suffix}`;
+      return `Projekti ülevaade — täitmine ja verstapostid${suffix}`;
     case "hiring-interview":
       return `Värbamine — intervjuu järel (sisemine koordineerimine)${suffix}`;
     default:
@@ -126,7 +126,7 @@ export function buildKokkuvote(
       p1 = `Müügikõne märkmetest on struktureeritud ${tegevused.length} järgnevat sammu; rõhk on järeltegevustel, materjalidel ja järgmisel kontaktil, et müügitoru jääks liikuma.`;
       break;
     case "project-status":
-      p1 = `Projekti seisuülevaate märkmetest on eraldatud ${tegevused.length} täitmise ja verstapostidega seotud sammu — sobivad sprinti planeerimiseks, riskiloendisse või juhtkonna lühikokkuvõttesse.`;
+      p1 = `Projekti ülevaate märkmetest on eraldatud ${tegevused.length} täitmise ja verstapostidega seotud sammu — sobivad sprinti planeerimiseks, riskiloendisse või juhtkonna lühikokkuvõttesse.`;
       break;
     case "hiring-interview":
       p1 = `Värbamisintervjuu märkmetest on kokku pandud ${tegevused.length} sisemist sammu (kandidaat, taustakontroll, otsus). See on mõeldud värbamis- ja tiimisisaseks koordineerimiseks — mitte otse kandidaadile saatmiseks.`;
@@ -232,7 +232,7 @@ Tervitades`;
 
 Tere,
 
-Projekti seisuülevaate põhjal allpool täitmisele ja verstapostidele fokusseeritud sammud. Sobib sprinti planeerimiseks, riskide ülevaatuseks või lühikese päevakorra manusena.
+Projekti ülevaate põhjal allpool täitmisele ja verstapostidele fokusseeritud sammud. Sobib sprinti planeerimiseks, riskide ülevaatuseks või lühikese päevakorra manusena.
 
 `;
       const outro = `

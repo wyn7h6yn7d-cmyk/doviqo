@@ -43,7 +43,7 @@ export function HeroSection() {
       )}
 
       <div
-        className="pointer-events-none absolute inset-0 -z-[1] bg-gradient-to-r from-[var(--bg-deep)] via-[color-mix(in_srgb,var(--bg-deep)_68%,transparent)] to-[color-mix(in_srgb,var(--bg-deep)_28%,transparent)] sm:from-[var(--bg-deep)] sm:via-[color-mix(in_srgb,var(--bg-deep)_55%,transparent)] sm:to-[color-mix(in_srgb,var(--bg-deep)_18%,transparent)] lg:via-[color-mix(in_srgb,var(--bg-deep)_48%,transparent)]"
+        className="pointer-events-none absolute inset-0 -z-[1] bg-gradient-to-r from-[var(--bg-deep)] via-[color-mix(in_srgb,var(--bg-deep)_62%,transparent)] to-[color-mix(in_srgb,var(--bg-deep)_22%,transparent)] sm:from-[var(--bg-deep)] sm:via-[color-mix(in_srgb,var(--bg-deep)_50%,transparent)] sm:to-[color-mix(in_srgb,var(--bg-deep)_12%,transparent)] lg:via-[color-mix(in_srgb,var(--bg-deep)_42%,transparent)]"
         aria-hidden
       />
       <div

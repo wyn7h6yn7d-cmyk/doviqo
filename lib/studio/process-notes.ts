@@ -11,6 +11,7 @@ import {
   buildKokkuvote,
   inferMeetingTone,
   isPresetTitleLine,
+  type MeetingToneId,
 } from "@/lib/studio/meeting-tone";
 
 /** Levinud eesnimed + demo jaoks laiendatud nimekiri. */
@@ -373,7 +374,35 @@ function filtreeriTegevuseRead(merged: string[]): string[] {
   return filtered.length > 0 ? filtered : merged;
 }
 
-export function processMeetingNotes(raw: string): StudioTulemus {
+/** Lahtised küsimused / kinnitust vajavad punktid — teksti skaneeringust (demo). */
+function extractLahtisedKusimused(mergedLines: string[]): string[] {
+  const out: string[] = [];
+  for (const line of mergedLines) {
+    const t = line.trim();
+    if (t.length < 4 || t.length > 320) continue;
+    if (t.includes("?")) {
+      out.push(t.replace(/^[\s\-–—•*]+/, ""));
+      continue;
+    }
+    if (
+      /\b(vaja kinnitada|kas integratsioon|kas .* jääb)\b/i.test(t) ||
+      /\b(kas |miks |kuidas |millal )\b/i.test(t)
+    ) {
+      out.push(t.replace(/^[\s\-–—•*]+/, ""));
+    }
+  }
+  return [...new Set(out)].slice(0, 8);
+}
+
+export type ProcessMeetingNotesOptions = {
+  /** Kui valitud, kirjutab üle automaatse tooni tuvastuse (Studio koosoleku tüüp). */
+  toneOverride?: MeetingToneId;
+};
+
+export function processMeetingNotes(
+  raw: string,
+  options?: ProcessMeetingNotesOptions,
+): StudioTulemus {
   const trimmed = raw.trim();
   if (trimmed.length === 0) {
     return {
@@ -383,6 +412,7 @@ export function processMeetingNotes(raw: string): StudioTulemus {
       kokkuvote: "",
       jarelkiri: "",
       emailTeema: "",
+      lahtisedKusimused: [],
       summary: {
         rawLineCount: 0,
         rawCharCount: 0,
@@ -394,10 +424,13 @@ export function processMeetingNotes(raw: string): StudioTulemus {
     };
   }
 
-  const tone = inferMeetingTone(trimmed);
+  const inferred = inferMeetingTone(trimmed);
+  const tone: MeetingToneId =
+    options?.toneOverride !== undefined ? options.toneOverride : inferred;
 
   const split = trimmed.split(/\r?\n/);
   const merged = liidaRead(split);
+  const lahtisedKusimused = extractLahtisedKusimused(merged);
   const linesToUse = filtreeriTegevuseRead(merged);
 
   const tegevused: TegevusRida[] = [];
@@ -437,6 +470,7 @@ export function processMeetingNotes(raw: string): StudioTulemus {
     kokkuvote,
     jarelkiri,
     emailTeema,
+    lahtisedKusimused,
     summary,
   };
 }

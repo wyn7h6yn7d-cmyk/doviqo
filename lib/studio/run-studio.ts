@@ -1,4 +1,7 @@
-import { processMeetingNotes } from "@/lib/studio/process-notes";
+import {
+  processMeetingNotes,
+  type ProcessMeetingNotesOptions,
+} from "@/lib/studio/process-notes";
 import type { StudioTulemus } from "@/lib/studio/types";
 
 /** Etappide viivitused (ms) — kokku usutav; UI progress ribaga sünkroonis. */
@@ -22,9 +25,12 @@ export const STUDIO_PROCESS_MILESTONES_MS: readonly number[] = (() => {
  * Studio töövoog — deterministlik brauseris (simuleeritud etapid + struktureeritud parsimine).
  * Hiljem: asenda API-kutsega, säilitades `StudioTulemus`.
  */
-export async function runStudioTransform(raw: string): Promise<StudioTulemus> {
+export async function runStudioTransform(
+  raw: string,
+  options?: ProcessMeetingNotesOptions,
+): Promise<StudioTulemus> {
   for (const ms of STUDIO_PROCESS_PHASES_MS) {
     await new Promise((r) => setTimeout(r, ms));
   }
-  return processMeetingNotes(raw);
+  return processMeetingNotes(raw, options);
 }

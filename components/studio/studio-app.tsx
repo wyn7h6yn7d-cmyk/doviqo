@@ -13,22 +13,22 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { DURATION, EASE_PREMIUM } from "@/lib/constants";
 import {
+  formatEmailBodyExport,
+  formatSlackExport,
   formatStudioPlainExport,
   formatTahtajadPlain,
+  formatTeamBriefExport,
   formatTegevusedPlain,
   formatVastutajadPlain,
 } from "@/lib/studio/format-export";
+import { presetIdToMeetingTone } from "@/lib/studio/preset-tone";
 import {
   STUDIO_PROCESS_MILESTONES_MS,
   STUDIO_PROCESS_TOTAL_MS,
 } from "@/lib/studio/run-studio";
 import { transformStudioInput } from "@/lib/studio/service";
 import type { StudioTulemus } from "@/lib/studio/types";
-import {
-  studioDemoPresets,
-  studioUi as t,
-  type StudioDemoPreset,
-} from "@/lib/studio/copy";
+import { studioDemoPresets, studioUi as t } from "@/lib/studio/copy";
 import { Button } from "@/components/ui/button";
 import { SectionContainer } from "@/components/layout/section-container";
 import { StudioCopyButton } from "@/components/studio/studio-copy-button";
@@ -134,7 +134,7 @@ function TransformStrip({ result }: { result: StudioTulemus }) {
   return (
     <motion.div
       variants={itemVariants}
-      className="glass-panel edge-lit rounded-xl px-5 py-4"
+      className="glass-panel edge-lit rounded-xl border border-[rgb(var(--accent)/0.22)] px-5 py-4"
     >
       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[rgb(var(--accent-bright))]">
         {t.transformStripLabel}
@@ -166,41 +166,89 @@ function EmptyState() {
   );
 }
 
-function StudioPresetPicker({
-  activePresetId,
-  onApply,
+function MeetingTypeSelector({
+  value,
+  onChange,
 }: {
-  activePresetId: string | null;
-  onApply: (preset: StudioDemoPreset) => void;
+  value: string;
+  onChange: (id: string) => void;
 }) {
   return (
-    <div role="group" aria-label={t.presetsGroupAria}>
-      <p className="text-[13px] font-semibold text-[var(--fg)]">{t.presetsSectionTitle}</p>
-      <p className="mt-1 text-[12px] leading-relaxed text-[var(--foreground-muted)]">
-        {t.presetsSectionLead}
-      </p>
-      <ul className="mt-3 flex flex-col gap-2">
-        {studioDemoPresets.map((p) => {
-          const selected = activePresetId === p.id;
-          return (
-            <li key={p.id}>
+    <div role="group" aria-label={t.meetingTypeGroupAria}>
+      <fieldset className="min-w-0 border-0 p-0">
+        <legend className="sr-only">{t.meetingTypeLabel}</legend>
+        <div className="flex flex-wrap gap-2">
+          {studioDemoPresets.map((p) => {
+            const selected = value === p.id;
+            return (
               <button
+                key={p.id}
                 type="button"
-                onClick={() => onApply(p)}
+                onClick={() => onChange(p.id)}
                 className={cn(
-                  "w-full rounded-xl border px-3 py-2.5 text-left text-[13px] font-medium leading-snug transition",
+                  "min-h-11 rounded-xl border px-3 py-2 text-left text-[12px] font-semibold leading-snug transition sm:min-h-0 sm:px-3.5 sm:py-2.5 sm:text-[13px]",
                   selected
-                    ? "border-[rgb(var(--accent-cyan)/0.45)] bg-[rgb(var(--accent)/0.16)] text-[var(--fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-[rgb(var(--accent)/0.28)]"
+                    ? "border-[rgb(var(--accent-cyan)/0.5)] bg-[rgb(var(--accent)/0.18)] text-[var(--fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-[rgb(var(--accent)/0.3)]"
                     : "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_55%,transparent)] text-[var(--foreground-muted)] hover:border-[rgb(var(--accent)/0.38)] hover:text-[var(--fg)]",
                 )}
-                aria-current={selected ? "true" : undefined}
+                aria-pressed={selected}
               >
                 {p.title}
               </button>
-            </li>
-          );
-        })}
-      </ul>
+            );
+          })}
+        </div>
+      </fieldset>
+    </div>
+  );
+}
+
+function QuickCopyActions({ result }: { result: StudioTulemus }) {
+  const slack = useMemo(() => formatSlackExport(result), [result]);
+  const emailBody = useMemo(() => formatEmailBodyExport(result), [result]);
+  const team = useMemo(() => formatTeamBriefExport(result), [result]);
+
+  return (
+    <div
+      className="flex flex-col gap-3 rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_40%,transparent)] p-4"
+      role="group"
+      aria-label={t.quickActionsLabel}
+    >
+      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
+        {t.quickActionsLabel}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <StudioCopyButton
+          text={result.kokkuvote}
+          label={t.copyKokkuvote}
+          size="md"
+          className="rounded-lg border border-[rgb(var(--accent)/0.25)] bg-[rgb(var(--accent)/0.08)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.14)]"
+        />
+        <StudioCopyButton
+          text={result.jarelkiri}
+          label={t.copyJarelkiri}
+          size="md"
+          className="rounded-lg border border-[rgb(var(--accent)/0.25)] bg-[rgb(var(--accent)/0.08)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.14)]"
+        />
+        <StudioCopyButton
+          text={slack}
+          label={t.copySlack}
+          size="md"
+          className="rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-3 py-2 text-[13px] text-[var(--foreground-muted)] hover:text-[var(--fg)]"
+        />
+        <StudioCopyButton
+          text={emailBody}
+          label={t.copyEmail}
+          size="md"
+          className="rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-3 py-2 text-[13px] text-[var(--foreground-muted)] hover:text-[var(--fg)]"
+        />
+        <StudioCopyButton
+          text={team}
+          label={t.copyTeam}
+          size="md"
+          className="rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-3 py-2 text-[13px] text-[var(--foreground-muted)] hover:text-[var(--fg)]"
+        />
+      </div>
     </div>
   );
 }
@@ -268,25 +316,22 @@ export function StudioApp() {
   const notesFieldId = useId();
   const notesHintId = `${notesFieldId}-hint`;
   const notesErrId = `${notesFieldId}-err`;
-  const [input, setInput] = useState("");
+
+  const [meetingTypeId, setMeetingTypeId] = useState(studioDemoPresets[0].id);
+  const [input, setInput] = useState(studioDemoPresets[0].body);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadCycle, setLoadCycle] = useState(0);
   const [result, setResult] = useState<StudioTulemus | null>(null);
 
-  const activePresetId = useMemo(() => {
-    const trimmed = input.trim();
-    if (!trimmed) return null;
-    for (const p of studioDemoPresets) {
-      if (p.body.trim() === trimmed) return p.id;
+  const onMeetingTypeChange = useCallback((id: string) => {
+    setMeetingTypeId(id);
+    const preset = studioDemoPresets.find((p) => p.id === id);
+    if (preset) {
+      setInput(preset.body);
+      setResult(null);
+      setError(null);
     }
-    return null;
-  }, [input]);
-
-  const applyPreset = useCallback((preset: StudioDemoPreset) => {
-    setInput(preset.body);
-    setError(null);
-    setResult(null);
   }, []);
 
   const runProcess = useCallback(async () => {
@@ -301,15 +346,18 @@ export function StudioApp() {
     setResult(null);
     setLoadCycle((c) => c + 1);
     try {
-      const out = await transformStudioInput(trimmed);
+      const out = await transformStudioInput(trimmed, {
+        toneOverride: presetIdToMeetingTone(meetingTypeId),
+      });
       setResult(out);
     } finally {
       setLoading(false);
     }
-  }, [input]);
+  }, [input, meetingTypeId]);
 
   const resetAll = useCallback(() => {
-    setInput("");
+    setMeetingTypeId(studioDemoPresets[0].id);
+    setInput(studioDemoPresets[0].body);
     setResult(null);
     setError(null);
   }, []);
@@ -371,11 +419,27 @@ export function StudioApp() {
             initial={reduce ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: DURATION.reveal, ease: EASE_PREMIUM }}
+            aria-label={t.workflowAria}
           >
             <div className="glass-panel edge-lit rounded-xl p-5 sm:p-6">
-              <div>
+              <div className="border-b border-[var(--border)] pb-5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
-                  {t.inputLabel}
+                  {t.stepMeetingType}
+                </p>
+                <p className="mt-1 text-[12px] text-[var(--foreground-muted)]">
+                  {t.stepMeetingTypeHint}
+                </p>
+                <div className="mt-4">
+                  <MeetingTypeSelector value={meetingTypeId} onChange={onMeetingTypeChange} />
+                </div>
+              </div>
+
+              <div className="pt-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
+                  {t.stepInput}
+                </p>
+                <p className="mt-1 text-[12px] text-[var(--foreground-muted)]">
+                  {t.sampleSectionLead}
                 </p>
               </div>
 
@@ -392,19 +456,15 @@ export function StudioApp() {
                   if (!next.trim()) setResult(null);
                 }}
                 placeholder={t.placeholder}
-                rows={18}
+                rows={16}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={
                   error
-                    ? t.inputHint
-                      ? `${notesHintId} ${notesErrId}`
-                      : notesErrId
-                    : t.inputHint
-                      ? notesHintId
-                      : undefined
+                    ? `${notesHintId} ${notesErrId}`
+                    : notesHintId
                 }
                 className={cn(
-                  "mt-4 min-h-[min(360px,50vh)] w-full resize-y rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] px-4 py-3 font-mono text-[13px] leading-relaxed text-[var(--fg)] shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] backdrop-blur-sm",
+                  "mt-4 min-h-[min(320px,46vh)] w-full resize-y rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] px-4 py-3 font-mono text-[13px] leading-relaxed text-[var(--fg)] shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] backdrop-blur-sm",
                   "placeholder:text-[var(--foreground-subtle)] outline-none transition",
                   "hover:border-[rgb(var(--accent)/0.35)]",
                   "focus:border-[rgb(var(--accent-cyan)/0.45)] focus:shadow-[inset_0_1px_2px_rgba(0,0,0,0.4),0_0_0_3px_rgb(var(--accent)/0.15)]",
@@ -414,14 +474,12 @@ export function StudioApp() {
                 spellCheck={false}
               />
 
-              {t.inputHint ? (
-                <p
-                  id={notesHintId}
-                  className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-subtle)]"
-                >
-                  {t.inputHint}
-                </p>
-              ) : null}
+              <p
+                id={notesHintId}
+                className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-subtle)]"
+              >
+                {t.inputHint}
+              </p>
 
               {error ? (
                 <p
@@ -433,33 +491,31 @@ export function StudioApp() {
                 </p>
               ) : null}
 
-              <div
-                id="studio-presets"
-                className="mt-5 rounded-xl border border-[rgb(var(--accent)/0.28)] bg-[color-mix(in_srgb,var(--surface-raised)_85%,transparent)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-5"
-              >
-                <StudioPresetPicker activePresetId={activePresetId} onApply={applyPreset} />
-              </div>
-
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Button
-                  type="button"
-                  onClick={runProcess}
-                  disabled={loading}
-                  className="min-h-12 min-w-[12rem] px-7 text-[15px] font-semibold"
-                  aria-busy={loading}
-                >
-                  {loading ? t.processing : t.processBtn}
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={resetAll}
-                  disabled={
-                    loading || (!input.trim() && !result && !error)
-                  }
-                >
-                  {t.resetBtn}
-                </Button>
+              <div className="mt-6 border-t border-[var(--border)] pt-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
+                  {t.stepGenerate}
+                </p>
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Button
+                    type="button"
+                    onClick={runProcess}
+                    disabled={loading}
+                    className="min-h-12 min-w-[12rem] px-7 text-[15px] font-semibold"
+                    aria-busy={loading}
+                  >
+                    {loading ? t.processing : t.processBtn}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={resetAll}
+                    disabled={
+                      loading || (!input.trim() && !result && !error)
+                    }
+                  >
+                    {t.resetBtn}
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -491,10 +547,7 @@ export function StudioApp() {
               ) : null}
             </div>
 
-            <div
-              className="flex flex-1 flex-col"
-              aria-live="polite"
-            >
+            <div className="flex flex-1 flex-col" aria-live="polite">
               <AnimatePresence mode="wait">
                 {loading ? (
                   <motion.div
@@ -518,9 +571,14 @@ export function StudioApp() {
                     <TransformStrip result={result} />
 
                     <motion.div variants={itemVariants}>
+                      <QuickCopyActions result={result} />
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
                       <ResultSection
                         title={t.sectionKokkuvote}
                         copyText={result.kokkuvote}
+                        copyLabel={t.copyKokkuvote}
                       >
                         <p className="whitespace-pre-wrap text-[14px] leading-relaxed text-[var(--foreground-muted)]">
                           {result.kokkuvote}
@@ -571,65 +629,86 @@ export function StudioApp() {
                       </ResultSection>
                     </motion.div>
 
-                  <div className="grid gap-5 lg:grid-cols-2">
-                    <motion.div variants={itemVariants}>
-                      <ResultSection
-                        title={t.sectionVastutajad}
-                        copyText={formatVastutajadPlain(result)}
-                      >
-                        <ul className="space-y-4">
-                          {result.vastutajad.map((v) => (
-                            <li key={v.nimi}>
-                              <p className="text-[13px] font-semibold text-[var(--fg)]">
-                                {v.nimi}
-                                <span className="ml-1.5 font-normal text-[var(--foreground-subtle)]">
-                                  ({v.tegevusteArv}{" "}
-                                  {v.tegevusteArv === 1 ? "tegevus" : "tegevust"})
-                                </span>
-                              </p>
-                              <ul className="mt-1.5 space-y-1 text-[13px] leading-relaxed text-[var(--foreground-muted)]">
-                                {v.ulesanded.map((u) => (
-                                  <li key={u}>· {u}</li>
-                                ))}
-                              </ul>
-                            </li>
-                          ))}
-                        </ul>
-                      </ResultSection>
-                    </motion.div>
+                    <div className="grid gap-5 lg:grid-cols-2">
+                      <motion.div variants={itemVariants}>
+                        <ResultSection
+                          title={t.sectionVastutajad}
+                          copyText={formatVastutajadPlain(result)}
+                        >
+                          <ul className="space-y-4">
+                            {result.vastutajad.map((v) => (
+                              <li key={v.nimi}>
+                                <p className="text-[13px] font-semibold text-[var(--fg)]">
+                                  {v.nimi}
+                                  <span className="ml-1.5 font-normal text-[var(--foreground-subtle)]">
+                                    ({v.tegevusteArv}{" "}
+                                    {v.tegevusteArv === 1 ? "tegevus" : "tegevust"})
+                                  </span>
+                                </p>
+                                <ul className="mt-1.5 space-y-1 text-[13px] leading-relaxed text-[var(--foreground-muted)]">
+                                  {v.ulesanded.map((u) => (
+                                    <li key={u}>· {u}</li>
+                                  ))}
+                                </ul>
+                              </li>
+                            ))}
+                          </ul>
+                        </ResultSection>
+                      </motion.div>
+
+                      <motion.div variants={itemVariants}>
+                        <ResultSection
+                          title={t.sectionTahtajad}
+                          copyText={formatTahtajadPlain(result)}
+                        >
+                          <ul className="space-y-4">
+                            {result.tahtajad.map((g) => (
+                              <li key={g.tahtaeg}>
+                                <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[rgb(var(--accent-bright))]">
+                                  {g.tahtaeg}
+                                </p>
+                                <ul className="mt-2 space-y-2 text-[13px] text-[var(--foreground-muted)]">
+                                  {g.read.map((row, i) => (
+                                    <li key={`${row.kirjeldus}-${i}`}>
+                                      <span className="font-medium text-[var(--fg)]">
+                                        {row.vastutaja}:
+                                      </span>{" "}
+                                      {row.kirjeldus}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </li>
+                            ))}
+                          </ul>
+                        </ResultSection>
+                      </motion.div>
+                    </div>
+
+                    {result.lahtisedKusimused.length > 0 ? (
+                      <motion.div variants={itemVariants}>
+                        <ResultSection
+                          title={t.sectionLahtised}
+                          copyText={result.lahtisedKusimused.join("\n")}
+                        >
+                          <ul className="list-disc space-y-2 pl-5 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+                            {result.lahtisedKusimused.map((q) => (
+                              <li key={q}>{q}</li>
+                            ))}
+                          </ul>
+                        </ResultSection>
+                      </motion.div>
+                    ) : null}
 
                     <motion.div variants={itemVariants}>
-                      <ResultSection
-                        title={t.sectionTahtajad}
-                        copyText={formatTahtajadPlain(result)}
-                      >
-                        <ul className="space-y-4">
-                          {result.tahtajad.map((g) => (
-                            <li key={g.tahtaeg}>
-                              <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[rgb(var(--accent-bright))]">
-                                {g.tahtaeg}
-                              </p>
-                              <ul className="mt-2 space-y-2 text-[13px] text-[var(--foreground-muted)]">
-                                {g.read.map((row, i) => (
-                                  <li key={`${row.kirjeldus}-${i}`}>
-                                    <span className="font-medium text-[var(--fg)]">
-                                      {row.vastutaja}:
-                                    </span>{" "}
-                                    {row.kirjeldus}
-                                  </li>
-                                ))}
-                              </ul>
-                            </li>
-                          ))}
-                        </ul>
-                      </ResultSection>
+                      <JarelkiriBlock result={result} />
                     </motion.div>
-                  </div>
 
-                  <motion.div variants={itemVariants}>
-                    <JarelkiriBlock result={result} />
+                    <motion.div variants={itemVariants} className="pb-2">
+                      <p className="text-[12px] font-medium text-[var(--foreground-subtle)]">
+                        {t.successHint}
+                      </p>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
                 ) : (
                   <motion.div
                     key="empty"

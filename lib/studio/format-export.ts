@@ -49,7 +49,53 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
     "Järelkiri",
     "—",
     r.jarelkiri,
+    ...(r.lahtisedKusimused.length
+      ? ["", "Lahtised küsimused", "—", r.lahtisedKusimused.join("\n")]
+      : []),
   ].join("\n");
+}
+
+/** Slack / kiirkanal — lühidalt, loetav. */
+export function formatSlackExport(r: StudioTulemus): string {
+  const lines = [
+    `*Kokkuvõte*\n${r.kokkuvote || "—"}`,
+    "",
+    "*Tegevused*",
+    ...r.tegevused.map(
+      (row) =>
+        `• ${row.kirjeldus} _(${row.vastutaja} · ${row.tahtaeg})_`,
+    ),
+  ];
+  if (r.lahtisedKusimused.length) {
+    lines.push("", "*Lahtised küsimused*", ...r.lahtisedKusimused.map((q) => `• ${q}`));
+  }
+  lines.push("", `*Järelkiri*\n\`\`\`\n${r.jarelkiri}\n\`\`\``);
+  return lines.join("\n");
+}
+
+/** E-kirja sisu (ilma teemareata) — kopeerimiseks posti keresse. */
+export function formatEmailBodyExport(r: StudioTulemus): string {
+  return r.jarelkiri
+    .trim()
+    .replace(/^Teema:\s*.+(\r?\n)+/i, "")
+    .trim();
+}
+
+/** Tiimile lühike ülevaade — kiirsõnum, stand-up. */
+export function formatTeamBriefExport(r: StudioTulemus): string {
+  const top = r.tegevused
+    .slice(0, 5)
+    .map((x) => `• ${x.vastutaja}: ${x.kirjeldus} (${x.tahtaeg})`)
+    .join("\n");
+  return [
+    "Koosolekujärgne plaan:",
+    "",
+    top,
+    "",
+    r.kokkuvote ? `Kokkuvõte: ${r.kokkuvote.split("\n")[0]}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 export function formatTegevusedPlain(r: StudioTulemus): string {
