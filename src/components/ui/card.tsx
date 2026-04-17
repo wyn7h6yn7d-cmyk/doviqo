@@ -2,13 +2,15 @@ import { cn } from "@/lib/cn";
 
 export function Card({
   className,
+  outerClassName,
   children,
 }: {
   className?: string;
+  outerClassName?: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("group relative", className)}>
+    <div className={cn("group relative", outerClassName)}>
       <div
         className={cn(
           "absolute inset-0 -z-10 rounded-2xl opacity-0 blur-xl transition duration-500 ease-out",
@@ -22,6 +24,7 @@ export function Card({
           "transition duration-300 ease-out will-change-transform",
           "hover:-translate-y-0.5 hover:border-white/14 hover:bg-white/[0.05] hover:shadow-layer-2",
           "focus-within:shadow-ring-soft",
+          className,
         )}
       >
         {/* Inner hairline to make surfaces feel “machined” */}

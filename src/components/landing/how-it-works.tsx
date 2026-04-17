@@ -23,7 +23,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how" className="py-14 sm:py-18 lg:py-20">
+    <section id="how" className="py-14 sm:py-16 lg:py-20">
       <Container>
         <Reveal>
           <SectionHeading
