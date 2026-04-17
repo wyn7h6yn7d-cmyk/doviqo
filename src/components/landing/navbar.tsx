@@ -38,7 +38,7 @@ export function Navbar() {
       <Container className="h-16 flex items-center justify-between">
         <a
           href="#top"
-          className="font-semibold tracking-tight text-white hover:text-white/90"
+          className="rounded-md font-semibold tracking-tight text-white hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25 focus-visible:ring-offset-0"
           aria-label="Doviqo home"
         >
           Doviqo
@@ -49,7 +49,7 @@ export function Navbar() {
             <a
               key={l.href}
               href={l.href}
-              className="text-sm text-white/72 hover:text-white transition"
+              className="rounded-md text-sm text-white/72 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25 focus-visible:ring-offset-0"
             >
               {l.label}
             </a>
@@ -71,7 +71,7 @@ export function Navbar() {
             href="#cta"
             className="sm:hidden"
           >
-            Early access
+            Get early access
           </Button>
         </div>
       </Container>

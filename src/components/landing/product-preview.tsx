@@ -25,8 +25,8 @@ export function ProductPreview() {
         <Reveal>
           <SectionHeading
             eyebrow="Product"
-            title="A premium workflow that makes next steps obvious."
-            description="Add a meeting. Doviqo extracts action items, assigns owners, sets deadlines, and drafts follow-ups — so momentum doesn’t decay after the call."
+            title="See what happens after the meeting"
+            description="Doviqo turns messy notes into a clean execution layer your team can actually use."
           />
         </Reveal>
 

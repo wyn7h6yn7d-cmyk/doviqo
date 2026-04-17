@@ -8,7 +8,7 @@ export function Footer() {
           Doviqo
         </p>
         <p className="text-xs text-white/45">
-          © {new Date().getFullYear()} Doviqo. From meeting to momentum.
+          Doviqo — turn conversations into clear next steps.
         </p>
       </Container>
     </footer>

@@ -97,6 +97,8 @@ export function Hero() {
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-sheen opacity-90" />
         <HeroBackground3D />
+        {/* Atmospheric lighting: keeps premium depth without noise */}
+        <div className="glow-layer" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/55 to-black/85" />
       </div>
 
@@ -137,7 +139,7 @@ export function Hero() {
                 </Button>
               </div>
               <p className="mt-4 text-xs leading-6 text-white/50">
-                Built for small teams. No recorder. Just execution you can ship.
+                No recorder. No clutter. Just clear next steps after every meeting.
               </p>
             </Reveal>
           </div>

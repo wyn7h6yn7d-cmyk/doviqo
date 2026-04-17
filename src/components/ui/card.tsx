@@ -29,6 +29,8 @@ export function Card({
       >
         {/* Inner hairline to make surfaces feel “machined” */}
         <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/[0.04]" />
+        {/* Subtle top-left highlight for layered surface feel */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(420px_240px_at_18%_12%,rgba(255,255,255,0.06),transparent_60%)] opacity-60" />
         {children}
       </div>
     </div>

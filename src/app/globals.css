@@ -64,6 +64,43 @@ body {
   mix-blend-mode: overlay;
 }
 
+/* Atmospheric glow accents (subtle, static, cheap) */
+.glow-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.glow-layer::before,
+.glow-layer::after {
+  content: "";
+  position: absolute;
+  filter: blur(40px);
+  opacity: 0.6;
+  transform: translateZ(0);
+}
+.glow-layer::before {
+  width: 720px;
+  height: 420px;
+  left: -260px;
+  top: -220px;
+  background: radial-gradient(
+    closest-side,
+    rgba(var(--accent), 0.18),
+    transparent 70%
+  );
+}
+.glow-layer::after {
+  width: 620px;
+  height: 420px;
+  right: -260px;
+  top: -120px;
+  background: radial-gradient(
+    closest-side,
+    rgba(var(--mint), 0.12),
+    transparent 72%
+  );
+}
+
 /* Better text rendering for “expensive” typography */
 * {
   -webkit-font-smoothing: antialiased;

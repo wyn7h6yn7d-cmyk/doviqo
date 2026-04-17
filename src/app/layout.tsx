@@ -13,19 +13,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Doviqo — From meeting to momentum",
+  title: "Doviqo — turn conversations into clear next steps",
   description:
-    "Doviqo turns meeting notes and transcripts into clear owners, deadlines, follow-ups, and next steps—fast.",
+    "Meetings end. Work slips. Doviqo fixes that. Turn meeting notes and transcripts into clear owners, deadlines, follow-ups, and next steps in minutes.",
   metadataBase: new URL("https://doviqo.com"),
+  applicationName: "Doviqo",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
-    title: "Doviqo — From meeting to momentum",
+    title: "Doviqo — turn conversations into clear next steps",
     description:
-      "Meetings end. Work slips. Doviqo fixes that. Turn meeting notes into clear next steps with owners and deadlines.",
+      "Meetings end. Work slips. Doviqo fixes that. Turn meeting notes and transcripts into clear owners, deadlines, follow-ups, and next steps in minutes.",
     type: "website",
+    url: "/",
+    siteName: "Doviqo",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Doviqo — From meeting to momentum",
+    title: "Doviqo — turn conversations into clear next steps",
     description:
       "Turn meeting notes and transcripts into clear owners, deadlines, follow-ups, and next steps in minutes.",
   },

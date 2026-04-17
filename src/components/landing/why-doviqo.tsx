@@ -1,49 +1,37 @@
-import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/motion/reveal";
-
-const reasons = [
-  {
-    title: "Clarity over clutter",
-    body: "Turn messy discussions into a crisp list of next steps — with context that stays readable.",
-  },
-  {
-    title: "Ownership by default",
-    body: "Every action has a clear owner. No “someone should…” slipping through the cracks.",
-  },
-  {
-    title: "Momentum that holds",
-    body: "Deadlines and follow-ups are draftable fast, so work moves between meetings.",
-  },
-  {
-    title: "Less manual recap",
-    body: "Spend minutes reviewing and sending. Stop rewriting the same recap every week.",
-  },
-];
+import { Stagger, StaggerItem } from "@/components/motion/stagger";
 
 export function WhyDoviqo() {
   return (
-    <section id="why" className="py-16 sm:py-20">
+    <section id="why" className="py-14 sm:py-16 lg:py-20">
       <Container>
         <Reveal>
           <SectionHeading
             eyebrow="Why Doviqo"
-            title="Designed for post-meeting execution."
-            description="A lightweight tool for small teams — focused on clarity, owners, deadlines, and follow-through."
+            title="Built for the 10 minutes after the meeting"
           />
         </Reveal>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          {reasons.map((r, idx) => (
-            <Reveal key={r.title} delay={0.05 * idx}>
-              <Card className="p-5 sm:p-6">
-                <p className="text-sm font-medium text-white/85">{r.title}</p>
-                <p className="mt-3 text-sm leading-7 text-white/62">{r.body}</p>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
+        <Stagger className="mt-10">
+          <ul className="grid gap-3 sm:gap-4 md:grid-cols-2">
+            {[
+              "Clear owners and next steps",
+              "Less manual recap work",
+              "Fewer dropped follow-ups",
+              "Faster post-meeting execution",
+              "Designed for small teams",
+            ].map((b) => (
+              <StaggerItem key={b}>
+                <li className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-4 shadow-layer-1 backdrop-blur-md">
+                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-white/35" />
+                  <span className="text-sm leading-7 text-white/75">{b}</span>
+                </li>
+              </StaggerItem>
+            ))}
+          </ul>
+        </Stagger>
       </Container>
     </section>
   );

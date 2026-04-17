@@ -41,8 +41,8 @@ export function FinalCta() {
           <Reveal className="lg:col-span-6">
             <SectionHeading
               eyebrow="Early access"
-              title="Turn your next meeting into momentum."
-              description="Join the waitlist for early access. For now this form is front-end only — wire it to your backend later."
+              title="From meeting to momentum"
+              description="Doviqo helps small teams turn conversations into clear next steps, without adding another bloated tool to the stack."
             />
             <div className="mt-6 flex flex-wrap gap-2 text-xs text-white/55">
               <span className="rounded-full bg-white/10 px-2 py-1">
@@ -80,7 +80,11 @@ export function FinalCta() {
                   }
                 >
                   {status === "success" ? (
-                    <div className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
+                    <div
+                      className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5"
+                      role="status"
+                      aria-live="polite"
+                    >
                       <div className="flex items-start gap-3">
                         <div className="mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white/80">
                           <span className="text-sm">✓</span>
@@ -166,6 +170,7 @@ export function FinalCta() {
                           <p
                             id={`${emailId}-error`}
                             className="text-xs text-white/55"
+                            role="alert"
                           >
                             {emailError}
                           </p>
@@ -210,7 +215,7 @@ export function FinalCta() {
                         >
                           {status === "submitting"
                             ? "Requesting…"
-                            : "Request early access"}
+                            : "Get early access"}
                         </Button>
 
                         {status === "error" && errorMessage ? (
