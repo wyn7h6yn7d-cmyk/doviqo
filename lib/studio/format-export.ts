@@ -100,6 +100,13 @@ export function formatEmailBodyExport(r: StudioTulemus): string {
     .trim();
 }
 
+/** Teema + tühi rida + sisu — mugav kleepida meilikliendis (teema eraldi väljale või keresse). */
+export function formatEmailReadyExport(r: StudioTulemus): string {
+  const body = formatEmailBodyExport(r);
+  const teema = (r.emailTeema || "").trim();
+  return [`Teema: ${teema || "—"}`, "", body].join("\n");
+}
+
 /** Tiimile lühike ülevaade — kiirsõnum, stand-up. */
 export function formatTeamBriefExport(r: StudioTulemus): string {
   const top = r.tegevused

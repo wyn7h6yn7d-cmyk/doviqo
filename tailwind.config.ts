@@ -23,15 +23,15 @@ export default {
       },
       boxShadow: {
         "soft-lg":
-          "0 24px 64px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255,255,255,0.06) inset",
+          "0 24px 64px rgba(0, 0, 0, 0.52), 0 1px 0 rgba(255,255,255,0.07) inset, 0 0 48px -28px rgb(var(--accent) / 0.12)",
         "soft-md":
-          "0 12px 36px rgba(0, 0, 0, 0.38), 0 1px 0 rgba(255,255,255,0.05) inset",
+          "0 12px 36px rgba(0, 0, 0, 0.42), 0 1px 0 rgba(255,255,255,0.06) inset, 0 0 36px -22px rgb(var(--accent-cyan) / 0.08)",
         "soft-sm":
-          "0 2px 12px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255,255,255,0.04) inset",
+          "0 2px 12px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255,255,255,0.05) inset, 0 0 24px -16px rgb(var(--accent) / 0.1)",
         "layer-dark":
           "0 1px 0 rgba(255,255,255,0.06) inset, 0 0 0 1px rgba(255,255,255,0.04), 0 20px 50px -12px rgba(0,0,0,0.55)",
         float:
-          "0 1px 0 rgba(255,255,255,0.08) inset, 0 18px 48px rgba(0,0,0,0.45), 0 0 40px -12px rgb(var(--accent) / 0.2)",
+          "0 1px 0 rgba(255,255,255,0.09) inset, 0 0 0 1px rgb(var(--accent-cyan) / 0.06), 0 18px 48px rgba(0,0,0,0.5), 0 0 52px -16px rgb(var(--accent) / 0.22)",
         card: "var(--shadow-card)",
         "glow-accent":
           "0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 60px -15px rgb(var(--accent) / 0.35), 0 20px 50px -18px rgba(0,0,0,0.5)",
@@ -47,7 +47,7 @@ export default {
           "radial-gradient(600px 400px at 50% 100%, rgb(var(--accent) / 0.06), transparent 55%)",
         ].join(", "),
         "surface-sheen":
-          "radial-gradient(480px 260px at 20% 0%, rgb(var(--accent) / 0.12), transparent 58%), radial-gradient(400px 220px at 90% 30%, rgb(var(--accent-cyan) / 0.08), transparent 58%)",
+          "radial-gradient(520px 280px at 18% 0%, rgb(var(--accent) / 0.16), transparent 58%), radial-gradient(440px 240px at 88% 28%, rgb(var(--accent-cyan) / 0.11), transparent 58%), radial-gradient(360px 200px at 50% 100%, rgb(var(--accent) / 0.06), transparent 60%)",
         "btn-primary":
           "linear-gradient(135deg, rgb(124 92 255) 0%, rgb(99 102 241) 45%, rgb(79 70 229) 100%)",
       },

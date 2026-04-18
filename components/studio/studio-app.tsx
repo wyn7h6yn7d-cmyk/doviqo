@@ -13,7 +13,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { DURATION, EASE_PREMIUM } from "@/lib/constants";
 import {
-  formatEmailBodyExport,
+  formatEmailReadyExport,
   formatSlackExport,
   formatStudioPlainExport,
   formatTahtajadPlain,
@@ -138,7 +138,7 @@ function OutputSkeletonBlock({
   children: ReactNode;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--border)_70%,transparent)] bg-[color-mix(in_srgb,var(--surface)_50%,transparent)] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div className="relative overflow-hidden rounded-xl border border-[rgb(var(--accent)/0.14)] bg-[linear-gradient(155deg,color-mix(in_srgb,var(--surface-raised)_55%,transparent)_0%,color-mix(in_srgb,var(--surface)_42%,transparent)_100%)] px-4 py-4 shadow-[inset_0_1px_0_rgb(255,255,255/0.05),0_0_40px_-28px_rgb(var(--accent)/0.12)]">
       <div
         className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-[radial-gradient(circle,rgb(var(--accent)/0.12)_0%,transparent_68%)]"
         aria-hidden
@@ -161,16 +161,18 @@ function PremiumResultCard({
   icon,
   copyText,
   copyLabel = t.copySection,
+  copySuccessLabel,
   children,
 }: {
   title: string;
   icon: ReactNode;
   copyText: string;
   copyLabel?: string;
+  copySuccessLabel?: string;
   children: ReactNode;
 }) {
   return (
-    <section className="group relative overflow-hidden rounded-2xl border border-[rgb(var(--accent)/0.16)] bg-[linear-gradient(158deg,rgba(24,28,40,0.97)_0%,rgba(10,12,20,0.92)_52%,rgba(8,10,16,0.88)_100%)] shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset,0_28px_64px_-36px_rgba(0,0,0,0.72),0_0_80px_-44px_rgb(var(--accent)/0.35)]">
+    <section className="panel-output-card group relative overflow-hidden rounded-2xl">
       <div
         className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-cyan)/0.12)_0%,transparent_70%)] opacity-90"
         aria-hidden
@@ -184,7 +186,12 @@ function PremiumResultCard({
             {title}
           </h2>
         </div>
-        <StudioCopyButton text={copyText} label={copyLabel} size="md" />
+        <StudioCopyButton
+          text={copyText}
+          label={copyLabel}
+          successLabel={copySuccessLabel}
+          size="md"
+        />
       </div>
       <div className="relative px-5 pb-6 pt-5">{children}</div>
     </section>
@@ -272,7 +279,7 @@ function TransformStrip({ result }: { result: StudioTulemus }) {
   return (
     <motion.div
       variants={itemVariants}
-      className="relative overflow-hidden rounded-2xl border border-[rgb(var(--accent-cyan)/0.3)] bg-[linear-gradient(128deg,rgb(var(--accent)/0.26)_0%,rgba(16,18,28,0.95)_42%,rgba(8,10,16,0.92)_100%)] px-5 py-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset,0_0_72px_-20px_rgb(var(--accent)/0.5),0_24px_64px_-36px_rgba(0,0,0,0.65)] sm:px-7 sm:py-7"
+      className="relative overflow-hidden rounded-2xl border border-[rgb(var(--accent-cyan)/0.38)] bg-[linear-gradient(128deg,rgb(var(--accent)/0.3)_0%,rgba(14,18,28,0.96)_45%,rgba(6,9,16,0.94)_100%)] px-5 py-6 shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_0_88px_-24px_rgb(var(--accent)/0.52),0_28px_72px_-40px_rgba(0,0,0,0.68)] sm:px-7 sm:py-7"
     >
       <div
         className="pointer-events-none absolute -right-20 top-0 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-cyan)/0.22)_0%,transparent_72%)] blur-2xl"
@@ -421,9 +428,12 @@ function MeetingTypeSelector({
 }) {
   return (
     <div role="group" aria-label={t.meetingTypeGroupAria}>
+      <p className="mb-3 text-[11px] font-medium text-[var(--foreground-subtle)]">
+        {t.meetingTypeContextLine}
+      </p>
       <fieldset className="min-w-0 border-0 p-0">
         <legend className="sr-only">{t.meetingTypeLabel}</legend>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-5 lg:gap-3">
           {studioDemoPresets.map((p) => {
             const selected = value === p.id;
             return (
@@ -432,27 +442,41 @@ function MeetingTypeSelector({
                 type="button"
                 onClick={() => onChange(p.id)}
                 className={cn(
-                  "group relative flex min-h-[4.5rem] flex-col justify-center rounded-2xl border px-3 py-3 text-left transition duration-200 sm:min-h-[4.75rem] sm:px-4",
+                  "group relative flex min-h-[5.75rem] flex-col justify-between rounded-2xl border px-3.5 py-3 text-left transition duration-200 sm:min-h-[6rem] sm:px-4",
                   selected
-                    ? "border-[rgb(var(--accent-cyan)/0.55)] bg-[rgb(var(--accent)/0.16)] text-[var(--fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_0_0_1px_rgb(var(--accent)/0.35),0_16px_42px_-22px_rgb(var(--accent)/0.55)]"
-                    : "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_82%,transparent)] text-[var(--foreground-muted)] hover:border-[rgb(var(--accent)/0.4)] hover:bg-[color-mix(in_srgb,var(--surface-raised)_90%,transparent)] hover:text-[var(--fg)]",
+                    ? "border-[rgb(var(--accent-cyan)/0.5)] bg-[linear-gradient(168deg,rgb(var(--accent)/0.22)_0%,color-mix(in_srgb,var(--surface-raised)_55%,transparent)_100%)] text-[var(--fg)] shadow-[inset_0_1px_0_rgb(255,255,255,0.08),0_0_0_1px_rgb(var(--accent)/0.35),0_14px_48px_-18px_rgb(var(--accent)/0.45)]"
+                    : "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] text-[var(--foreground-muted)] hover:border-[rgb(var(--accent)/0.42)] hover:bg-[color-mix(in_srgb,var(--surface-raised)_92%,transparent)] hover:text-[var(--fg)]",
                 )}
                 aria-pressed={selected}
+                aria-describedby={`preset-intent-${p.id}`}
               >
                 {selected ? (
                   <span
-                    className="absolute right-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-[rgb(var(--accent-cyan)/0.35)] text-[10px] font-bold text-[var(--fg)]"
+                    className="absolute right-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-[rgb(var(--accent-cyan)/0.4)] text-[10px] font-bold text-[var(--fg)] shadow-[0_0_20px_-4px_rgb(var(--accent-cyan)/0.5)]"
                     aria-hidden
                   >
                     ✓
                   </span>
                 ) : null}
-                <span className="pr-6 text-[13px] font-semibold leading-snug sm:text-[14px]">
+                <span
+                  className={cn(
+                    "pr-7 text-[13px] font-semibold leading-snug sm:text-[14px]",
+                    selected && "text-[var(--fg)]",
+                  )}
+                >
                   {p.title}
                 </span>
-                <span className="mt-1.5 text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--foreground-subtle)] group-hover:text-[var(--foreground-muted)]">
-                  {selected ? "Valitud kontekst" : "Struktuur + toon"}
-                </span>
+                <p
+                  id={`preset-intent-${p.id}`}
+                  className={cn(
+                    "mt-2 line-clamp-3 text-[11px] leading-snug sm:text-[12px]",
+                    selected
+                      ? "text-[var(--foreground-muted)]"
+                      : "text-[var(--foreground-subtle)] group-hover:text-[var(--foreground-muted)]",
+                  )}
+                >
+                  {p.intent}
+                </p>
               </button>
             );
           })}
@@ -462,59 +486,86 @@ function MeetingTypeSelector({
   );
 }
 
-function QuickCopyActions({ result }: { result: StudioTulemus }) {
+function QuickCopyActions({
+  result,
+  exportAll,
+}: {
+  result: StudioTulemus;
+  exportAll: string;
+}) {
   const slack = useMemo(() => formatSlackExport(result), [result]);
-  const emailBody = useMemo(() => formatEmailBodyExport(result), [result]);
+  const emailReady = useMemo(() => formatEmailReadyExport(result), [result]);
   const team = useMemo(() => formatTeamBriefExport(result), [result]);
-  const otsusedPlain = useMemo(() => formatOtsusedPlain(result), [result]);
 
   return (
     <div
-      className="flex flex-col gap-3 rounded-2xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_35%,transparent)] p-4 sm:p-5"
+      className="rounded-2xl border border-[rgb(var(--accent)/0.22)] bg-[linear-gradient(168deg,color-mix(in_srgb,var(--surface-muted)_48%,transparent)_0%,color-mix(in_srgb,var(--surface)_28%,var(--bg-deep))_100%)] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_48px_-28px_rgb(var(--accent)/0.18)] sm:p-5"
       role="group"
-      aria-label={t.quickActionsLabel}
+      aria-label={t.workflowCopyTitle}
     >
-      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
-        {t.quickActionsLabel}
-      </p>
-      <div className="flex flex-wrap gap-2">
+      <div className="border-b border-[color-mix(in_srgb,var(--border)_70%,transparent)] pb-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[rgb(var(--accent-bright))]">
+          {t.workflowCopyTitle}
+        </p>
+        <p className="mt-2 max-w-3xl text-[13px] leading-relaxed text-[var(--foreground-muted)] sm:text-[14px]">
+          {t.workflowCopyHint}
+        </p>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-6 lg:gap-2.5">
         <StudioCopyButton
           text={result.kokkuvote}
           label={t.copyKokkuvote}
+          successLabel={t.copiedKokkuvote}
+          variant="workflow"
           size="md"
-          className="rounded-lg border border-[rgb(var(--accent)/0.25)] bg-[rgb(var(--accent)/0.08)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.14)]"
+          className="lg:col-span-2"
         />
-        {result.otsused.length > 0 ? (
-          <StudioCopyButton
-            text={otsusedPlain}
-            label={t.copyOtsused}
-            size="md"
-            className="rounded-lg border border-[rgb(var(--accent)/0.25)] bg-[rgb(var(--accent)/0.08)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.14)]"
-          />
-        ) : null}
         <StudioCopyButton
           text={result.jarelkiri}
           label={t.copyJarelkiri}
+          successLabel={t.copiedJarelkiri}
+          variant="workflow"
           size="md"
-          className="rounded-lg border border-[rgb(var(--accent)/0.25)] bg-[rgb(var(--accent)/0.08)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.14)]"
+          className="lg:col-span-2"
         />
         <StudioCopyButton
-          text={slack}
-          label={t.copySlack}
+          text={exportAll}
+          label={t.copyAll}
+          successLabel={t.copiedAll}
+          variant="workflow"
           size="md"
-          className="rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-3 py-2 text-[13px] text-[var(--foreground-muted)] hover:text-[var(--fg)]"
-        />
-        <StudioCopyButton
-          text={emailBody}
-          label={t.copyEmail}
-          size="md"
-          className="rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-3 py-2 text-[13px] text-[var(--foreground-muted)] hover:text-[var(--fg)]"
+          className="lg:col-span-2"
         />
         <StudioCopyButton
           text={team}
           label={t.copyTeam}
+          successLabel={t.copiedTeam}
+          variant="workflow"
           size="md"
-          className="rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-3 py-2 text-[13px] text-[var(--foreground-muted)] hover:text-[var(--fg)]"
+          className="lg:col-span-3"
+        />
+        <StudioCopyButton
+          text={emailReady}
+          label={t.copyEmail}
+          successLabel={t.copiedEmail}
+          variant="workflow"
+          size="md"
+          className="lg:col-span-3"
+        />
+      </div>
+
+      <div className="mt-3 border-t border-[color-mix(in_srgb,var(--border)_60%,transparent)] pt-3">
+        <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--foreground-subtle)]">
+          {t.workflowMoreChannels}
+        </p>
+        <StudioCopyButton
+          text={slack}
+          label={t.copySlack}
+          successLabel={t.copiedSlack}
+          variant="workflowMuted"
+          size="md"
+          className="sm:max-w-md"
         />
       </div>
     </div>
@@ -582,21 +633,20 @@ export function StudioApp() {
 
   return (
     <div className="relative flex min-h-screen flex-col bg-[var(--bg-deep)]">
-      <div
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_-18%,rgb(var(--accent)/0.16),transparent_58%),radial-gradient(ellipse_70%_42%_at_100%_12%,rgb(var(--accent-cyan)/0.09),transparent_52%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none fixed inset-0 opacity-[0.35] [background-image:linear-gradient(rgba(148,163,184,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.045)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_85%_65%_at_50%_42%,black,transparent)]"
-        aria-hidden
-      />
+      <div className="studio-atmosphere" aria-hidden />
+      <div className="studio-atmosphere-grid" aria-hidden />
 
-      <header className="sticky top-0 z-50 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg-elevated)_88%,transparent)] shadow-[0_1px_0_rgba(255,255,255,0.05)_inset,0_20px_56px_-28px_rgba(0,0,0,0.65)] backdrop-blur-xl">
+      <header className="studio-header-bar sticky top-0 z-50">
         <SectionContainer className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <p className="text-gradient-accent text-[10px] font-semibold uppercase tracking-[0.16em]">
-              {t.studioEyebrow}
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-gradient-accent text-[10px] font-semibold uppercase tracking-[0.16em]">
+                {t.studioEyebrow}
+              </p>
+              <span className="rounded-full border border-[rgb(var(--accent-cyan)/0.35)] bg-[rgb(var(--accent-cyan)/0.08)] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-[rgb(var(--accent-cyan))]">
+                {t.demoBadge}
+              </span>
+            </div>
             <h1 className="mt-1.5 text-[1.4rem] font-semibold tracking-[-0.035em] text-[var(--fg)] sm:text-[1.5rem]">
               {t.productName}
             </h1>
@@ -622,7 +672,7 @@ export function StudioApp() {
             </Link>
           </nav>
         </SectionContainer>
-        <div className="border-t border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-muted)_40%,transparent)]">
+        <div className="studio-notice-strip">
           <SectionContainer className="py-2.5">
             <p className="text-[12px] leading-relaxed text-[var(--foreground-muted)]">
               {t.demoNotice}
@@ -631,7 +681,7 @@ export function StudioApp() {
         </div>
       </header>
 
-      <section className="relative z-10 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_55%,var(--bg-deep))] py-5 sm:py-7">
+      <section className="studio-meeting-strip relative z-10 py-5 sm:py-7">
         <SectionContainer>
           <div className="max-w-4xl">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--accent-bright))]">
@@ -644,12 +694,15 @@ export function StudioApp() {
           <div className="mt-6">
             <MeetingTypeSelector value={meetingTypeId} onChange={onMeetingTypeChange} />
           </div>
+          <p className="mt-5 max-w-3xl text-[12px] leading-relaxed text-[var(--foreground-subtle)] sm:text-[13px]">
+            {t.meetingTypeFooterNote}
+          </p>
         </SectionContainer>
       </section>
 
       <div className="relative z-10 flex flex-1 flex-col lg:grid lg:min-h-0 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)] lg:items-stretch xl:grid-cols-[minmax(300px,400px)_minmax(0,1fr)]">
         <motion.aside
-          className="flex w-full flex-col border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_94%,black)] lg:shrink-0 lg:border-b-0 lg:border-r"
+          className="studio-intake-rail flex w-full flex-col border-b border-[var(--border)] lg:shrink-0 lg:border-b-0 lg:border-r"
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.reveal, ease: EASE_PREMIUM }}
@@ -762,7 +815,7 @@ export function StudioApp() {
         </motion.aside>
 
         <motion.main
-          className="relative flex min-h-[min(560px,68vh)] flex-1 flex-col border-[var(--border)] bg-[linear-gradient(180deg,rgba(12,14,22,0.75)_0%,rgba(8,10,16,0.94)_40%,var(--bg-deep)_100%)] lg:min-h-[calc(100vh-12rem)]"
+          className="studio-output-stage relative z-0 flex min-h-[min(560px,68vh)] flex-1 flex-col border-[var(--border)] lg:min-h-[calc(100vh-12rem)]"
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -771,32 +824,18 @@ export function StudioApp() {
             delay: 0.05,
           }}
         >
-          <div
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_70%_-8%,rgb(var(--accent)/0.12),transparent_55%)]"
-            aria-hidden
-          />
-          <SectionContainer className="relative flex flex-1 flex-col py-6 lg:min-h-0 lg:py-8">
-            <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[rgb(var(--accent-bright))]">
-                  {t.outputTitle}
-                </p>
-                <p className="mt-2 max-w-2xl text-[15px] font-medium leading-relaxed tracking-[-0.015em] text-[var(--foreground-muted)]">
-                  {t.outputHint}
-                </p>
-              </div>
-              {hasSuccess ? (
-                <StudioCopyButton
-                  text={exportAll}
-                  label={t.copyAll}
-                  size="md"
-                  className="rounded-xl border border-[rgb(var(--accent)/0.45)] bg-[rgb(var(--accent)/0.16)] px-4 py-2.5 text-[13px] font-semibold text-[var(--fg)] shadow-[0_0_44px_-14px_rgb(var(--accent)/0.6)] hover:bg-[rgb(var(--accent)/0.24)]"
-                />
-              ) : null}
+          <SectionContainer className="relative z-10 flex flex-1 flex-col py-6 lg:min-h-0 lg:py-8">
+            <div className="mb-5">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[rgb(var(--accent-bright))]">
+                {t.outputTitle}
+              </p>
+              <p className="mt-2 max-w-2xl text-[15px] font-medium leading-relaxed tracking-[-0.015em] text-[var(--foreground-muted)]">
+                {t.outputHint}
+              </p>
             </div>
 
             <div
-              className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-[rgb(var(--accent)/0.22)] bg-[color-mix(in_srgb,var(--surface)_48%,transparent)] shadow-[0_0_0_1px_rgba(255,255,255,0.055)_inset,0_32px_100px_-40px_rgba(0,0,0,0.78),0_0_120px_-48px_rgb(var(--accent)/0.42),0_0_1px_rgb(var(--accent-cyan)/0.2)] backdrop-blur-md"
+              className="studio-canvas-frame flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl"
               aria-live="polite"
             >
               <AnimatePresence mode="wait">
@@ -824,7 +863,7 @@ export function StudioApp() {
                     <TransformStrip result={result} />
 
                     <motion.div className="mt-6" variants={itemVariants}>
-                      <QuickCopyActions result={result} />
+                      <QuickCopyActions result={result} exportAll={exportAll} />
                     </motion.div>
 
                     <motion.div className="mt-6" variants={itemVariants}>
@@ -833,6 +872,7 @@ export function StudioApp() {
                         icon={<IconSummary />}
                         copyText={result.kokkuvote}
                         copyLabel={t.copyKokkuvote}
+                        copySuccessLabel={t.copiedKokkuvote}
                       >
                         <p className="whitespace-pre-wrap text-[15px] leading-[1.65] text-[var(--foreground-muted)]">
                           {result.kokkuvote}
@@ -990,6 +1030,7 @@ export function StudioApp() {
                         icon={<IconMail />}
                         copyText={result.jarelkiri}
                         copyLabel={t.copyJarelkiri}
+                        copySuccessLabel={t.copiedJarelkiri}
                       >
                         <div className="flex flex-wrap gap-2 pb-4">
                           <StudioCopyButton

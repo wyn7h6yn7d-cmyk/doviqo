@@ -5,7 +5,7 @@
 export const siteMeta = {
   title: "Doviqo — koosoleku järgne täitmine",
   description:
-    "Väikestele tiimidele: koosoleku järelsisust saad selge tegevuskava — vastutajad, tähtajad ja saatmisvalmis järelkiri. Doviqo ei kogu ega hoia märkmeid; see kiirendab seda, mis pärast koosolekut niikuinii ära tuleb teha.",
+    "Koosoleku järeltegevus brauseris: proovi Doviqo Studiot — tegevused, vastutajad, tähtajad, järelkiri. Interaktiivne demo; fookus on täitmisel, mitte märkmete kogumisel.",
   keywords: [
     "koosolek",
     "järeltegevus",
@@ -22,12 +22,12 @@ export const siteMeta = {
 export const nav = {
   brand: "Doviqo",
   links: [
-    { href: "#product", label: "Toode" },
+    { href: "/studio", label: "Studiot demo" },
+    { href: "#product", label: "Töövoog" },
     { href: "#how", label: "Kuidas see töötab" },
     { href: "#benefits", label: "Miks Doviqo" },
-    { href: "/studio", label: "Studio" },
   ] as const,
-  studioCta: "Ava Studio",
+  studioCta: "Proovi Studiot",
   cta: "Ootenimekiri",
   homeAria: "Doviqo avaleht",
   navAria: "Põhinavigatsioon",
@@ -38,19 +38,23 @@ export const nav = {
 } as const;
 
 export const hero = {
-  eyebrow: "Koosolekust välja, töö juurde",
-  headline: "Pärast koosolekut ei jää õhku „mis edasi?“",
+  eyebrow: "Interaktiivne demo · Doviqo Studio",
+  headline: "Koosoleku lõpus algab järeltegevus — mitte „kokkuvõtte“ kirjutamine",
   subheadline:
-    "Doviqo seab koosoleku järel kinni tegevused, vastutajad, tähtajad ja valmis järelkirja — et vähem käsitsi korrata ja kiiremini käima lükata. See ei ole märkmerakendus ega üldine kokkuvõtetööriist: fookus on täitmisel, mitte teksti hoidmisel.",
+    "Doviqo muudab järelsisu tegevusteks, vastutuseks, tähtaegadeks ja kanalisse minevaks tekstiks. Ei ole märkmete hoidla: sama loogika töötab Studiot demos — kleebi oma tekst, näed kohe planni.",
   clarification:
-    "Siia ei pea midagi „alamaks“ koguma: sisend on koosoleku järelsisu (üleskirjutus, logi, lõik tekstist), väljund on plaan ja kanalisse pandav järelsõnum.",
-  primaryCta: "Ava Studio",
+    "Sisend on koosoleku järelsisu (üleskirjutus, punktid, lõik). Väljund on töö, mida muidu teeksid käsitsi: plaan, mis on valmis saatmiseks.",
+  demoCallout:
+    "Studiot demo näitab toodet kohe: üks klõps, oma järelsisu, päris struktuur — pole ainult turundustekst.",
+  primaryCta: "Proovi Doviqo Studiot",
   secondaryCta: "Ootenimekiri",
   helper:
-    "Studio demo töötab brauseris. Ootenimekirjaga tead, kui täisversioon tuleb.",
+    "Studio demo avaneb kohe ja töötab ainult brauseris. Ootenimekiri on eraldi: uudised tulevase täisversiooni kohta.",
 } as const;
 
 export const heroPreview = {
+  chromeEyebrow: "Doviqo Studio",
+  chromeHint: "Studiot vaate eelvaade (staatiline)",
   messyLabel: "Koosoleku järelsisu — nii nagu see tuli",
   messyLines: [
     "anna — onboarding tekst… kolmapäev??",
@@ -74,20 +78,24 @@ export const heroPreview = {
   emailPreview: `Tere,
 
 Siin on kokkulepitud järgmised sammud, vastutajad ja tähtajad — järgmine samm on tööl, mitte taas ümber rääkimisel…`,
+  openStudioCta: "Käivita päris demo",
+  footnote:
+    "Täielik töövoog (koosolekutüübid, täpne struktuur, kopeerimisnupud) — avaneb ainult Studiost.",
 } as const;
 
 export const productProof = {
   id: "product",
-  title: "Segasest järelsisust saad täitmisvalmis plaani",
+  eyebrow: "Demoga tõestatud töövoog",
+  title: "Studiot avades näed sama loogikat oma tekstiga",
   lead:
-    "Märkmerakendused hoiavad teksti alles. Doviqo ei salvesta koosolekut kuskile arhiivi — see tõstab esile järgmised sammud, vastutuse ja tähtajad ning annab valmis järelsõnumi, mille annad kohe tiimile või kliendile. Eesmärk on kiirem järeltegevus, mitte „puhtam lõik“.",
+    "Avalehel on staatiline näidis; /studio demos paned pärisjärelsisu ja näed kohe kokkuvõtet, tegevusi, tähtaegu ja järelkirja. See on järeltegevuse tööriist — mitte koosoleku „märkmete“ kogumise moodul.",
   inputStep: {
     label: "Järelsisu",
     body: "Üleskirjutus, bulletid või lõik dokumendist — nii nagu see koosoleku järel kätte saad.",
   },
   processStep: {
-    label: "Struktuur",
-    body: "Doviqo eraldab tegevused, vastutajad ja tähtajad ning seab need järjekorda — mitte ei asenda koosolekut ühe üldise „kokkuvõttega“.",
+    label: "Teisendus",
+    body: "Tekstist tulevad välja tegevused, vastutajad ja tähtajad — üldine kokkuvõte jääb tagaplaanile; ees on järgmised sammud.",
   },
   outputStep: {
     label: "Väljund",
@@ -97,15 +105,17 @@ export const productProof = {
       "Saatmisvalmis järelkiri (teema ja sisu)",
     ] as const,
   },
-  cta: "Ava Studio",
-  ctaHint: "Avab Doviqo Studio — proovi koosoleku järgset demot brauseris.",
+  cta: "Ava päris demo",
+  ctaHint:
+    "Viib otse Doviqo Studiot — seal on koosoleku tüübid, täpne väljund ja kopeerimine ühe klikiga.",
 } as const;
 
 export const howItWorks = {
   id: "how",
   eyebrow: "" as const,
   title: "Kuidas see töötab",
-  lead: "Kolm sammu: võta järelsisu, tõmba plaan välja, jaga ja mine tegema.",
+  lead:
+    "Kolm sammu — täpselt nii näed Studios: järelsisu sisse, plaan kätte, valmis tekst Slacki või meilile.",
   steps: [
     {
       title: "Aseta sisse koosoleku järelsisu",
@@ -120,30 +130,32 @@ export const howItWorks = {
       body: "Järelkiri või tegevuste plaan on valmis kopeerimiseks; vähem manuaalset meelde tuletamist ja uuesti kirjutamist.",
     },
   ] as const,
+  studioCta: "Proovi neid samme Studiost",
+  studioCtaHint: "Interaktiivne demo — sama loogika, oma näidis.",
 } as const;
 
 export const benefits = {
   id: "benefits",
   eyebrow: "" as const,
-  title: "Miks väike tiim seda kasutab",
+  title: "Miks see on täitmine, mitte märkmed",
   lead:
-    "Koosolekud vahetuvad kiiresti; Doviqo hoiab fookuse asjadel, mis muidu kipuvad pudenema või vestluses ära kaduma.",
+    "Väikesed tiimid ei vaja veel üht teksti hoidlat — nad vajavad kiiresti selget järeltegevust ja kanalisse minevat sõnumit.",
   items: [
     {
       title: "Vähem käsitsi järelkordamist",
-      body: "Ei pea nullist kokku panema seda, mis juba koosolekul otsustati — struktuur ja järelsõnum tulevad ette.",
+      body: "Struktuur ja järelsõnum tulevad järelsisust ette — vähem sama ümberütlemist Slackis ja dokumendis.",
     },
     {
-      title: "Selge „kes, mis, millal“",
-      body: "Vastutus ja tähtajad on kohe näha — vähem segadust ja „kes seda üldse võttis?“.",
+      title: "Selge vastutus ja tähtajad",
+      body: "„Kes teeb, mis ja millal“ on kohe näha — vähem „kes seda üldse võttis?“.",
     },
     {
-      title: "Tegevused püsivad esiplaanil",
-      body: "Järgmised sammud ei kao chati lõppu ega unune dokumendi keskele — need on järjest ees.",
+      title: "Järgmised sammud jäävad kinni",
+      body: "Tegevused ei kao chati lõppu: need on ees enne uut koosolekut.",
     },
     {
-      title: "Kiirem start pärast koosolekut",
-      body: "Saad täitmisplaani valmis siis, kui otsused on värske peaga veel meeles.",
+      title: "Kiire start enne kui meeled jahutavad",
+      body: "Plaan valmis siis, kui otsused on veel värsge peaga — nagu järjekindel järeltegevus.",
     },
   ] as const,
 } as const;
@@ -152,7 +164,7 @@ export { waitlist } from "@/lib/waitlist/messages";
 
 export const footer = {
   tagline:
-    "Doviqo — koosoleku järgne täitmine: tegevused, vastutajad, tähtajad, valmis järelväljund.",
+    "Doviqo — koosoleku järgne täitmine. Proovi brauseris: /studio demo näitab toote loogikat kohe.",
   navLabel: "Jaluse lingid",
   studioLink: "Doviqo Studio",
   waitlistLink: "Ootenimekiri",

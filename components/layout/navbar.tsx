@@ -77,8 +77,8 @@ export function Navbar({ variant = "marketing" }: { variant?: "marketing" | "stu
       cn(
         "fixed inset-x-0 top-0 z-50 border-b transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
         scrolled
-          ? "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg-elevated)_82%,transparent)]/95 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_12px_48px_-16px_rgba(0,0,0,0.55),0_0_40px_-20px_rgb(var(--accent)/0.12)] backdrop-blur-xl"
-          : "border-transparent bg-[color-mix(in_srgb,var(--bg-deep)_75%,transparent)]/88 backdrop-blur-md",
+          ? "border-[var(--border)] bg-[color-mix(in_srgb,var(--bg-elevated)_76%,transparent)]/95 shadow-[0_1px_0_rgb(255,255,255,0.07)_inset,0_0_0_1px_rgb(var(--accent)/0.08),0_16px_56px_-20px_rgba(0,0,0,0.62),0_0_56px_-28px_rgb(var(--accent)/0.16)] backdrop-blur-xl"
+          : "border-transparent bg-[color-mix(in_srgb,var(--bg-deep)_70%,transparent)]/90 backdrop-blur-md",
       ),
     [scrolled],
   );

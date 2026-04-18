@@ -19,5 +19,6 @@ export const waitlist = {
   errorGeneric:
     "Ühendus ebaõnnestus. Proovi hetke pärast uuesti või kirjuta meile otse.",
   /** Tekst ootenimekirja sektsiooni all lingiga Studiot proovima */
-  tryStudioLead: "Tahad kohe proovida, kuidas järelplaan kiiresti valmis tuleb?",
+  tryStudioLead:
+    "Tahad kohe näha sama loogikat oma tekstiga? Ava Studiot demo — ootenimekiri on eraldi.",
 } as const;

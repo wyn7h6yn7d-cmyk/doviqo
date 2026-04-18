@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
+
 import { heroPreview } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 
 /**
  * Premium toote eelvaade: segane järelsisu → tegevused, tähtajad, järelkiri.
- * Staatiline, ei korda Studioga täpset käitumist — müüb visuaalset transformatsiooni.
+ * Selgelt ühendatud /studio demoga (chrome + CTA).
  */
 export function HeroProductPreview({ className }: { className?: string }) {
   const p = heroPreview;
@@ -17,11 +19,25 @@ export function HeroProductPreview({ className }: { className?: string }) {
         className,
       )}
       role="region"
-      aria-label="Näidis: segane koosoleku järelsisu muutub tegevusteks, tähtaegadeks ja järelkirjaks"
+      aria-label="Näidis: mida Doviqo Studio järelsisust teeb — täpne demo avaneb /studio lehelt"
     >
       <div className="pointer-events-none absolute -right-20 -top-28 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgb(var(--accent)/0.35)_0%,transparent_68%)] blur-2xl" />
       <div className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-cyan)/0.18)_0%,transparent_70%)] blur-2xl" />
       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[rgb(var(--accent-cyan)/0.35)] to-transparent opacity-80" />
+
+      <div className="relative flex items-center justify-between gap-3 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_35%,transparent)] px-4 py-2.5 sm:px-5">
+        <div className="min-w-0">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--accent-bright))]">
+            {p.chromeEyebrow}
+          </p>
+          <p className="mt-0.5 truncate text-[11px] text-[var(--foreground-subtle)] sm:text-[12px]">
+            {p.chromeHint}
+          </p>
+        </div>
+        <span className="shrink-0 rounded-md border border-[rgb(var(--accent-cyan)/0.35)] bg-[rgb(var(--accent-cyan)/0.08)] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[rgb(var(--accent-cyan))]">
+          demo
+        </span>
+      </div>
 
       {/* Segane järelsisu */}
       <div className="relative border-b border-[var(--border-strong)] bg-[linear-gradient(165deg,rgba(30,27,45,0.55)_0%,rgba(14,17,24,0.92)_100%)] px-4 py-4 sm:px-5 sm:py-5">
@@ -111,6 +127,21 @@ export function HeroProductPreview({ className }: { className?: string }) {
             {p.emailPreview}
           </p>
         </div>
+      </div>
+
+      <div className="border-t border-[var(--border)] bg-[color-mix(in_srgb,var(--bg-deep)_40%,transparent)] px-4 py-3 sm:px-5">
+        <p className="text-[12px] leading-relaxed text-[var(--foreground-subtle)]">
+          {p.footnote}
+        </p>
+        <Link
+          href="/studio"
+          className="mt-3 flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[rgb(var(--accent)/0.35)] bg-[rgb(var(--accent)/0.1)] px-4 text-[13px] font-semibold text-[rgb(var(--accent-bright))] transition hover:border-[rgb(var(--accent-cyan)/0.45)] hover:bg-[rgb(var(--accent)/0.16)] hover:text-[var(--fg)]"
+        >
+          {p.openStudioCta}
+          <span aria-hidden className="text-[rgb(var(--accent-cyan))]">
+            →
+          </span>
+        </Link>
       </div>
     </div>
   );

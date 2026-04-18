@@ -63,19 +63,141 @@ export function buildEmailTeema(tone: MeetingToneId): string {
 
   switch (tone) {
     case "team-weekly":
-      return `Nädalakoosolek — tiimi järgmised sammud${suffix}`;
+      return `Tiim — nädala plaan ja tegevused${suffix}`;
     case "client-meeting":
-      return `Kliendikohtumine — projekti järgmised sammud ja tähtajad${suffix}`;
+      return `Kliendikohtumine — kinnitused ja järgmised sammud${suffix}`;
     case "sales-call":
-      return `Müügikõne — järeltegevused, materjalid ja tähtajad${suffix}`;
+      return `Müük — järel, materjalid, järgmine kontakt${suffix}`;
     case "project-status":
-      return `Projekti ülevaade — täitmine ja verstapostid${suffix}`;
+      return `Projekt — verstapostid, täitmine, sõltuvused${suffix}`;
     case "hiring-interview":
-      return `Värbamine — intervjuu järel (sisemine koordineerimine)${suffix}`;
+      return `Värbamine — intervjuu järel (tiim/Hr)${suffix}`;
     default:
       return d
         ? `Koosoleku järel — järgmised sammud (${d})`
         : "Koosoleku järel — järgmised sammud";
+  }
+}
+
+/** Ühendatud tekst kõigist tegevusridadest — deterministlike märksõnade jaoks. */
+function tegevusteBlob(t: TegevusRida[]): string {
+  return t.map((r) => `${r.kirjeldus} ${r.vastutaja} ${r.tahtaeg}`).join("\n");
+}
+
+function hasBlockerSignal(blob: string): boolean {
+  return /\b(blocker|takistus|tõkke|oht|risk|võlg|ootab\b|ei ole valmis|puudub veel|ei valmis)/i.test(
+    blob,
+  );
+}
+
+function hasPricingSignal(blob: string): boolean {
+  return /\b(hind|hinna|pakkum|paket|eelarve|maksab|case study|materjal)/i.test(blob);
+}
+
+function hasNextTouchSignal(blob: string): boolean {
+  return /\b(follow-up|järgmine (?:kõne|kohtumine|call|demo)|reedel kontakt|järgmine võimalus)/i.test(
+    blob,
+  );
+}
+
+function hasDeliverySignal(blob: string): boolean {
+  return /\b(launch|käivit|release|go-live|api|sprint|verstap|dashboard|front-end|sõltuv|integratsioon)/i.test(
+    blob,
+  );
+}
+
+function hasHiringSignal(blob: string): boolean {
+  return /\b(kandidaat|referents|voor|intervjuu|hr|värb|otsust)/i.test(blob);
+}
+
+function dynamicKokkLause(tone: MeetingToneId, blob: string): string | null {
+  switch (tone) {
+    case "team-weekly":
+      if (hasBlockerSignal(blob)) {
+        return "Tekstis nähtub võimalikke takistusi või sõltuvusi — vaata need enne järgmist plokki koos läbi.";
+      }
+      return null;
+    case "sales-call":
+      if (hasPricingSignal(blob) && hasNextTouchSignal(blob)) {
+        return "Materjalide/hinna ja järgmise kontakti read on koos — hoia müügis sama järjekord.";
+      }
+      if (hasPricingSignal(blob)) {
+        return "Hinna- või materjalitegevused on eraldi nähtavad — kinnita need müügijuhi või CRM-i järgi.";
+      }
+      if (hasNextTouchSignal(blob)) {
+        return "Järgmine kontakt või demo on tekstis kajastunud — kalendris sama kui kanalis.";
+      }
+      return null;
+    case "project-status":
+      if (hasDeliverySignal(blob)) {
+        return "Launchi, API või ülesannete sõltuvused kajastuvad ridades — vastenda need plaaniga enne välise kliendi uuendust.";
+      }
+      return null;
+    case "hiring-interview":
+      if (hasHiringSignal(blob)) {
+        return "Kandidaat, voor või reference ridadest — hoia värbamisreeglid (iseäranis väline jagamine) silmas.";
+      }
+      return null;
+    case "client-meeting":
+      if (/\b(kinnita|kliendile|partner)/i.test(blob)) {
+        return "Kui mõni punkt on kliendile uudis, vaata sõnastus üle enne väljasaatmist.";
+      }
+      return null;
+    default:
+      return null;
+  }
+}
+
+function listPealkiriJarelkirjas(tone: MeetingToneId): string {
+  switch (tone) {
+    case "team-weekly":
+      return "Tegevused ja omanikud (sisemine kanal)";
+    case "client-meeting":
+      return "Projektipoolne plaan — kinnitused ja tähtajad";
+    case "sales-call":
+      return "Järeltegevused ja müügikäik";
+    case "project-status":
+      return "Täitmine, verstapostid ja kuupäevad";
+    case "hiring-interview":
+      return "Värbamismeeskonna sammud (sisemine)";
+    default:
+      return "Järgmised sammud";
+  }
+}
+
+/** Lühike, deterministlik lõppsõnum enne „Tervitades“ — ei dubleeri alati kokkuvõttega. */
+function dynamicJarelkiriTail(tone: MeetingToneId, blob: string): string | null {
+  switch (tone) {
+    case "team-weekly":
+      if (hasBlockerSignal(blob)) {
+        return "Blokeerivad või kinni olevad punktid: võta päevakorra tipuks enne uusi ülesandeid.";
+      }
+      return null;
+    case "sales-call":
+      if (hasPricingSignal(blob) && hasNextTouchSignal(blob)) {
+        return "Hoia hinna/materjalide rida ja järgmise kontakti aega ühes vaates (CRM või kalender).";
+      }
+      if (hasNextTouchSignal(blob)) {
+        return "Järgmine müügisamm: sama kanal mis lähteprotsessis (e-post, LinkedIn või telefon).";
+      }
+      return null;
+    case "project-status":
+      if (hasDeliverySignal(blob)) {
+        return "Kui launch/API sõltuvus muutub, uuenda sama loendit enne välise kliendiuuenduse saatmist.";
+      }
+      return null;
+    case "hiring-interview":
+      if (hasHiringSignal(blob)) {
+        return "Kandidaadiandmeid väljapoole jagada ainult kinnitatud kanalis — kinnitab interviewer või HR.";
+      }
+      return null;
+    case "client-meeting":
+      if (/\b(kinnita|kliendile)\b/i.test(blob)) {
+        return "Enne välja: üks kiire review läbi kliendi pilgu (kohustused ja kuupäevad).";
+      }
+      return null;
+    default:
+      return null;
   }
 }
 
@@ -114,22 +236,25 @@ export function buildKokkuvote(
         })()
       : "";
 
+  const blob = tegevusteBlob(tegevused);
+  const dynKokk = dynamicKokkLause(tone, blob);
+
   let p1: string;
   switch (tone) {
     case "team-weekly":
-      p1 = `Nädalakoosoleku järelsisust tulenevalt on allpool ${tegevused.length} järgmist sammu koos vastutajate ja tähtaegadega — tiimisisene taustainfo järeltegevuseks. Sobib jagamiseks Slackis, Teamsis või ühise dokumendina; kliendi- või partneripoole sõnastust kohanda ise.`;
+      p1 = `Tiimisisene kooster: kirjas on ${tegevused.length} sammu omaniku ja tähtajaga — lühidalt ja operatiivselt. Jagamiseks Slacki/Teamsi või ühise plokina; välisele kliendile minev sõnastus tuleb eraldi koostada.`;
       break;
     case "client-meeting":
-      p1 = `Kliendikohtumise järelsisust on välja pandud ${tegevused.length} projektipoolset järgmist sammu. Toon kirjeldab täitmist ja tähtaegu — kasuta sisemiselt kinnituseks või kohanda sõnastust enne kliendile edastamist.`;
+      p1 = `Kliendikohtumise tööversioon: ${tegevused.length} sammu, mis seab paika täitmise, vastutajad ja tähtajad. Sisu on projekti poolt aus — partnerlik/teenindav toon lisatakse enne väljasaatmist.`;
       break;
     case "sales-call":
-      p1 = `Müügikõne järelsisust on struktureeritud ${tegevused.length} järgnevat sammu; rõhk on järeltegevustel, materjalidel ja järgmisel kontaktil, et müügitoru jääks liikuma.`;
+      p1 = `Müügikõne järel on ${tegevused.length} müügisammu (materjalid, hind, järgmine kontakt, otsustusprotsess). Eesmärk on, et toru ei seiskuks ja järgmine puute punkt oleks ajastatud.`;
       break;
     case "project-status":
-      p1 = `Projekti ülevaate järelsisust on eraldatud ${tegevused.length} täitmise ja verstapostidega seotud sammu — sobivad sprinti planeerimiseks, riskiloendisse või juhtkonna edasikanalisse.`;
+      p1 = `Projekti ülevaade kokku ${tegevused.length} sammuga: verstapostid, sõltuvused ja kättesaadavus. Sobib sprintiks, riskitabelisse või lühikese edasikanali manusena — kliendi pressiks kopeeri ainult kinnitatud read.`;
       break;
     case "hiring-interview":
-      p1 = `Värbamisintervjuu järelsisust on kokku pandud ${tegevused.length} sisemist sammu (kandidaat, taustakontroll, otsus). Mõeldud värbamis- ja tiimisisaseks koordineerimiseks — mitte otse kandidaadile saatmiseks.`;
+      p1 = `Värbamise sisemine plaan: ${tegevused.length} sammu (kandidaat, järgmine voor, referentsid, koordineerimine). Pole mõeldud otse kandidaadile — ainult tiimi/HR siseseks koosseisuks.`;
       break;
     default:
       p1 = `Koosoleku järelsisust on eraldatud ${tegevused.length} järgmist sammu — jagatavad tiimile ja sobivad järelkontrolliks enne väljasaatmist.`;
@@ -153,19 +278,48 @@ export function buildKokkuvote(
 
   let p3: string;
   if (unikaalsedTahtajad.length === 0) {
-    p3 =
-      "Tähtaegu ei leidnud järelsisust selgelt — lisa kalendrisse või kirjelda tähtaeg ridades (nt „homme“, „reedeks“).";
+    switch (tone) {
+      case "team-weekly":
+        p3 =
+          "Tähtaegu tekstist ei tuvastanud — märgi Slacki või ridadesse (nt homme, reedeks), et sync jääks selgeks.";
+        break;
+      case "client-meeting":
+        p3 =
+          "Tähtaegu ei leidnud kindlalt — lisa kalendrisse ja taasta kliendile kinnitusena, kui kuupäev on uus.";
+        break;
+      case "sales-call":
+        p3 =
+          "Tähtaeg puudub ridadest — pane CRM-i või kalendrisse, et müügijärg oleks jälgitav.";
+        break;
+      case "project-status":
+        p3 =
+          "Kuupäevi tekstist ei kinnitanud — täienda sprinti või Gantti, et launch/sõltuvused oleksid nähtavad.";
+        break;
+      case "hiring-interview":
+        p3 =
+          "Tähtaeg tekstis ebaselge — täpsusta interview/HR kanalis (järgmine voor, feedbacki tähtaeg).";
+        break;
+      default:
+        p3 =
+          "Tähtaegu ei leidnud järelsisust selgelt — lisa kalendrisse või kirjelda tähtaeg ridades (nt „homme“, „reedeks“).";
+    }
   } else {
     const tail =
-      tone === "project-status"
-        ? " — kinnita launchi ja sõltuvustega kooskõlas."
-        : tone === "sales-call"
-          ? " — hoia järgmine puute punkt kalendris paigas."
-          : " — kinnita oma kalendriga.";
+      tone === "team-weekly"
+        ? " — hoia päevakorra või taski tipus, et blockers ei kao põhja."
+        : tone === "client-meeting"
+          ? " — need on kliendile lubatud kuupäevad ainult pärast sisemist kinnitust."
+          : tone === "project-status"
+            ? " — vastenda launchi ja sõltuvustega (API, sisend, GTM)."
+            : tone === "sales-call"
+              ? " — sidu järgmise calli/demo ajaga ühte vaatesse."
+              : tone === "hiring-interview"
+                ? " — koonda interview plani ja kandidaadi kogemusega kokku."
+                : " — kinnita oma kalendriga.";
     p3 = `Tähtajad tekstist: ${unikaalsedTahtajad.join(", ")}${tail}`;
   }
 
-  return [p1, p2, p3, top3Line].filter(Boolean).join("\n\n");
+  return [p1, p2, p3, top3Line, dynKokk].filter(Boolean).join("\n\n");
 }
 
 export function buildJarelkiri(
@@ -173,7 +327,10 @@ export function buildJarelkiri(
   emailTeema: string,
   tone: MeetingToneId,
 ): string {
-  const list = tegevused
+  const blob = tegevusteBlob(tegevused);
+  const tail = dynamicJarelkiriTail(tone, blob);
+
+  const listBody = tegevused
     .map((row, i) => {
       const nr = i + 1;
       const dl = row.tahtaeg !== "—" ? ` (tähtaeg: ${row.tahtaeg})` : "";
@@ -181,18 +338,23 @@ export function buildJarelkiri(
     })
     .join("\n");
 
+  const listTitle = listPealkiriJarelkirjas(tone);
+  const list = `${listTitle}\n\n${listBody}`;
+
+  const enneTervitus = tail ? `\n\n${tail}` : "";
+
   switch (tone) {
     case "team-weekly": {
       const intro = `Teema: ${emailTeema}
 
 Hei tiim,
 
-All on nädalakoosoleku järel kokkulepitud järgmised sammud — kasutage seda ühiselt kanalis või jagatud dokumendina.
+Lühidalt ja otse: kes teeb, millal, ja mis võiks takistada. Kasuta sisemises kanalis (Slack/Teams) — väline sõnum eraldi.
 
 `;
       const outro = `
 
-Kui vastutaja või tähtaeg vajab täpsustamist, andke teada siin või kanalis — paneme koos paika.
+Kui omanik või tähtaeg vajab täpsustamist, vastake siia või kanalis.${enneTervitus}
 
 Tervitades`;
       return intro + list + outro;
@@ -202,12 +364,12 @@ Tervitades`;
 
 Tere,
 
-Tänase kliendikohtumise põhjal allpool projekti järgmised sammud, vastutajad ja tähtajad. Palun kinnitage sisemiselt enne kliendile edastamist või kohandage sõnastust vastavalt suhtluse toonile.
+Tänase kliendikohtumise tööversioon: allpool kinnitused, vastutajad ja tähtajad. Enne väljasaatmist kohandada kliendi keeles; see tekst on projektipoolne plaan.
 
 `;
       const outro = `
 
-Kui mõni punkt vajab täpsustamist või tähtaeg muutub, vastake sellele kirjale või uuendage oma tööriistas — hoiame projekti ja kliendi ootused kooskõlas.
+Kui tähtaeg või lubadus muutub, uuendage oma tööriistas ja vajadusel saatke kliendile lühiuuendus.${enneTervitus}
 
 Tervitades`;
       return intro + list + outro;
@@ -217,12 +379,12 @@ Tervitades`;
 
 Tere,
 
-Tänase müügikõne järel allpool järeltegevused ja järgmised sammud: materjalid, hinnastus, järgmine kontakt. Eesmärk on hoida protsess liikuvana ja järgmine puute punkt ajastatud.
+Müügikõne järel: järeltegevused, materjalid, hind ja järgmine samm otsustusprotsessis. Eesmärk on, et protsess liiguks ja järgmine kontakt oleks kalendris.
 
 `;
       const outro = `
 
-Kui kliendi prioriteedid või eelarve muutuvad, märkige see ära — kohandame plaani ja järelkõne fookust vastavalt.
+Kui prioriteedid või eelarve muutuvad, logige see CRM-i — kohandame plaani vastavalt.${enneTervitus}
 
 Tervitades`;
       return intro + list + outro;
@@ -232,12 +394,12 @@ Tervitades`;
 
 Tere,
 
-Projekti ülevaate põhjal allpool täitmisele ja verstapostidele fokusseeritud sammud. Sobib sprinti planeerimiseks, riskide ülevaatuseks või lühikese päevakorra manusena.
+Projekti ülevaade: verstapostid, täitmine ja sõltuvused. Sobib sprinti, riskitšekiks või juhtkonna lühikokkuvõtte manusena.
 
 `;
       const outro = `
 
-Kui launch, API või sõltuvused nihkuvad, uuendame plaani — anna teada, et tähtajad jääksid usutavaks.
+Kui launch, API või järjestus nihkub, uuenda sama loendit — väliseks release-kõneks kopeeri ainult kinnitatud read.${enneTervitus}
 
 Tervitades`;
       return intro + list + outro;
@@ -247,12 +409,12 @@ Tervitades`;
 
 Tere,
 
-Värbamisintervjuu põhjal allpool sisemine tööjaotus (kandidaat, taustakontroll, otsus, järgmine voor). Palun mitte edastada väljapoole värbamismeeskonda ilma kinnituseta.
+Värbamise koordineerimine: järgmine voor, muljed, referentsid ja sisemine tööjaotus. Ärge saatke otse välisele kandidaadile ilma kinnituseta.
 
 `;
       const outro = `
 
-Kui vastutaja või tähtaeg vajab muudatust, kirjutage HR-kanalisse või vastake sellele kirjale — hoiame värbamistsüklit kooskõlas.
+Kui roll või tähtaeg muutub, kirjutage HR-kanalisse või vastake sellele kirjale.${enneTervitus}
 
 Tervitades`;
       return intro + list + outro;
@@ -262,12 +424,12 @@ Tervitades`;
 
 Tere,
 
-Täname tänase koosoleku eest. Allpool on tegevuskava: järgmised sammud, vastutajad ja tähtajad — palun vaata üle ja anna teada, kui midagi vajab täpsustamist.
+Täname koosoleku eest. Allpool järgmised sammud, vastutajad ja tähtajad — palun vaata üle enne edasisaatmist.
 
 `;
       const outro = `
 
-Kui vastutaja või tähtaeg ei vasta kokkuleppele, vasta sellele kirjale või uuenda üksust oma tiimikanalis — paneme need koos paika.
+Kui vastutaja või tähtaeg ei klapi, vasta sellele kirjale või märgi kanalis.${enneTervitus}
 
 Tervitades`;
       return intro + list + outro;

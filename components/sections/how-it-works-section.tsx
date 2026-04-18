@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { DURATION, EASE_PREMIUM } from "@/lib/constants";
 import { howItWorks } from "@/lib/site-content";
 import { sectionUi } from "@/lib/ui";
+import { Button } from "@/components/ui/button";
 import { SectionContainer } from "@/components/layout/section-container";
 
 export function HowItWorksSection() {
@@ -71,6 +72,22 @@ export function HowItWorksSection() {
                 </li>
               ))}
             </ol>
+          </div>
+
+          <div className="relative mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+            <p
+              className="max-w-xl text-[14px] leading-relaxed text-[var(--foreground-muted)]"
+              id="how-studio-hint"
+            >
+              {howItWorks.studioCtaHint}
+            </p>
+            <Button
+              href="/studio"
+              className="min-h-12 w-full shrink-0 px-7 text-[15px] font-semibold shadow-[0_0_40px_-14px_rgb(124,92,255/0.45)] sm:w-auto"
+              aria-describedby="how-studio-hint"
+            >
+              {howItWorks.studioCta}
+            </Button>
           </div>
         </motion.div>
       </SectionContainer>

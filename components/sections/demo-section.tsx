@@ -19,7 +19,7 @@ export function DemoSection() {
       aria-labelledby="product-heading"
     >
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_55%_at_50%_0%,rgb(var(--accent)/0.11),transparent_55%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_55%_at_50%_0%,rgb(var(--accent)/0.16),transparent_55%)]"
         aria-hidden
       />
       <div
@@ -35,7 +35,8 @@ export function DemoSection() {
           transition={{ duration: DURATION.reveal * 0.85, ease: EASE_PREMIUM }}
         >
           <div className="max-w-2xl">
-            <h2 id="product-heading" className={sectionUi.titleMd}>
+            <p className={sectionUi.eyebrow}>{p.eyebrow}</p>
+            <h2 id="product-heading" className={`${sectionUi.titleMd} mt-3`}>
               {p.title}
             </h2>
             <p className={sectionUi.lead}>{p.lead}</p>
@@ -100,20 +101,24 @@ export function DemoSection() {
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-6">
+          <div
+            className="mt-10 flex flex-col gap-4 rounded-2xl border border-[rgb(var(--accent)/0.25)] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--surface-raised)_70%,transparent)_0%,color-mix(in_srgb,var(--bg-deep)_85%,black)_100%)] p-5 shadow-[inset_0_1px_0_rgb(255,255,255,0.06),0_0_52px_-28px_rgb(var(--accent)/0.28)] sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:p-6"
+            role="region"
+            aria-label="Doviqo Studiot demo kutse"
+          >
+            <p
+              id="product-cta-hint"
+              className="max-w-xl text-[14px] leading-relaxed text-[var(--foreground-muted)] sm:text-[15px]"
+            >
+              {p.ctaHint}
+            </p>
             <Button
               href="/studio"
-              className="min-h-12 touch-manipulation"
+              className="min-h-[3rem] w-full shrink-0 touch-manipulation px-7 text-[15px] font-semibold shadow-[0_0_48px_-14px_rgb(124,92,255/0.5)] sm:w-auto"
               aria-describedby="product-cta-hint"
             >
               {p.cta}
             </Button>
-            <p
-              id="product-cta-hint"
-              className="text-[13px] text-[var(--foreground-subtle)]"
-            >
-              {p.ctaHint}
-            </p>
           </div>
         </motion.div>
       </SectionContainer>

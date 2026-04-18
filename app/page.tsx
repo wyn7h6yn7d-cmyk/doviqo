@@ -8,7 +8,7 @@ import { WaitlistSection } from "@/components/sections/waitlist-section";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="bg-page-studio min-h-screen text-foreground">
       <Navbar />
       <main id="main-content" tabIndex={-1}>
         <HeroSection />
