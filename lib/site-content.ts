@@ -1,11 +1,11 @@
 /**
- * Doviqo — avalehe tekstid (koosolekujärgne tegevus, mitte märkmerakendus).
+ * Doviqo — avalehe tekstid (koosoleku järgne täitmine, mitte märkmerakendus).
  */
 
 export const siteMeta = {
-  title: "Doviqo — koosolekujärgne tegevusplaan",
+  title: "Doviqo — koosoleku järgne täitmine",
   description:
-    "Väikestele tiimidele: muuda pärast koosolekut segadus tegevusteks, vastutajateks, tähtaegadeks ja saatmisvalmis järelkirjaks. Doviqo ei salvesta märkmeid — see teeb töö, mis saab pärast koosolekut.",
+    "Väikestele tiimidele: koosoleku järelsisust saad selge tegevuskava — vastutajad, tähtajad ja saatmisvalmis järelkiri. Doviqo ei kogu ega hoia märkmeid; see kiirendab seda, mis pärast koosolekut niikuinii ära tuleb teha.",
   keywords: [
     "koosolek",
     "järeltegevus",
@@ -14,7 +14,8 @@ export const siteMeta = {
     "vastutaja",
     "tähtaeg",
     "väike tiim",
-    "üleskirjutus",
+    "järelkontroll",
+    "täitmine",
   ],
 } as const;
 
@@ -37,29 +38,29 @@ export const nav = {
 } as const;
 
 export const hero = {
-  eyebrow: "Pärast koosolekut, mitte märkmete hulgas",
-  headline: "Koosoleku märkmed ei vii tööd edasi. Järgmised sammud viivad.",
+  eyebrow: "Koosolekust välja, töö juurde",
+  headline: "Pärast koosolekut ei jää õhku „mis edasi?“",
   subheadline:
-    "Doviqo aitab väikestel tiimidel muuta märkmed, üleskirjutused ja koosoleku sisu tegevusteks, vastutajateks, tähtaegadeks ja saatmisvalmis järelkirjaks — ilma tühja kokkuvõtte kirjutamiseta.",
+    "Doviqo seab koosoleku järel kinni tegevused, vastutajad, tähtajad ja valmis järelkirja — et vähem käsitsi korrata ja kiiremini käima lükata. See ei ole märkmerakendus ega üldine kokkuvõtetööriist: fookus on täitmisel, mitte teksti hoidmisel.",
   clarification:
-    "Doviqo ei ole koht, kus märkmed „elavad“. See on koht, kus selgineb, mis pärast koosolekut tegelikult juhtub — struktuur, vastutus ja järelkiri.",
+    "Siia ei pea midagi „alamaks“ koguma: sisend on koosoleku järelsisu (üleskirjutus, logi, lõik tekstist), väljund on plaan ja kanalisse pandav järelsõnum.",
   primaryCta: "Ava Studio",
   secondaryCta: "Ootenimekiri",
   helper:
-    "Studio demo töötab brauseris. Ootenimekirjaga saad teada, kui täisversioon valmis on.",
+    "Studio demo töötab brauseris. Ootenimekirjaga tead, kui täisversioon tuleb.",
 } as const;
 
 export const heroPreview = {
-  messyLabel: "Segane koosolekujärgne sisend",
+  messyLabel: "Koosoleku järelsisu — nii nagu see tuli",
   messyLines: [
     "anna — onboarding tekst… kolmapäev??",
     "martin acme pakkumine neljap",
     "elena takistused homme üle",
     "analüütika võlg → järgmine nädal",
-    "kiri tervele tiimile pärast koosolekut",
+    "tiimile järelteavitus peale ühist blokki",
   ],
-  rawTextBadge: "Toores sisend",
-  outLabel: "Selge tegevusplaan",
+  rawTextBadge: "Toores järelsisu",
+  outLabel: "Tegevuskava ja järelkanal",
   actionsTitle: "Tegevused",
   actions: [
     { owner: "Anna", task: "Onboardingi e-kirja tekst", due: "kolmapäevaks" },
@@ -72,50 +73,51 @@ export const heroPreview = {
   emailSubject: "Järgmised sammud pärast koosolekut",
   emailPreview: `Tere,
 
-Siin on kokkulepitud järgmised sammud, vastutajad ja tähtajad — palun vaata ringi…`,
+Siin on kokkulepitud järgmised sammud, vastutajad ja tähtajad — järgmine samm on tööl, mitte taas ümber rääkimisel…`,
 } as const;
 
 export const productProof = {
   id: "product",
-  title: "Teave sisse, järgmised sammud välja",
-  lead: "Märkmerakendused hoiavad infot. Doviqo teeb järgmise sammu selgeks: tegevused, omanikud, tähtajad ja valmis järelkiri — see töö tuleb pärast koosolekut niikuinii.",
+  title: "Segasest järelsisust saad täitmisvalmis plaani",
+  lead:
+    "Märkmerakendused hoiavad teksti alles. Doviqo ei salvesta koosolekut kuskile arhiivi — see tõstab esile järgmised sammud, vastutuse ja tähtajad ning annab valmis järelsõnumi, mille annad kohe tiimile või kliendile. Eesmärk on kiirem järeltegevus, mitte „puhtam lõik“.",
   inputStep: {
-    label: "Sisend",
-    body: "Märkmed või üleskirjutus — nii, nagu need päriselt välja tulevad.",
+    label: "Järelsisu",
+    body: "Üleskirjutus, bulletid või lõik dokumendist — nii nagu see koosoleku järel kätte saad.",
   },
   processStep: {
     label: "Struktuur",
-    body: "Doviqo eraldab tegevused, vastutajad ja tähtajad ning paneb kokku kokkuvõtte ja järelkirja.",
+    body: "Doviqo eraldab tegevused, vastutajad ja tähtajad ning seab need järjekorda — mitte ei asenda koosolekut ühe üldise „kokkuvõttega“.",
   },
   outputStep: {
     label: "Väljund",
     items: [
-      "Tegevused ja vastutajad",
-      "Tähtajad ühes vaates",
-      "Saatmisvalmis järelkiri (ka teemaga)",
+      "Tegevused ja omanikud ühes vaates",
+      "Tähtajad prioriteediga",
+      "Saatmisvalmis järelkiri (teema ja sisu)",
     ] as const,
   },
   cta: "Ava Studio",
-  ctaHint: "Avab Doviqo Studio — koosolekujärgne demo otse brauseris.",
+  ctaHint: "Avab Doviqo Studio — proovi koosoleku järgset demot brauseris.",
 } as const;
 
 export const howItWorks = {
   id: "how",
   eyebrow: "" as const,
   title: "Kuidas see töötab",
-  lead: "Kolm sammu: sisu sisse, plaan välja, siis edasiandmine.",
+  lead: "Kolm sammu: võta järelsisu, tõmba plaan välja, jaga ja mine tegema.",
   steps: [
     {
-      title: "Lisa koosoleku sisu",
-      body: "Kleebi märkmed või üleskirjutus — mitte „ilusaks“ kirjutades.",
+      title: "Aseta sisse koosoleku järelsisu",
+      body: "Võib olla üleskirjutus, kiirkonspekt või lõik tekstist — oluline on, mis edasi teha tuleb, mitte lause ilu.",
     },
     {
-      title: "Saa tegevusplaan ja vastutus",
-      body: "Näed tegevusi, vastutajaid ja tähtaegu ühes vaates.",
+      title: "Vaata tegevused ja vastutus läbi",
+      body: "Näed kohe, kes teeb, mis ja millal — ilma pikast käsitsi läbikammimist.",
     },
     {
-      title: "Jaga ja mine töö juurde",
-      body: "Kopeeri järelkiri või kokkuvõte — vähem käsitsi meelde tuletamist.",
+      title: "Anna kanalisse ja lükka töö käima",
+      body: "Järelkiri või tegevuste plaan on valmis kopeerimiseks; vähem manuaalset meelde tuletamist ja uuesti kirjutamist.",
     },
   ] as const,
 } as const;
@@ -123,25 +125,25 @@ export const howItWorks = {
 export const benefits = {
   id: "benefits",
   eyebrow: "" as const,
-  title: "Miks see väikese tiimi jaoks mõistlik on",
+  title: "Miks väike tiim seda kasutab",
   lead:
-    "Vähem segadust pärast koosolekut — rohkem tegevust, mis tegelikult edasi läheb.",
+    "Koosolekud vahetuvad kiiresti; Doviqo hoiab fookuse asjadel, mis muidu kipuvad pudenema või vestluses ära kaduma.",
   items: [
     {
-      title: "Vähem järelkirja nullist",
-      body: "Ei pea iga kord uuesti kirjutama, mida märkmetes juba oli — struktuur tuleb ette.",
+      title: "Vähem käsitsi järelkordamist",
+      body: "Ei pea nullist kokku panema seda, mis juba koosolekul otsustati — struktuur ja järelsõnum tulevad ette.",
     },
     {
-      title: "Kes, mis, millal",
-      body: "Vastutus ja tähtajad on kohe näha — vähem „kes seda tegi?“.",
+      title: "Selge „kes, mis, millal“",
+      body: "Vastutus ja tähtajad on kohe näha — vähem segadust ja „kes seda üldse võttis?“.",
     },
     {
-      title: "Vähem ununenud punkte",
-      body: "Järgmised sammud ei kao chati või dokumendi lõppu.",
+      title: "Tegevused püsivad esiplaanil",
+      body: "Järgmised sammud ei kao chati lõppu ega unune dokumendi keskele — need on järjest ees.",
     },
     {
-      title: "Kiirem järeltegevus",
-      body: "Plaan valmis siis, kui koosolek veel meeles on.",
+      title: "Kiirem start pärast koosolekut",
+      body: "Saad täitmisplaani valmis siis, kui otsused on värske peaga veel meeles.",
     },
   ] as const,
 } as const;
@@ -150,7 +152,7 @@ export { waitlist } from "@/lib/waitlist/messages";
 
 export const footer = {
   tagline:
-    "Doviqo — koosolekujärgne tegevus: järgmised sammud, vastutajad, järelkiri.",
+    "Doviqo — koosoleku järgne täitmine: tegevused, vastutajad, tähtajad, valmis järelväljund.",
   navLabel: "Jaluse lingid",
   studioLink: "Doviqo Studio",
   waitlistLink: "Ootenimekiri",

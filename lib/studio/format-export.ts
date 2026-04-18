@@ -1,6 +1,6 @@
 import type { StudioTulemus } from "@/lib/studio/types";
 
-/** Üks plokk teksti kopeerimiseks (e-post, Slack, märkmik). */
+/** Üks plokk teksti kopeerimiseks (e-post, Slack jne). */
 export function formatStudioPlainExport(r: StudioTulemus): string {
   const tegevused = r.tegevused
     .map(
@@ -26,7 +26,7 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
     .join("\n\n");
 
   return [
-    "Kokkuvõte",
+    "Tegevuse taust",
     "—",
     r.kokkuvote || "—",
     "",
@@ -58,7 +58,7 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
 /** Slack / kiirkanal — lühidalt, loetav. */
 export function formatSlackExport(r: StudioTulemus): string {
   const lines = [
-    `*Kokkuvõte*\n${r.kokkuvote || "—"}`,
+    `*Tegevuse taust*\n${r.kokkuvote || "—"}`,
     "",
     "*Tegevused*",
     ...r.tegevused.map(
@@ -92,7 +92,9 @@ export function formatTeamBriefExport(r: StudioTulemus): string {
     "",
     top,
     "",
-    r.kokkuvote ? `Kokkuvõte: ${r.kokkuvote.split("\n")[0]}` : "",
+    r.kokkuvote
+      ? `Taust: ${r.kokkuvote.split("\n")[0]}`
+      : "",
   ]
     .filter(Boolean)
     .join("\n");

@@ -4,7 +4,7 @@ import { heroPreview } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 
 /**
- * Premium toote eelvaade: segane sisend → tegevused, tähtajad, järelkiri.
+ * Premium toote eelvaade: segane järelsisu → tegevused, tähtajad, järelkiri.
  * Staatiline, ei korda Studioga täpset käitumist — müüb visuaalset transformatsiooni.
  */
 export function HeroProductPreview({ className }: { className?: string }) {
@@ -17,13 +17,13 @@ export function HeroProductPreview({ className }: { className?: string }) {
         className,
       )}
       role="region"
-      aria-label="Näidis: segased märkmed muutuvad tegevusteks, tähtaegadeks ja järelkirjaks"
+      aria-label="Näidis: segane koosoleku järelsisu muutub tegevusteks, tähtaegadeks ja järelkirjaks"
     >
       <div className="pointer-events-none absolute -right-20 -top-28 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgb(var(--accent)/0.35)_0%,transparent_68%)] blur-2xl" />
       <div className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-cyan)/0.18)_0%,transparent_70%)] blur-2xl" />
       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[rgb(var(--accent-cyan)/0.35)] to-transparent opacity-80" />
 
-      {/* Segane sisend */}
+      {/* Segane järelsisu */}
       <div className="relative border-b border-[var(--border-strong)] bg-[linear-gradient(165deg,rgba(30,27,45,0.55)_0%,rgba(14,17,24,0.92)_100%)] px-4 py-4 sm:px-5 sm:py-5">
         <div className="flex items-center justify-between gap-2">
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--accent-bright))]">

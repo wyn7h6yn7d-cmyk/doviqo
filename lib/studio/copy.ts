@@ -1,19 +1,19 @@
-/** Doviqo Studio — demo tekstid (koosolekujärgne tegevus, mitte märkmerakendus). */
+/** Doviqo Studio — demo tekstid (koosoleku järgne täitmine, mitte märkmerakendus). */
 
 export const studioMeta = {
-  title: "Doviqo Studio — koosolekujärgne tegevusplaan",
+  title: "Doviqo Studio — koosoleku järgne tegevuskava",
   description:
-    "Interaktiivne demo: koosoleku tüüp, sisend, tegevused, vastutajad, tähtajad ja saatmisvalmis järelkiri — kõik brauseris.",
+    "Interaktiivne demo: koosoleku tüüp, järelsisu, tegevused, vastutajad, tähtajad ja saatmisvalmis järelkiri — kõik brauseris, ilma pilvesalvestuseta.",
 } as const;
 
 export const studioUi = {
   studioEyebrow: "Interaktiivne demo",
   productName: "Doviqo Studio",
   workspaceSubtitle:
-    "Muuda koosoleku sisu mõne hetkega tegevusplaaniks, vastutajateks ja järelkirjaks.",
+    "Muuda koosoleku järelsisu tegevusteks, vastutajateks, tähtaegadeks ja kanalisse sobivaks järelkirjaks.",
 
   demoNotice:
-    "See on demoversioon. Tulemus tekib sinu brauseris — salvestust ega pilve siin ei ole. Doviqo ei ole koht, kus märkmed „elavad“; see on koht, kus pärast koosolekut tekivad järgmised sammud.",
+    "See on demoversioon. Tulemus tekib sinu brauseris — salvestust ega pilve siin ei ole. Doviqo ei ole koht, kus tekste kogutakse; see on tööriist, mis pärast koosolekut muudab järelsisu täitmiskõlblikuks plaaniks ja järelsõnumiks.",
 
   waitlistLink: "Ootenimekiri",
   studioNavAria: "Proovilehe lingid",
@@ -24,20 +24,23 @@ export const studioUi = {
   stepMeetingTypeHint:
     "Vali kontekst — väljund kohandub (tiim, klient, müük, projekt või värbamine).",
 
-  stepInput: "2. Lisa koosoleku sisu",
-  inputLabel: "Lisa koosoleku sisu",
-  inputLabelLong: "Koosoleku sisu — märkmed või üleskirjutus",
+  stepInput: "2. Lisa koosoleku järelsisu",
+  inputLabel: "Koosoleku järelsisu",
+  inputLabelLong: "Koosoleku järelsisu — üleskirjutus või muu toores tekst",
   inputHint:
-    "Kleebi siia märkmed või üleskirjutus. Doviqo tõstab välja, mis tuleb edasi teha.",
+    "Kleebi siia see, mis koosoleku järel kätte saad (üleskirjutus, bulletid jne). Doviqo tõstab esile järgmised sammud, vastutuse ja tähtajad — täitmiseks, mitte arhiivi jaoks.",
+
   placeholder: `Näiteks:
 - Anna lõpetab onboarding’u teksti kolmapäevaks
 - Martin saadab kliendile uuendatud pakkumise neljapäeval
 - Elena vaatab blockerid homme üle
-- vaja saata tiimile kokkuvõte`,
+- analytics cleanup lükkub järgmisse nädalasse
+- tiimile lühike järelteavitus pärast plokki
+- järgmises sprindis võtame onboarding’u parandused ette`,
 
-  stepGenerate: "3. Koosta tegevusplaan",
+  stepGenerate: "3. Koosta täitmisplaan",
   processBtn: "Koosta järgmised sammud",
-  processing: "Koostan tegevusplaani…",
+  processing: "Koostan tegevustplaani…",
   resetBtn: "Alusta uuesti",
 
   meetingTypeLabel: "Koosoleku tüüp",
@@ -45,27 +48,27 @@ export const studioUi = {
 
   sampleSectionTitle: "Näidissituatsioon",
   sampleSectionLead:
-    "Vali ülal koosoleku tüüp ja kasuta näidist — saad kohe näha, kuidas plaan välja näeb.",
+    "Vali ülal koosoleku tüüp ja kasuta näidist — näed kohe, kuidas täitmisplaan välja näeb.",
 
   outputTitle: "Koosolekujärgne tegevuskava",
   outputHint:
-    "Segi sõne → selge plaan: tegevused, vastutajad, tähtajad ja järelkiri valmis kopeerimiseks.",
+    "Segane järelsisu → selge plaan: tegevused, vastutajad, tähtajad ja järelkiri kopeerimiseks.",
 
-  transformStripLabel: "Tegevusplaan valmis",
-  transformSummaryLine: "{raw} rida sisendist → {items} tegevust",
+  transformStripLabel: "Tegevustplaan valmis",
+  transformSummaryLine: "{raw} rida järelsisust → {items} tegevust",
   transformStripHint:
-    "See on töö, mis tuleb pärast koosolekut — vähem käsitsi kokkuvõtet, rohkem selgust ja vastutust.",
+    "See on töö, mis peale koosolekut niikuinii ära teha — vähem käsitsi kordamist, rohkem selget vastutust ja edasiliikumist.",
 
   transformTitle: "Ülevaade",
-  transformLines: "{raw} rida sisendist → {items} tegevust",
+  transformLines: "{raw} rida järelsisust → {items} tegevust",
   transformMeta:
     "{owners} vastutajat · {deadlines} tähtajaga · {chars} märki",
 
   rawInputToggle: "Näita algset teksti",
   rawInputHint:
-    "Algne sisend, millest plaan tekkis — võrdle ridahaaval, kui vaja.",
+    "Algne järelsisu, millest plaan tekkis — võrdle ridahaaval, kui vaja.",
 
-  sectionKokkuvote: "Kokkuvõte",
+  sectionKokkuvote: "Tegevuse taust",
   sectionTegevused: "Tegevused",
   sectionVastutajad: "Vastutajad",
   sectionTahtajad: "Tähtajad",
@@ -79,7 +82,7 @@ export const studioUi = {
 
   copy: "Kopeeri",
   copySection: "Kopeeri see plokk",
-  copyKokkuvote: "Kopeeri kokkuvõte",
+  copyKokkuvote: "Kopeeri tegevuse taust",
   copyAll: "Kopeeri kõik",
   copyJarelkiri: "Kopeeri järelkiri",
   copySubject: "Kopeeri teema",
@@ -90,21 +93,21 @@ export const studioUi = {
 
   quickActionsLabel: "Kiirkopeerimine",
 
-  emptyTitle: "Siit algab koosolekujärgne selgus",
+  emptyTitle: "Siit algab koosoleku järgne selgus",
   emptyBody:
-    "Vali koosoleku tüüp, lisa koosoleku sisu (või näidis) ja vajuta „Koosta järgmised sammud“. Doviqo teeb nähtavaks tegevused, vastutajad, tähtajad ja järelkirja — mitte ei hoia märkmeid.",
+    "Vali koosoleku tüüp, lisa järelsisu (või näidis) ja vajuta „Koosta järgmised sammud“. Doviqo teeb nähtavaks tegevused, vastutajad, tähtajad ja järelkirja — mitte ei hoia sulle märkmeid alles.",
 
-  loadingTitle: "Koostan tegevusplaani…",
+  loadingTitle: "Koostan tegevustplaani…",
   loadingHint:
-    "Eraldame tegevused, vastutajad, tähtajad, paneme kokku kokkuvõtte ja järelkirja.",
+    "Eraldame tegevused, vastutajad ja tähtajad; seome need kokku tegevuse tausta ja järelkirjaga.",
   loadingStep1: "Tegevused ja vastutajad",
   loadingStep2: "Tähtajad ja struktuur",
-  loadingStep3: "Kokkuvõte ja järelkiri",
+  loadingStep3: "Tegevuse taust ja järelkiri",
 
   successHint:
     "Kontrolli vastutajad ja tähtajad — seejärel kopeeri kanalisse või meilile.",
 
-  emptyError: "Lisa vähemalt üks rida koosoleku sisust.",
+  emptyError: "Lisa vähemalt üks rida koosoleku järelsisust.",
 
   backHome: "Tagasi avalehele",
 } as const;
@@ -126,7 +129,7 @@ export const studioDemoPresets: readonly StudioDemoPreset[] = [
 - Martin saadab kliendile uuendatud pakkumise neljapäeval
 - Elena vaatab blockerid homme üle
 - analytics cleanup lükkub järgmisse nädalasse
-- vaja saata tiimile kokkuvõte
+- saata tiimile lühike järelteavitus pärast plokki
 - järgmises sprindis võtame onboarding’u parandused ette`,
   },
   {
@@ -146,7 +149,7 @@ export const studioDemoPresets: readonly StudioDemoPreset[] = [
     title: "Müügikõne",
     body: `Müügikõne
 
-- potentsiaalne klient tahab lühikest kokkuvõtet tänasest kõnest
+- potentsiaalne klient tahab lühikest ülevaadet tänasest kõnest
 - saata hinnastus ja pakettide võrdlus
 - Liis saadab case study neljapäevaks
 - Jaan uurib, kas onboarding saab alata juba järgmisel nädalal
@@ -163,7 +166,7 @@ export const studioDemoPresets: readonly StudioDemoPreset[] = [
 - Nora lõpetab settings vaate neljapäevaks
 - API ühendus lükkub järgmise nädala algusse
 - vaja panna paika uus launch kuupäev
-- saata juhtkonnale lühike kokkuvõte tänase seisuga`,
+- saata juhtkonnale lühike ülevaade tänase seisuga`,
   },
   {
     id: "hiring-interview",
@@ -173,7 +176,7 @@ export const studioDemoPresets: readonly StudioDemoPreset[] = [
 - kandidaat jättis väga hea mulje
 - vaja kontrollida referentse
 - Kati saadab kodutöö täna õhtul
-- Mart teeb kokkuvõtte homseks
+- Mart annab homseks värbamistiimile lühikese sisemise tagasiside
 - otsus võiks tulla hiljemalt reedel
 - kutsuda kandidaat järgmisesse vooru, kui referentsid on korras`,
   },

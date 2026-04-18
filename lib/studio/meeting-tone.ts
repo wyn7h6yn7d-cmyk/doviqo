@@ -117,22 +117,22 @@ export function buildKokkuvote(
   let p1: string;
   switch (tone) {
     case "team-weekly":
-      p1 = `Nädalakoosoleku märkmetest tulenevalt on allpool tiimisisene kokkuvõte: ${tegevused.length} järgmist sammu koos vastutajate ja tähtaegadega. Sobib jagamiseks Slackis, Teamsis või ühise dokumendina — kliendile või partneri poole sõnastage vastavalt vajadusele ümber.`;
+      p1 = `Nädalakoosoleku järelsisust tulenevalt on allpool ${tegevused.length} järgmist sammu koos vastutajate ja tähtaegadega — tiimisisene taustainfo järeltegevuseks. Sobib jagamiseks Slackis, Teamsis või ühise dokumendina; kliendi- või partneripoole sõnastust kohanda ise.`;
       break;
     case "client-meeting":
-      p1 = `Kliendikohtumise märkmetest on kokku pandud ${tegevused.length} projektipoolset järgmist sammu. Toon on suunatud selgusele ja tähtaegadele — kasutage sisemiselt kinnituseks või kohandage sõnastust, kui saadate kokkuvõtte kliendile.`;
+      p1 = `Kliendikohtumise järelsisust on välja pandud ${tegevused.length} projektipoolset järgmist sammu. Toon kirjeldab täitmist ja tähtaegu — kasuta sisemiselt kinnituseks või kohanda sõnastust enne kliendile edastamist.`;
       break;
     case "sales-call":
-      p1 = `Müügikõne märkmetest on struktureeritud ${tegevused.length} järgnevat sammu; rõhk on järeltegevustel, materjalidel ja järgmisel kontaktil, et müügitoru jääks liikuma.`;
+      p1 = `Müügikõne järelsisust on struktureeritud ${tegevused.length} järgnevat sammu; rõhk on järeltegevustel, materjalidel ja järgmisel kontaktil, et müügitoru jääks liikuma.`;
       break;
     case "project-status":
-      p1 = `Projekti ülevaate märkmetest on eraldatud ${tegevused.length} täitmise ja verstapostidega seotud sammu — sobivad sprinti planeerimiseks, riskiloendisse või juhtkonna lühikokkuvõttesse.`;
+      p1 = `Projekti ülevaate järelsisust on eraldatud ${tegevused.length} täitmise ja verstapostidega seotud sammu — sobivad sprinti planeerimiseks, riskiloendisse või juhtkonna edasikanalisse.`;
       break;
     case "hiring-interview":
-      p1 = `Värbamisintervjuu märkmetest on kokku pandud ${tegevused.length} sisemist sammu (kandidaat, taustakontroll, otsus). See on mõeldud värbamis- ja tiimisisaseks koordineerimiseks — mitte otse kandidaadile saatmiseks.`;
+      p1 = `Värbamisintervjuu järelsisust on kokku pandud ${tegevused.length} sisemist sammu (kandidaat, taustakontroll, otsus). Mõeldud värbamis- ja tiimisisaseks koordineerimiseks — mitte otse kandidaadile saatmiseks.`;
       break;
     default:
-      p1 = `Märkmetest kokku ${tegevused.length} järgmist sammu — need on jagatavad tiimile ja sobivad ka järelkontrolliks enne saatmist.`;
+      p1 = `Koosoleku järelsisust on eraldatud ${tegevused.length} järgmist sammu — jagatavad tiimile ja sobivad järelkontrolliks enne väljasaatmist.`;
   }
 
   let p2: string;
@@ -154,7 +154,7 @@ export function buildKokkuvote(
   let p3: string;
   if (unikaalsedTahtajad.length === 0) {
     p3 =
-      "Tähtaegu ei leidnud märkmetest selgelt — lisa kalendrisse või kirjelda tähtaeg ridades (nt „homme“, „reedeks“).";
+      "Tähtaegu ei leidnud järelsisust selgelt — lisa kalendrisse või kirjelda tähtaeg ridades (nt „homme“, „reedeks“).";
   } else {
     const tail =
       tone === "project-status"
@@ -187,7 +187,7 @@ export function buildJarelkiri(
 
 Hei tiim,
 
-Siin on lühike kokkuvõte nädalakoosolekust ja järgmised sammud — kasutage seda ühiselt kanalis või jagatud dokumendina.
+All on nädalakoosoleku järel kokkulepitud järgmised sammud — kasutage seda ühiselt kanalis või jagatud dokumendina.
 
 `;
       const outro = `
@@ -217,7 +217,7 @@ Tervitades`;
 
 Tere,
 
-Tänase müügikõne põhjal allpool kokkuvõte ning järgmised sammud: materjalid, hinnastus, järgmine kontakt. Eesmärk on hoida protsess liikuvana ja järgmine puute punkt ajastatud.
+Tänase müügikõne järel allpool järeltegevused ja järgmised sammud: materjalid, hinnastus, järgmine kontakt. Eesmärk on hoida protsess liikuvana ja järgmine puute punkt ajastatud.
 
 `;
       const outro = `
@@ -262,7 +262,7 @@ Tervitades`;
 
 Tere,
 
-Täname tänase koosoleku eest. Allpool on koondatud järgmised sammud, vastutajad ja tähtajad — palun vaata üle ja anna teada, kui midagi vajab täpsustamist.
+Täname tänase koosoleku eest. Allpool on tegevuskava: järgmised sammud, vastutajad ja tähtajad — palun vaata üle ja anna teada, kui midagi vajab täpsustamist.
 
 `;
       const outro = `

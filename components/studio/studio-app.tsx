@@ -313,9 +313,9 @@ function JarelkiriBlock({ result }: { result: StudioTulemus }) {
 
 export function StudioApp() {
   const reduce = useReducedMotion() ?? false;
-  const notesFieldId = useId();
-  const notesHintId = `${notesFieldId}-hint`;
-  const notesErrId = `${notesFieldId}-err`;
+  const meetingInputId = useId();
+  const meetingInputHintId = `${meetingInputId}-hint`;
+  const meetingInputErrId = `${meetingInputId}-err`;
 
   const [meetingTypeId, setMeetingTypeId] = useState(studioDemoPresets[0].id);
   const [input, setInput] = useState(studioDemoPresets[0].body);
@@ -443,11 +443,11 @@ export function StudioApp() {
                 </p>
               </div>
 
-              <label htmlFor="studio-notes" className="sr-only">
+              <label htmlFor="studio-meeting-input" className="sr-only">
                 {t.inputLabelLong}
               </label>
               <textarea
-                id="studio-notes"
+                id="studio-meeting-input"
                 value={input}
                 onChange={(e) => {
                   const next = e.target.value;
@@ -460,8 +460,8 @@ export function StudioApp() {
                 aria-invalid={error ? true : undefined}
                 aria-describedby={
                   error
-                    ? `${notesHintId} ${notesErrId}`
-                    : notesHintId
+                    ? `${meetingInputHintId} ${meetingInputErrId}`
+                    : meetingInputHintId
                 }
                 className={cn(
                   "mt-4 min-h-[min(320px,46vh)] w-full resize-y rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] px-4 py-3 font-mono text-[13px] leading-relaxed text-[var(--fg)] shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] backdrop-blur-sm",
@@ -475,7 +475,7 @@ export function StudioApp() {
               />
 
               <p
-                id={notesHintId}
+                id={meetingInputHintId}
                 className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-subtle)]"
               >
                 {t.inputHint}
@@ -483,7 +483,7 @@ export function StudioApp() {
 
               {error ? (
                 <p
-                  id={notesErrId}
+                  id={meetingInputErrId}
                   className="mt-4 text-sm font-medium text-rose-600"
                   role="alert"
                 >
