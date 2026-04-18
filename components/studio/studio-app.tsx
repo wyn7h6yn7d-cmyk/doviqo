@@ -28,7 +28,11 @@ import {
 } from "@/lib/studio/run-studio";
 import { transformStudioInput } from "@/lib/studio/service";
 import type { StudioTulemus } from "@/lib/studio/types";
-import { studioDemoPresets, studioUi as t } from "@/lib/studio/copy";
+import {
+  studioDemoPresets,
+  studioEmotionalPillars,
+  studioUi as t,
+} from "@/lib/studio/copy";
 import { Button } from "@/components/ui/button";
 import { SectionContainer } from "@/components/layout/section-container";
 import { StudioCopyButton } from "@/components/studio/studio-copy-button";
@@ -95,22 +99,24 @@ function LoadingStepsSync() {
 function LoadingPanel({ loadCycle }: { loadCycle: number }) {
   return (
     <div
-      className="glass-panel edge-lit rounded-xl p-6"
+      className="glass-panel edge-lit flex min-h-[min(340px,48vh)] flex-col justify-center rounded-2xl border border-[rgb(var(--accent)/0.22)] p-6 sm:p-8"
       role="status"
       aria-busy="true"
       aria-label={t.loadingTitle}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-start gap-4">
         <span
-          className="inline-flex h-9 w-9 animate-spin rounded-full border-2 border-[var(--border-strong)] border-t-[rgb(var(--accent-bright))]"
+          className="inline-flex h-11 w-11 shrink-0 animate-spin rounded-full border-2 border-[var(--border-strong)] border-t-[rgb(var(--accent-bright))]"
           aria-hidden
         />
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold text-[var(--fg)]">{t.loadingTitle}</p>
-          <p className="mt-0.5 text-[13px] text-[var(--foreground-muted)]">
+          <p className="text-[17px] font-semibold tracking-[-0.02em] text-[var(--fg)]">
+            {t.loadingTitle}
+          </p>
+          <p className="mt-1 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
             {t.loadingHint}
           </p>
-          <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-[var(--surface-muted)]">
+          <div className="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-[var(--surface-muted)]">
             <motion.div
               key={loadCycle}
               className="h-full rounded-full bg-gradient-to-r from-[rgb(124,92,255)] via-[rgb(99,102,241)] to-[rgb(34,211,238)]"
@@ -134,34 +140,67 @@ function TransformStrip({ result }: { result: StudioTulemus }) {
   return (
     <motion.div
       variants={itemVariants}
-      className="glass-panel edge-lit rounded-xl border border-[rgb(var(--accent)/0.22)] px-5 py-4"
+      className="relative overflow-hidden rounded-2xl border border-[rgb(var(--accent-cyan)/0.28)] bg-[linear-gradient(135deg,rgb(var(--accent)/0.22)_0%,rgba(14,17,24,0.94)_48%,rgba(8,10,16,0.92)_100%)] px-5 py-6 shadow-[0_0_60px_-22px_rgb(var(--accent)/0.45)] sm:px-7 sm:py-7"
     >
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[rgb(var(--accent-bright))]">
+      <div
+        className="pointer-events-none absolute -right-16 top-0 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-cyan)/0.2)_0%,transparent_70%)] blur-2xl"
+        aria-hidden
+      />
+      <p className="relative text-[11px] font-semibold uppercase tracking-[0.2em] text-[rgb(var(--accent-bright))]">
         {t.transformStripLabel}
       </p>
-      <p className="mt-2 text-[16px] font-semibold tracking-[-0.025em] text-[var(--fg)]">
+      <p className="relative mt-3 text-[clamp(1.05rem,2.6vw,1.35rem)] font-semibold leading-snug tracking-[-0.03em] text-[var(--fg)]">
         {t.transformSummaryLine
           .replace("{raw}", String(s.rawLineCount))
           .replace("{items}", String(s.structuredItemCount))}
       </p>
-      <p className="mt-1.5 text-[13px] text-[var(--foreground-muted)]">
+      <p className="relative mt-2 text-[13px] text-[var(--foreground-muted)]">
         {s.uniqueVastutajad} vastutajat · {s.tahtaegadega} tähtajaga ·{" "}
         {s.rawCharCount.toLocaleString("et-EE")} märki
       </p>
-      <p className="mt-2 text-[12px] leading-relaxed text-[var(--foreground-subtle)]">
+      <p className="relative mt-3 max-w-2xl text-[13px] leading-relaxed text-[var(--foreground-subtle)]">
         {t.transformStripHint}
       </p>
     </motion.div>
   );
 }
 
-function EmptyState() {
+function EmptyExecutionCanvas() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[rgb(var(--accent)/0.25)] bg-[color-mix(in_srgb,var(--surface)_35%,transparent)] px-6 py-12 text-center backdrop-blur-sm">
-      <p className="text-base font-semibold text-[var(--fg)]">{t.emptyTitle}</p>
-      <p className="mt-2 max-w-md text-[14px] leading-relaxed text-[var(--foreground-muted)]">
-        {t.emptyBody}
-      </p>
+    <div className="flex min-h-[min(420px,52vh)] flex-col justify-center px-4 py-10 sm:px-8">
+      <div className="mx-auto max-w-2xl text-center">
+        <div
+          className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-[rgb(var(--accent)/0.35)] bg-[rgb(var(--accent)/0.1)] text-[22px] shadow-[0_0_40px_-12px_rgb(var(--accent)/0.5)]"
+          aria-hidden
+        >
+          ◇
+        </div>
+        <p className="text-[17px] font-semibold text-[var(--fg)]">{t.emptyTitle}</p>
+        <p className="mt-3 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+          {t.emptyBody}
+        </p>
+      </div>
+      <div className="mx-auto mt-10 grid w-full max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
+        {studioEmotionalPillars.map((row) => (
+          <div
+            key={row.before}
+            className="rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_45%,transparent)] px-4 py-3.5 text-center"
+          >
+            <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--foreground-subtle)]">
+              {row.before}
+            </p>
+            <p
+              className="mt-2 text-[12px] text-[var(--foreground-muted)]"
+              aria-hidden
+            >
+              →
+            </p>
+            <p className="mt-1 text-[14px] font-semibold text-[rgb(var(--accent-bright))]">
+              {row.after}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -177,7 +216,7 @@ function MeetingTypeSelector({
     <div role="group" aria-label={t.meetingTypeGroupAria}>
       <fieldset className="min-w-0 border-0 p-0">
         <legend className="sr-only">{t.meetingTypeLabel}</legend>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">
           {studioDemoPresets.map((p) => {
             const selected = value === p.id;
             return (
@@ -186,14 +225,27 @@ function MeetingTypeSelector({
                 type="button"
                 onClick={() => onChange(p.id)}
                 className={cn(
-                  "min-h-11 rounded-xl border px-3 py-2 text-left text-[12px] font-semibold leading-snug transition sm:min-h-0 sm:px-3.5 sm:py-2.5 sm:text-[13px]",
+                  "group relative flex min-h-[4.5rem] flex-col justify-center rounded-2xl border px-3 py-3 text-left transition duration-200 sm:min-h-[4.75rem] sm:px-4",
                   selected
-                    ? "border-[rgb(var(--accent-cyan)/0.5)] bg-[rgb(var(--accent)/0.18)] text-[var(--fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-1 ring-[rgb(var(--accent)/0.3)]"
-                    : "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_55%,transparent)] text-[var(--foreground-muted)] hover:border-[rgb(var(--accent)/0.38)] hover:text-[var(--fg)]",
+                    ? "border-[rgb(var(--accent-cyan)/0.55)] bg-[rgb(var(--accent)/0.16)] text-[var(--fg)] shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_0_0_1px_rgb(var(--accent)/0.35),0_16px_42px_-22px_rgb(var(--accent)/0.55)]"
+                    : "border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_82%,transparent)] text-[var(--foreground-muted)] hover:border-[rgb(var(--accent)/0.4)] hover:bg-[color-mix(in_srgb,var(--surface-raised)_90%,transparent)] hover:text-[var(--fg)]",
                 )}
                 aria-pressed={selected}
               >
-                {p.title}
+                {selected ? (
+                  <span
+                    className="absolute right-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-[rgb(var(--accent-cyan)/0.35)] text-[10px] font-bold text-[var(--fg)]"
+                    aria-hidden
+                  >
+                    ✓
+                  </span>
+                ) : null}
+                <span className="pr-6 text-[13px] font-semibold leading-snug sm:text-[14px]">
+                  {p.title}
+                </span>
+                <span className="mt-1.5 text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--foreground-subtle)] group-hover:text-[var(--foreground-muted)]">
+                  {selected ? "Valitud kontekst" : "Struktuur + toon"}
+                </span>
               </button>
             );
           })}
@@ -210,7 +262,7 @@ function QuickCopyActions({ result }: { result: StudioTulemus }) {
 
   return (
     <div
-      className="flex flex-col gap-3 rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_40%,transparent)] p-4"
+      className="flex flex-col gap-3 rounded-2xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_35%,transparent)] p-4 sm:p-5"
       role="group"
       aria-label={t.quickActionsLabel}
     >
@@ -371,17 +423,26 @@ export function StudioApp() {
     result !== null && result.tegevused.length > 0 && !loading;
 
   return (
-    <div className="bg-page-studio flex min-h-screen flex-col">
-      <header className="sticky top-0 z-40 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg-elevated)_90%,transparent)]/95 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_16px_48px_-18px_rgba(0,0,0,0.55),0_0_40px_-24px_rgb(var(--accent)/0.12)] backdrop-blur-xl">
+    <div className="relative flex min-h-screen flex-col bg-[var(--bg-deep)]">
+      <div
+        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_-18%,rgb(var(--accent)/0.16),transparent_58%),radial-gradient(ellipse_70%_42%_at_100%_12%,rgb(var(--accent-cyan)/0.09),transparent_52%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none fixed inset-0 opacity-[0.35] [background-image:linear-gradient(rgba(148,163,184,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.045)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_85%_65%_at_50%_42%,black,transparent)]"
+        aria-hidden
+      />
+
+      <header className="sticky top-0 z-50 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg-elevated)_88%,transparent)] shadow-[0_1px_0_rgba(255,255,255,0.05)_inset,0_20px_56px_-28px_rgba(0,0,0,0.65)] backdrop-blur-xl">
         <SectionContainer className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <p className="text-gradient-accent text-[10px] font-semibold uppercase tracking-[0.14em]">
+            <p className="text-gradient-accent text-[10px] font-semibold uppercase tracking-[0.16em]">
               {t.studioEyebrow}
             </p>
-            <h1 className="mt-2 text-[1.35rem] font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-[1.45rem]">
+            <h1 className="mt-1.5 text-[1.4rem] font-semibold tracking-[-0.035em] text-[var(--fg)] sm:text-[1.5rem]">
               {t.productName}
             </h1>
-            <p className="mt-1 max-w-xl text-[13px] leading-relaxed text-[var(--foreground-muted)]">
+            <p className="mt-1.5 max-w-xl text-[13px] leading-relaxed text-[var(--foreground-muted)]">
               {t.workspaceSubtitle}
             </p>
           </div>
@@ -403,104 +464,126 @@ export function StudioApp() {
             </Link>
           </nav>
         </SectionContainer>
+        <div className="border-t border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-muted)_40%,transparent)]">
+          <SectionContainer className="py-2.5">
+            <p className="text-[12px] leading-relaxed text-[var(--foreground-muted)]">
+              {t.demoNotice}
+            </p>
+          </SectionContainer>
+        </div>
       </header>
 
-      <SectionContainer className="flex flex-1 flex-col py-8 sm:py-10">
-        <div
-          className="glass-panel edge-lit mb-8 rounded-[1rem] px-4 py-3.5 text-[13px] leading-relaxed text-[var(--foreground-muted)]"
-          role="note"
+      <section className="relative z-10 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_55%,var(--bg-deep))] py-5 sm:py-7">
+        <SectionContainer>
+          <div className="max-w-4xl">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--accent-bright))]">
+              {t.meetingBarTitle}
+            </p>
+            <p className="mt-2 text-[14px] leading-relaxed text-[var(--foreground-muted)] sm:text-[15px]">
+              {t.meetingBarHint}
+            </p>
+          </div>
+          <div className="mt-6">
+            <MeetingTypeSelector value={meetingTypeId} onChange={onMeetingTypeChange} />
+          </div>
+        </SectionContainer>
+      </section>
+
+      <div className="relative z-10 flex flex-1 flex-col lg:flex-row lg:items-stretch">
+        <motion.aside
+          className="flex w-full flex-col border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_94%,black)] lg:w-[min(100%,420px)] lg:shrink-0 lg:border-b-0 lg:border-r"
+          initial={reduce ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: DURATION.reveal, ease: EASE_PREMIUM }}
+          aria-label={t.workflowAria}
         >
-          <p>{t.demoNotice}</p>
-        </div>
+          <SectionContainer className="flex flex-1 flex-col py-6 lg:min-h-[calc(100vh-13rem)] lg:py-8">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground-subtle)]">
+              {t.intakeRailTitle}
+            </p>
+            <h2 className="mt-3 text-[18px] font-semibold tracking-[-0.03em] text-[var(--fg)]">
+              {t.stepInput}
+            </h2>
+            <p className="mt-2 text-[13px] leading-relaxed text-[var(--foreground-muted)]">
+              {t.sampleSectionLead}
+            </p>
 
-        <div className="grid flex-1 gap-8 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)] xl:gap-10">
-          <motion.div
-            className="flex flex-col"
-            initial={reduce ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: DURATION.reveal, ease: EASE_PREMIUM }}
-            aria-label={t.workflowAria}
-          >
-            <div className="glass-panel edge-lit rounded-xl p-5 sm:p-6">
-              <div className="border-b border-[var(--border)] pb-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
-                  {t.stepMeetingType}
-                </p>
-                <p className="mt-1 text-[12px] text-[var(--foreground-muted)]">
-                  {t.stepMeetingTypeHint}
-                </p>
-                <div className="mt-4">
-                  <MeetingTypeSelector value={meetingTypeId} onChange={onMeetingTypeChange} />
-                </div>
-              </div>
+            <label htmlFor="studio-meeting-input" className="sr-only">
+              {t.inputLabelLong}
+            </label>
+            <textarea
+              id="studio-meeting-input"
+              value={input}
+              onChange={(e) => {
+                const next = e.target.value;
+                setInput(next);
+                setError(null);
+                if (!next.trim()) setResult(null);
+              }}
+              placeholder={t.placeholder}
+              rows={14}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={
+                error
+                  ? `${meetingInputHintId} ${meetingInputErrId}`
+                  : meetingInputHintId
+              }
+              className={cn(
+                "mt-4 min-h-[min(280px,40vh)] w-full resize-y rounded-2xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_90%,transparent)] px-4 py-3.5 font-mono text-[13px] leading-relaxed text-[var(--fg)] shadow-[inset_0_1px_3px_rgba(0,0,0,0.42)] backdrop-blur-sm",
+                "placeholder:text-[var(--foreground-subtle)] outline-none transition",
+                "hover:border-[rgb(var(--accent)/0.38)]",
+                "focus:border-[rgb(var(--accent-cyan)/0.5)] focus:shadow-[inset_0_1px_3px_rgba(0,0,0,0.38),0_0_0_3px_rgb(var(--accent)/0.18)]",
+                error &&
+                  "border-rose-400/70 focus:border-rose-400 focus:shadow-[inset_0_1px_2px_rgba(0,0,0,0.35),0_0_0_3px_rgba(244,63,94,0.2)]",
+              )}
+              spellCheck={false}
+            />
 
-              <div className="pt-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
-                  {t.stepInput}
-                </p>
-                <p className="mt-1 text-[12px] text-[var(--foreground-muted)]">
-                  {t.sampleSectionLead}
-                </p>
-              </div>
+            <p
+              id={meetingInputHintId}
+              className="mt-3 text-[13px] leading-relaxed text-[var(--foreground-subtle)]"
+            >
+              {t.inputHint}
+            </p>
 
-              <label htmlFor="studio-meeting-input" className="sr-only">
-                {t.inputLabelLong}
-              </label>
-              <textarea
-                id="studio-meeting-input"
-                value={input}
-                onChange={(e) => {
-                  const next = e.target.value;
-                  setInput(next);
-                  setError(null);
-                  if (!next.trim()) setResult(null);
-                }}
-                placeholder={t.placeholder}
-                rows={16}
-                aria-invalid={error ? true : undefined}
-                aria-describedby={
-                  error
-                    ? `${meetingInputHintId} ${meetingInputErrId}`
-                    : meetingInputHintId
-                }
-                className={cn(
-                  "mt-4 min-h-[min(320px,46vh)] w-full resize-y rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] px-4 py-3 font-mono text-[13px] leading-relaxed text-[var(--fg)] shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] backdrop-blur-sm",
-                  "placeholder:text-[var(--foreground-subtle)] outline-none transition",
-                  "hover:border-[rgb(var(--accent)/0.35)]",
-                  "focus:border-[rgb(var(--accent-cyan)/0.45)] focus:shadow-[inset_0_1px_2px_rgba(0,0,0,0.4),0_0_0_3px_rgb(var(--accent)/0.15)]",
-                  error &&
-                    "border-rose-400/70 focus:border-rose-400 focus:shadow-[inset_0_1px_2px_rgba(0,0,0,0.35),0_0_0_3px_rgba(244,63,94,0.2)]",
-                )}
-                spellCheck={false}
-              />
-
+            {error ? (
               <p
-                id={meetingInputHintId}
-                className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-subtle)]"
+                id={meetingInputErrId}
+                className="mt-4 text-sm font-medium text-rose-600"
+                role="alert"
               >
-                {t.inputHint}
+                {error}
               </p>
+            ) : null}
 
-              {error ? (
-                <p
-                  id={meetingInputErrId}
-                  className="mt-4 text-sm font-medium text-rose-600"
-                  role="alert"
-                >
-                  {error}
+            <div className="mt-6 flex flex-1 flex-col justify-end">
+              <div className="rounded-2xl border border-dashed border-[rgb(var(--accent)/0.38)] bg-[color-mix(in_srgb,var(--surface-raised)_50%,transparent)] p-4 sm:p-5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[rgb(var(--accent-bright))]">
+                  {t.transformZoneTitle}
                 </p>
-              ) : null}
-
-              <div className="mt-6 border-t border-[var(--border)] pt-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
-                  {t.stepGenerate}
+                <p className="mt-2 text-[13px] leading-relaxed text-[var(--foreground-muted)]">
+                  {t.transformZoneHint}
                 </p>
-                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <div className="mt-4 flex flex-wrap items-center gap-2 text-[12px] font-medium sm:gap-3">
+                  <span className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] px-2.5 py-1.5 font-mono text-[11px] text-[var(--foreground-muted)] sm:text-[12px]">
+                    {t.bridgeMessy}
+                  </span>
+                  <span
+                    className="text-[rgb(var(--accent-cyan))]"
+                    aria-hidden
+                  >
+                    →
+                  </span>
+                  <span className="rounded-lg border border-[rgb(var(--accent-cyan)/0.35)] bg-[rgb(var(--accent)/0.12)] px-2.5 py-1.5 font-mono text-[11px] text-[rgb(var(--accent-bright))] sm:text-[12px]">
+                    {t.bridgeClear}
+                  </span>
+                </div>
+                <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Button
                     type="button"
                     onClick={runProcess}
                     disabled={loading}
-                    className="min-h-12 min-w-[12rem] px-7 text-[15px] font-semibold"
+                    className="min-h-[3.25rem] min-w-[13.5rem] px-8 text-[15px] font-semibold shadow-[0_0_42px_-12px_rgb(var(--accent)/0.65)]"
                     aria-busy={loading}
                   >
                     {loading ? t.processing : t.processBtn}
@@ -509,72 +592,84 @@ export function StudioApp() {
                     type="button"
                     variant="secondary"
                     onClick={resetAll}
-                    disabled={
-                      loading || (!input.trim() && !result && !error)
-                    }
+                    disabled={loading || (!input.trim() && !result && !error)}
+                    className="min-h-[3.25rem]"
                   >
                     {t.resetBtn}
                   </Button>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </SectionContainer>
+        </motion.aside>
 
-          <motion.div
-            className="flex min-h-[420px] flex-col"
-            initial={reduce ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: DURATION.reveal,
-              ease: EASE_PREMIUM,
-              delay: 0.04,
-            }}
-          >
-            <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+        <motion.main
+          className="relative flex min-h-[min(520px,62vh)] flex-1 flex-col border-[var(--border)] bg-[linear-gradient(180deg,rgba(10,12,18,0.65)_0%,rgba(8,10,16,0.92)_38%,var(--bg-deep)_100%)] lg:min-h-[calc(100vh-13rem)]"
+          initial={reduce ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: DURATION.reveal,
+            ease: EASE_PREMIUM,
+            delay: 0.05,
+          }}
+        >
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_70%_-8%,rgb(var(--accent)/0.12),transparent_55%)]"
+            aria-hidden
+          />
+          <SectionContainer className="relative flex flex-1 flex-col py-6 lg:py-8">
+            <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--accent-bright))]">
                   {t.outputTitle}
                 </p>
-                <p className="mt-1 text-sm text-[var(--foreground-muted)]">{t.outputHint}</p>
+                <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+                  {t.outputHint}
+                </p>
               </div>
               {hasSuccess ? (
                 <StudioCopyButton
                   text={exportAll}
                   label={t.copyAll}
                   size="md"
-                  className="rounded-lg border border-[rgb(var(--accent)/0.35)] bg-[rgb(var(--accent)/0.12)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.18)]"
+                  className="rounded-xl border border-[rgb(var(--accent)/0.4)] bg-[rgb(var(--accent)/0.14)] px-4 py-2.5 text-[13px] font-semibold text-[var(--fg)] shadow-[0_0_36px_-14px_rgb(var(--accent)/0.55)] hover:bg-[rgb(var(--accent)/0.22)]"
                 />
               ) : null}
             </div>
 
-            <div className="flex flex-1 flex-col" aria-live="polite">
+            <div
+              className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-[rgb(var(--accent)/0.18)] bg-[color-mix(in_srgb,var(--surface)_42%,transparent)] shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset,0_24px_80px_-32px_rgba(0,0,0,0.75),0_0_100px_-40px_rgb(var(--accent)/0.35)] backdrop-blur-md"
+              aria-live="polite"
+            >
               <AnimatePresence mode="wait">
                 {loading ? (
                   <motion.div
                     key="loading"
-                    initial={{ opacity: 0, y: 6 }}
+                    className="flex flex-1 flex-col p-4 sm:p-6"
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.22, ease: EASE_PREMIUM }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.24, ease: EASE_PREMIUM }}
                   >
                     <LoadingPanel loadCycle={loadCycle} />
                   </motion.div>
                 ) : hasSuccess && result ? (
                   <motion.div
                     key="result"
-                    className="space-y-5"
+                    className="flex max-h-[min(78vh,1200px)] flex-1 flex-col overflow-y-auto overflow-x-hidden p-4 sm:p-6"
                     variants={listVariants}
                     initial="hidden"
                     animate="show"
                     exit={{ opacity: 0 }}
+                    style={{ scrollbarGutter: "stable" }}
                   >
                     <TransformStrip result={result} />
 
-                    <motion.div variants={itemVariants}>
+                    <motion.div className="mt-5" variants={itemVariants}>
                       <QuickCopyActions result={result} />
                     </motion.div>
 
-                    <motion.div variants={itemVariants}>
+                    <motion.div className="mt-5" variants={itemVariants}>
                       <ResultSection
                         title={t.sectionKokkuvote}
                         copyText={result.kokkuvote}
@@ -586,7 +681,7 @@ export function StudioApp() {
                       </ResultSection>
                     </motion.div>
 
-                    <motion.div variants={itemVariants}>
+                    <motion.div className="mt-5" variants={itemVariants}>
                       <ResultSection
                         title={t.sectionTegevused}
                         copyText={formatTegevusedPlain(result)}
@@ -629,7 +724,7 @@ export function StudioApp() {
                       </ResultSection>
                     </motion.div>
 
-                    <div className="grid gap-5 lg:grid-cols-2">
+                    <div className="mt-5 grid gap-5 lg:grid-cols-2">
                       <motion.div variants={itemVariants}>
                         <ResultSection
                           title={t.sectionVastutajad}
@@ -685,7 +780,7 @@ export function StudioApp() {
                     </div>
 
                     {result.lahtisedKusimused.length > 0 ? (
-                      <motion.div variants={itemVariants}>
+                      <motion.div className="mt-5" variants={itemVariants}>
                         <ResultSection
                           title={t.sectionLahtised}
                           copyText={result.lahtisedKusimused.join("\n")}
@@ -699,11 +794,11 @@ export function StudioApp() {
                       </motion.div>
                     ) : null}
 
-                    <motion.div variants={itemVariants}>
+                    <motion.div className="mt-5" variants={itemVariants}>
                       <JarelkiriBlock result={result} />
                     </motion.div>
 
-                    <motion.div variants={itemVariants} className="pb-2">
+                    <motion.div variants={itemVariants} className="mt-6 pb-2">
                       <p className="text-[12px] font-medium text-[var(--foreground-subtle)]">
                         {t.successHint}
                       </p>
@@ -712,19 +807,20 @@ export function StudioApp() {
                 ) : (
                   <motion.div
                     key="empty"
-                    initial={{ opacity: 0, y: 8 }}
+                    className="flex flex-1 flex-col"
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.28, ease: EASE_PREMIUM }}
+                    transition={{ duration: 0.3, ease: EASE_PREMIUM }}
                   >
-                    <EmptyState />
+                    <EmptyExecutionCanvas />
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
-          </motion.div>
-        </div>
-      </SectionContainer>
+          </SectionContainer>
+        </motion.main>
+      </div>
     </div>
   );
 }
