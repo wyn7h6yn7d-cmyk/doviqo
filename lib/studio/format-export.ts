@@ -26,7 +26,7 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
     .join("\n\n");
 
   return [
-    "Tegevuse taust",
+    "Kokkuvõte",
     "—",
     r.kokkuvote || "—",
     "",
@@ -58,7 +58,7 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
 /** Slack / kiirkanal — lühidalt, loetav. */
 export function formatSlackExport(r: StudioTulemus): string {
   const lines = [
-    `*Tegevuse taust*\n${r.kokkuvote || "—"}`,
+    `*Kokkuvõte*\n${r.kokkuvote || "—"}`,
     "",
     "*Tegevused*",
     ...r.tegevused.map(
@@ -93,7 +93,7 @@ export function formatTeamBriefExport(r: StudioTulemus): string {
     top,
     "",
     r.kokkuvote
-      ? `Taust: ${r.kokkuvote.split("\n")[0]}`
+      ? `Kokkuvõte: ${r.kokkuvote.split("\n")[0]}`
       : "",
   ]
     .filter(Boolean)

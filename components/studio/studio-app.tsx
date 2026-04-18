@@ -59,6 +59,128 @@ const itemVariants = {
   },
 };
 
+function IconSummary() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+      <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconTasks() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+      <path d="M9 11l3 3L22 4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconPeople() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function IconCalendar() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <path d="M16 2v4M8 2v4M3 10h18" strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconMail() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+      <path d="M22 6l-10 7L2 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function IconHelp() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+      <path d="M9.09 9a3 3 0 115.83 1c0 2-3 2-3 4M12 17h.01" strokeLinecap="round" />
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+  );
+}
+
+function SkeletonLine({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "h-2.5 animate-pulse rounded-md bg-[color-mix(in_srgb,var(--foreground-muted)_16%,transparent)]",
+        className,
+      )}
+      aria-hidden
+    />
+  );
+}
+
+function OutputSkeletonBlock({
+  label,
+  icon,
+  children,
+}: {
+  label: string;
+  icon: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--border)_70%,transparent)] bg-[color-mix(in_srgb,var(--surface)_50%,transparent)] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+      <div
+        className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-[radial-gradient(circle,rgb(var(--accent)/0.12)_0%,transparent_68%)]"
+        aria-hidden
+      />
+      <div className="relative mb-3 flex items-center gap-2.5">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[rgb(var(--accent)/0.14)] bg-[rgb(var(--accent)/0.07)] text-[rgb(var(--accent-bright))]">
+          {icon}
+        </div>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground-subtle)]">
+          {label}
+        </span>
+      </div>
+      <div className="relative space-y-2.5">{children}</div>
+    </div>
+  );
+}
+
+function PremiumResultCard({
+  title,
+  icon,
+  copyText,
+  copyLabel = t.copySection,
+  children,
+}: {
+  title: string;
+  icon: ReactNode;
+  copyText: string;
+  copyLabel?: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="group relative overflow-hidden rounded-2xl border border-[rgb(var(--accent)/0.16)] bg-[linear-gradient(158deg,rgba(24,28,40,0.97)_0%,rgba(10,12,20,0.92)_52%,rgba(8,10,16,0.88)_100%)] shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset,0_28px_64px_-36px_rgba(0,0,0,0.72),0_0_80px_-44px_rgb(var(--accent)/0.35)]">
+      <div
+        className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-cyan)/0.12)_0%,transparent_70%)] opacity-90"
+        aria-hidden
+      />
+      <div className="relative flex flex-wrap items-start justify-between gap-3 border-b border-[color-mix(in_srgb,var(--border)_85%,transparent)] px-5 pb-4 pt-5">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[rgb(var(--accent)/0.25)] bg-[rgb(var(--accent)/0.11)] text-[rgb(var(--accent-bright))] shadow-[0_0_28px_-12px_rgb(var(--accent)/0.55)]">
+            {icon}
+          </div>
+          <h2 className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground-subtle)]">
+            {title}
+          </h2>
+        </div>
+        <StudioCopyButton text={copyText} label={copyLabel} size="md" />
+      </div>
+      <div className="relative px-5 pb-6 pt-5">{children}</div>
+    </section>
+  );
+}
+
 function LoadingStepsSync() {
   const [done, setDone] = useState(0);
 
@@ -140,16 +262,27 @@ function TransformStrip({ result }: { result: StudioTulemus }) {
   return (
     <motion.div
       variants={itemVariants}
-      className="relative overflow-hidden rounded-2xl border border-[rgb(var(--accent-cyan)/0.28)] bg-[linear-gradient(135deg,rgb(var(--accent)/0.22)_0%,rgba(14,17,24,0.94)_48%,rgba(8,10,16,0.92)_100%)] px-5 py-6 shadow-[0_0_60px_-22px_rgb(var(--accent)/0.45)] sm:px-7 sm:py-7"
+      className="relative overflow-hidden rounded-2xl border border-[rgb(var(--accent-cyan)/0.3)] bg-[linear-gradient(128deg,rgb(var(--accent)/0.26)_0%,rgba(16,18,28,0.95)_42%,rgba(8,10,16,0.92)_100%)] px-5 py-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset,0_0_72px_-20px_rgb(var(--accent)/0.5),0_24px_64px_-36px_rgba(0,0,0,0.65)] sm:px-7 sm:py-7"
     >
       <div
-        className="pointer-events-none absolute -right-16 top-0 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-cyan)/0.2)_0%,transparent_70%)] blur-2xl"
+        className="pointer-events-none absolute -right-20 top-0 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-cyan)/0.22)_0%,transparent_72%)] blur-2xl"
         aria-hidden
       />
-      <p className="relative text-[11px] font-semibold uppercase tracking-[0.2em] text-[rgb(var(--accent-bright))]">
-        {t.transformStripLabel}
-      </p>
-      <p className="relative mt-3 text-[clamp(1.05rem,2.6vw,1.35rem)] font-semibold leading-snug tracking-[-0.03em] text-[var(--fg)]">
+      <div className="relative flex flex-wrap items-center gap-3">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[rgb(var(--accent-cyan)/0.45)] bg-[rgb(var(--accent)/0.22)] px-3 py-1.5 shadow-[0_0_24px_-10px_rgb(var(--accent-cyan)/0.55)]">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[rgb(var(--accent-cyan))] opacity-50" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[rgb(var(--accent-cyan))]" />
+          </span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[rgb(var(--accent-bright))]">
+            {t.resultStatusBadge}
+          </span>
+        </span>
+        <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
+          {t.transformStripLabel}
+        </span>
+      </div>
+      <p className="relative mt-4 text-[clamp(1.08rem,2.8vw,1.42rem)] font-semibold leading-snug tracking-[-0.03em] text-[var(--fg)]">
         {t.transformSummaryLine
           .replace("{raw}", String(s.rawLineCount))
           .replace("{items}", String(s.structuredItemCount))}
@@ -167,39 +300,93 @@ function TransformStrip({ result }: { result: StudioTulemus }) {
 
 function EmptyExecutionCanvas() {
   return (
-    <div className="flex min-h-[min(420px,52vh)] flex-col justify-center px-4 py-10 sm:px-8">
-      <div className="mx-auto max-w-2xl text-center">
-        <div
-          className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-[rgb(var(--accent)/0.35)] bg-[rgb(var(--accent)/0.1)] text-[22px] shadow-[0_0_40px_-12px_rgb(var(--accent)/0.5)]"
-          aria-hidden
-        >
-          ◇
-        </div>
-        <p className="text-[17px] font-semibold text-[var(--fg)]">{t.emptyTitle}</p>
-        <p className="mt-3 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
-          {t.emptyBody}
-        </p>
-      </div>
-      <div className="mx-auto mt-10 grid w-full max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
-        {studioEmotionalPillars.map((row) => (
+    <div className="relative flex min-h-[min(560px,70vh)] flex-1 flex-col overflow-hidden rounded-2xl">
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_18%,rgb(var(--accent)/0.18),transparent_58%),radial-gradient(ellipse_55%_40%_at_80%_90%,rgb(var(--accent-cyan)/0.1),transparent_55%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_80px_-24px_rgb(var(--accent)/0.14)]"
+        aria-hidden
+      />
+
+      <div className="relative flex flex-1 flex-col px-5 py-8 sm:px-8 sm:py-10">
+        <div className="mx-auto max-w-lg text-center">
           <div
-            key={row.before}
-            className="rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_45%,transparent)] px-4 py-3.5 text-center"
+            className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-[rgb(var(--accent)/0.38)] bg-[linear-gradient(155deg,rgb(var(--accent)/0.18)_0%,rgba(14,17,26,0.9)_100%)] text-[26px] text-[rgb(var(--accent-bright))] shadow-[0_0_56px_-16px_rgb(var(--accent)/0.55)]"
+            aria-hidden
           >
-            <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--foreground-subtle)]">
-              {row.before}
-            </p>
-            <p
-              className="mt-2 text-[12px] text-[var(--foreground-muted)]"
-              aria-hidden
-            >
-              →
-            </p>
-            <p className="mt-1 text-[14px] font-semibold text-[rgb(var(--accent-bright))]">
-              {row.after}
-            </p>
+            ◈
           </div>
-        ))}
+          <p className="text-[18px] font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-[19px]">
+            {t.emptyTitle}
+          </p>
+          <p className="mt-3 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+            {t.emptyBody}
+          </p>
+        </div>
+
+        <div className="relative mx-auto mt-10 w-full max-w-4xl flex-1 space-y-3 sm:space-y-4">
+          <OutputSkeletonBlock label={t.sectionKokkuvote} icon={<IconSummary />}>
+            <SkeletonLine className="w-[94%]" />
+            <SkeletonLine className="w-[88%]" />
+            <SkeletonLine className="w-[62%]" />
+          </OutputSkeletonBlock>
+
+          <OutputSkeletonBlock label={t.sectionTegevused} icon={<IconTasks />}>
+            <div className="space-y-2">
+              {(["w-[93%]", "w-[76%]", "w-[84%]", "w-[58%]"] as const).map((w, i) => (
+                <div
+                  key={i}
+                  className="flex gap-3 rounded-lg border border-[color-mix(in_srgb,var(--border)_50%,transparent)] bg-[color-mix(in_srgb,var(--surface)_35%,transparent)] px-3 py-2.5"
+                >
+                  <SkeletonLine className={cn("h-3 shrink-0", w)} />
+                  <SkeletonLine className="h-3 w-14 shrink-0" />
+                  <SkeletonLine className="h-3 w-12 shrink-0" />
+                </div>
+              ))}
+            </div>
+          </OutputSkeletonBlock>
+
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+            <OutputSkeletonBlock label={t.sectionVastutajad} icon={<IconPeople />}>
+              <SkeletonLine className="w-[70%]" />
+              <SkeletonLine className="w-[88%]" />
+              <SkeletonLine className="w-[56%]" />
+            </OutputSkeletonBlock>
+            <OutputSkeletonBlock label={t.sectionTahtajad} icon={<IconCalendar />}>
+              <SkeletonLine className="w-[64%]" />
+              <SkeletonLine className="w-[92%]" />
+              <SkeletonLine className="w-[72%]" />
+            </OutputSkeletonBlock>
+          </div>
+
+          <OutputSkeletonBlock label={t.sectionJarelkiri} icon={<IconMail />}>
+            <SkeletonLine className="w-[40%]" />
+            <div className="mt-3 space-y-2 rounded-lg border border-[color-mix(in_srgb,var(--border)_45%,transparent)] bg-[color-mix(in_srgb,var(--bg-elevated)_55%,transparent)] p-3">
+              <SkeletonLine className="w-full" />
+              <SkeletonLine className="w-[91%]" />
+              <SkeletonLine className="w-[78%]" />
+              <SkeletonLine className="h-10 w-full opacity-40" />
+            </div>
+          </OutputSkeletonBlock>
+        </div>
+
+        <div className="relative mx-auto mt-8 grid w-full max-w-3xl grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-3">
+          {studioEmotionalPillars.map((row) => (
+            <div
+              key={row.before}
+              className="rounded-xl border border-[color-mix(in_srgb,var(--border)_70%,transparent)] bg-[color-mix(in_srgb,var(--surface-muted)_38%,transparent)] px-3 py-2.5 text-center backdrop-blur-sm"
+            >
+              <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--foreground-subtle)]">
+                {row.before}
+              </p>
+              <p className="mt-1 text-[13px] font-semibold text-[rgb(var(--accent-bright))]">
+                → {row.after}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -302,64 +489,6 @@ function QuickCopyActions({ result }: { result: StudioTulemus }) {
         />
       </div>
     </div>
-  );
-}
-
-function ResultSection({
-  title,
-  copyText,
-  copyLabel = t.copySection,
-  children,
-}: {
-  title: string;
-  copyText: string;
-  copyLabel?: string;
-  children: ReactNode;
-}) {
-  return (
-    <section className="glass-panel edge-lit overflow-hidden rounded-xl">
-      <div className="flex items-center justify-between gap-3 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_55%,transparent)] px-4 py-3">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
-          {title}
-        </h2>
-        <StudioCopyButton text={copyText} label={copyLabel} />
-      </div>
-      <div className="p-4 sm:p-5">{children}</div>
-    </section>
-  );
-}
-
-function JarelkiriBlock({ result }: { result: StudioTulemus }) {
-  return (
-    <section className="glass-panel edge-lit overflow-hidden rounded-xl">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--surface-muted)_55%,transparent)] px-4 py-3">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--foreground-subtle)]">
-          {t.sectionJarelkiri}
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          <StudioCopyButton text={result.emailTeema} label={t.copySubject} size="sm" />
-          <StudioCopyButton
-            text={result.jarelkiri}
-            label={t.copyJarelkiri}
-            size="sm"
-            className="font-medium"
-          />
-        </div>
-      </div>
-      <div className="space-y-4 p-4 sm:p-5">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground-subtle)]">
-            {t.sectionEmailTeema}
-          </p>
-          <p className="mt-1.5 text-[14px] font-medium leading-snug text-[var(--fg)]">
-            {result.emailTeema}
-          </p>
-        </div>
-        <pre className="whitespace-pre-wrap rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-4 font-mono text-[12px] leading-relaxed text-[var(--foreground-muted)] sm:text-[13px]">
-          {result.jarelkiri}
-        </pre>
-      </div>
-    </section>
   );
 }
 
@@ -489,9 +618,9 @@ export function StudioApp() {
         </SectionContainer>
       </section>
 
-      <div className="relative z-10 flex flex-1 flex-col lg:flex-row lg:items-stretch">
+      <div className="relative z-10 flex flex-1 flex-col lg:grid lg:min-h-0 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)] lg:items-stretch xl:grid-cols-[minmax(300px,400px)_minmax(0,1fr)]">
         <motion.aside
-          className="flex w-full flex-col border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_94%,black)] lg:w-[min(100%,420px)] lg:shrink-0 lg:border-b-0 lg:border-r"
+          className="flex w-full flex-col border-b border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--bg)_94%,black)] lg:shrink-0 lg:border-b-0 lg:border-r"
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: DURATION.reveal, ease: EASE_PREMIUM }}
@@ -604,7 +733,7 @@ export function StudioApp() {
         </motion.aside>
 
         <motion.main
-          className="relative flex min-h-[min(520px,62vh)] flex-1 flex-col border-[var(--border)] bg-[linear-gradient(180deg,rgba(10,12,18,0.65)_0%,rgba(8,10,16,0.92)_38%,var(--bg-deep)_100%)] lg:min-h-[calc(100vh-13rem)]"
+          className="relative flex min-h-[min(560px,68vh)] flex-1 flex-col border-[var(--border)] bg-[linear-gradient(180deg,rgba(12,14,22,0.75)_0%,rgba(8,10,16,0.94)_40%,var(--bg-deep)_100%)] lg:min-h-[calc(100vh-12rem)]"
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -617,13 +746,13 @@ export function StudioApp() {
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_70%_-8%,rgb(var(--accent)/0.12),transparent_55%)]"
             aria-hidden
           />
-          <SectionContainer className="relative flex flex-1 flex-col py-6 lg:py-8">
+          <SectionContainer className="relative flex flex-1 flex-col py-6 lg:min-h-0 lg:py-8">
             <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--accent-bright))]">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[rgb(var(--accent-bright))]">
                   {t.outputTitle}
                 </p>
-                <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+                <p className="mt-2 max-w-2xl text-[15px] font-medium leading-relaxed tracking-[-0.015em] text-[var(--foreground-muted)]">
                   {t.outputHint}
                 </p>
               </div>
@@ -632,13 +761,13 @@ export function StudioApp() {
                   text={exportAll}
                   label={t.copyAll}
                   size="md"
-                  className="rounded-xl border border-[rgb(var(--accent)/0.4)] bg-[rgb(var(--accent)/0.14)] px-4 py-2.5 text-[13px] font-semibold text-[var(--fg)] shadow-[0_0_36px_-14px_rgb(var(--accent)/0.55)] hover:bg-[rgb(var(--accent)/0.22)]"
+                  className="rounded-xl border border-[rgb(var(--accent)/0.45)] bg-[rgb(var(--accent)/0.16)] px-4 py-2.5 text-[13px] font-semibold text-[var(--fg)] shadow-[0_0_44px_-14px_rgb(var(--accent)/0.6)] hover:bg-[rgb(var(--accent)/0.24)]"
                 />
               ) : null}
             </div>
 
             <div
-              className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-[rgb(var(--accent)/0.18)] bg-[color-mix(in_srgb,var(--surface)_42%,transparent)] shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset,0_24px_80px_-32px_rgba(0,0,0,0.75),0_0_100px_-40px_rgb(var(--accent)/0.35)] backdrop-blur-md"
+              className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-[rgb(var(--accent)/0.22)] bg-[color-mix(in_srgb,var(--surface)_48%,transparent)] shadow-[0_0_0_1px_rgba(255,255,255,0.055)_inset,0_32px_100px_-40px_rgba(0,0,0,0.78),0_0_120px_-48px_rgb(var(--accent)/0.42),0_0_1px_rgb(var(--accent-cyan)/0.2)] backdrop-blur-md"
               aria-live="polite"
             >
               <AnimatePresence mode="wait">
@@ -665,38 +794,40 @@ export function StudioApp() {
                   >
                     <TransformStrip result={result} />
 
-                    <motion.div className="mt-5" variants={itemVariants}>
+                    <motion.div className="mt-6" variants={itemVariants}>
                       <QuickCopyActions result={result} />
                     </motion.div>
 
-                    <motion.div className="mt-5" variants={itemVariants}>
-                      <ResultSection
+                    <motion.div className="mt-6" variants={itemVariants}>
+                      <PremiumResultCard
                         title={t.sectionKokkuvote}
+                        icon={<IconSummary />}
                         copyText={result.kokkuvote}
                         copyLabel={t.copyKokkuvote}
                       >
-                        <p className="whitespace-pre-wrap text-[14px] leading-relaxed text-[var(--foreground-muted)]">
+                        <p className="whitespace-pre-wrap text-[15px] leading-[1.65] text-[var(--foreground-muted)]">
                           {result.kokkuvote}
                         </p>
-                      </ResultSection>
+                      </PremiumResultCard>
                     </motion.div>
 
-                    <motion.div className="mt-5" variants={itemVariants}>
-                      <ResultSection
+                    <motion.div className="mt-6" variants={itemVariants}>
+                      <PremiumResultCard
                         title={t.sectionTegevused}
+                        icon={<IconTasks />}
                         copyText={formatTegevusedPlain(result)}
                       >
-                        <div className="overflow-x-auto rounded-xl border border-[var(--border-strong)]">
+                        <div className="overflow-x-auto rounded-xl border border-[color-mix(in_srgb,var(--border)_90%,transparent)] bg-[color-mix(in_srgb,var(--bg-elevated)_65%,transparent)]">
                           <table className="w-full min-w-[480px] text-left text-[13px]">
                             <thead>
-                              <tr className="border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-muted)_75%,transparent)] text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--foreground-subtle)]">
-                                <th className="px-3 py-2.5 font-medium">
+                              <tr className="border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-muted)_80%,transparent)] text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--foreground-subtle)]">
+                                <th className="px-4 py-3 font-medium">
                                   {t.tableTask}
                                 </th>
-                                <th className="w-[100px] px-3 py-2.5 font-medium">
+                                <th className="w-[108px] px-4 py-3 font-medium">
                                   {t.tableOwner}
                                 </th>
-                                <th className="w-[104px] px-3 py-2.5 text-right font-medium">
+                                <th className="w-[108px] px-4 py-3 text-right font-medium">
                                   {t.tableDue}
                                 </th>
                               </tr>
@@ -705,15 +836,15 @@ export function StudioApp() {
                               {result.tegevused.map((row, i) => (
                                 <tr
                                   key={`${row.kirjeldus}-${i}`}
-                                  className="border-t border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_70%,transparent)]"
+                                  className="border-t border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_55%,transparent)]"
                                 >
-                                  <td className="px-3 py-3 leading-snug text-[var(--fg)]">
+                                  <td className="px-4 py-3.5 leading-snug text-[var(--fg)]">
                                     {row.kirjeldus}
                                   </td>
-                                  <td className="px-3 py-3 text-[var(--foreground-muted)]">
+                                  <td className="px-4 py-3.5 text-[var(--foreground-muted)]">
                                     {row.vastutaja}
                                   </td>
-                                  <td className="px-3 py-3 text-right tabular-nums text-[var(--foreground-subtle)]">
+                                  <td className="px-4 py-3.5 text-right tabular-nums text-[var(--foreground-subtle)]">
                                     {row.tahtaeg}
                                   </td>
                                 </tr>
@@ -721,26 +852,27 @@ export function StudioApp() {
                             </tbody>
                           </table>
                         </div>
-                      </ResultSection>
+                      </PremiumResultCard>
                     </motion.div>
 
-                    <div className="mt-5 grid gap-5 lg:grid-cols-2">
+                    <div className="mt-6 grid gap-6 lg:grid-cols-2">
                       <motion.div variants={itemVariants}>
-                        <ResultSection
+                        <PremiumResultCard
                           title={t.sectionVastutajad}
+                          icon={<IconPeople />}
                           copyText={formatVastutajadPlain(result)}
                         >
-                          <ul className="space-y-4">
+                          <ul className="space-y-5">
                             {result.vastutajad.map((v) => (
                               <li key={v.nimi}>
-                                <p className="text-[13px] font-semibold text-[var(--fg)]">
+                                <p className="text-[14px] font-semibold text-[var(--fg)]">
                                   {v.nimi}
-                                  <span className="ml-1.5 font-normal text-[var(--foreground-subtle)]">
+                                  <span className="ml-1.5 text-[12px] font-normal text-[var(--foreground-subtle)]">
                                     ({v.tegevusteArv}{" "}
                                     {v.tegevusteArv === 1 ? "tegevus" : "tegevust"})
                                   </span>
                                 </p>
-                                <ul className="mt-1.5 space-y-1 text-[13px] leading-relaxed text-[var(--foreground-muted)]">
+                                <ul className="mt-2 space-y-1.5 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
                                   {v.ulesanded.map((u) => (
                                     <li key={u}>· {u}</li>
                                   ))}
@@ -748,21 +880,22 @@ export function StudioApp() {
                               </li>
                             ))}
                           </ul>
-                        </ResultSection>
+                        </PremiumResultCard>
                       </motion.div>
 
                       <motion.div variants={itemVariants}>
-                        <ResultSection
+                        <PremiumResultCard
                           title={t.sectionTahtajad}
+                          icon={<IconCalendar />}
                           copyText={formatTahtajadPlain(result)}
                         >
-                          <ul className="space-y-4">
+                          <ul className="space-y-5">
                             {result.tahtajad.map((g) => (
                               <li key={g.tahtaeg}>
-                                <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[rgb(var(--accent-bright))]">
+                                <p className="text-[12px] font-semibold uppercase tracking-[0.1em] text-[rgb(var(--accent-bright))]">
                                   {g.tahtaeg}
                                 </p>
-                                <ul className="mt-2 space-y-2 text-[13px] text-[var(--foreground-muted)]">
+                                <ul className="mt-2.5 space-y-2 text-[14px] text-[var(--foreground-muted)]">
                                   {g.read.map((row, i) => (
                                     <li key={`${row.kirjeldus}-${i}`}>
                                       <span className="font-medium text-[var(--fg)]">
@@ -775,14 +908,15 @@ export function StudioApp() {
                               </li>
                             ))}
                           </ul>
-                        </ResultSection>
+                        </PremiumResultCard>
                       </motion.div>
                     </div>
 
                     {result.lahtisedKusimused.length > 0 ? (
-                      <motion.div className="mt-5" variants={itemVariants}>
-                        <ResultSection
+                      <motion.div className="mt-6" variants={itemVariants}>
+                        <PremiumResultCard
                           title={t.sectionLahtised}
+                          icon={<IconHelp />}
                           copyText={result.lahtisedKusimused.join("\n")}
                         >
                           <ul className="list-disc space-y-2 pl-5 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
@@ -790,12 +924,37 @@ export function StudioApp() {
                               <li key={q}>{q}</li>
                             ))}
                           </ul>
-                        </ResultSection>
+                        </PremiumResultCard>
                       </motion.div>
                     ) : null}
 
-                    <motion.div className="mt-5" variants={itemVariants}>
-                      <JarelkiriBlock result={result} />
+                    <motion.div className="mt-6" variants={itemVariants}>
+                      <PremiumResultCard
+                        title={t.sectionJarelkiri}
+                        icon={<IconMail />}
+                        copyText={result.jarelkiri}
+                        copyLabel={t.copyJarelkiri}
+                      >
+                        <div className="flex flex-wrap gap-2 pb-4">
+                          <StudioCopyButton
+                            text={result.emailTeema}
+                            label={t.copySubject}
+                            size="sm"
+                            className="rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-3 py-2 text-[12px] text-[var(--foreground-muted)] hover:text-[var(--fg)]"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--foreground-subtle)]">
+                            {t.sectionEmailTeema}
+                          </p>
+                          <p className="mt-2 text-[15px] font-medium leading-snug text-[var(--fg)]">
+                            {result.emailTeema}
+                          </p>
+                        </div>
+                        <pre className="mt-5 whitespace-pre-wrap rounded-xl border border-[color-mix(in_srgb,var(--border)_85%,transparent)] bg-[var(--bg-elevated)] p-4 font-mono text-[12px] leading-relaxed text-[var(--foreground-muted)] sm:text-[13px]">
+                          {result.jarelkiri}
+                        </pre>
+                      </PremiumResultCard>
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="mt-6 pb-2">

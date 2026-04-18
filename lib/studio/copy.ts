@@ -64,11 +64,12 @@ export const studioUi = {
   sampleSectionLead:
     "Koosoleku tüübi valik laeb näidissisu — saad selle kohe üle kirjutada.",
 
-  outputTitle: "Täitmise lõuend",
+  outputTitle: "Tulemus ja tegevuskava",
   outputHint:
-    "Siia ilmuvad tegevused, vastutus, tähtajad ja järelkiri — valmis kopeerima.",
+    "See on põhivaade: siin näed tegevust selgelt — kokkuvõte, ülesanded, vastutus, tähtajad ja järelkiri kopeerimiseks.",
 
-  transformStripLabel: "Tegevustplaan valmis",
+  resultStatusBadge: "Tegevusplaan valmis",
+  transformStripLabel: "Struktureeritud väljund",
   transformSummaryLine: "{raw} rida järelsisust → {items} tegevust",
   transformStripHint:
     "See on töö, mis peale koosolekut niikuinii ära teha — vähem käsitsi kordamist, rohkem selget vastutust ja edasiliikumist.",
@@ -82,7 +83,7 @@ export const studioUi = {
   rawInputHint:
     "Algne järelsisu, millest plaan tekkis — võrdle ridahaaval, kui vaja.",
 
-  sectionKokkuvote: "Tegevuse taust",
+  sectionKokkuvote: "Kokkuvõte",
   sectionTegevused: "Tegevused",
   sectionVastutajad: "Vastutajad",
   sectionTahtajad: "Tähtajad",
@@ -96,7 +97,7 @@ export const studioUi = {
 
   copy: "Kopeeri",
   copySection: "Kopeeri see plokk",
-  copyKokkuvote: "Kopeeri tegevuse taust",
+  copyKokkuvote: "Kopeeri kokkuvõte",
   copyAll: "Kopeeri kõik",
   copyJarelkiri: "Kopeeri järelkiri",
   copySubject: "Kopeeri teema",
@@ -107,16 +108,16 @@ export const studioUi = {
 
   quickActionsLabel: "Kiirkopeerimine",
 
-  emptyTitle: "Täitmise plaan ilmub siia",
+  emptyTitle: "Siin saab tegevus nähtavaks",
   emptyBody:
-    "Vali üleval kontekst, kleebi koosoleku sisse ja vajuta „Koosta järgmised sammud“. Tühi lõuend täitub tegevuste, vastutajate ja tähtaegadega — valmis jagamiseks.",
+    "Kui koosoleku sisu on üleval olemas ja vajutad „Koosta järgmised sammud“, tekivad siia struktureeritud plokid — kokkuvõte, tegevused, vastutajad, tähtajad ja järelkiri. See on rakenduse keskus, mitte näidis.",
 
   loadingTitle: "Koostan järgmisi samme…",
   loadingHint:
-    "Eraldame tegevused, vastutajad ja tähtajad; seome need kokku tegevuse tausta ja järelkirjaga.",
+    "Eraldame tegevused, vastutajad ja tähtajad; paneme kokku kokkuvõtte ja järelkirja.",
   loadingStep1: "Tegevused ja vastutajad",
   loadingStep2: "Tähtajad ja struktuur",
-  loadingStep3: "Tegevuse taust ja järelkiri",
+  loadingStep3: "Kokkuvõte ja järelkiri",
 
   successHint:
     "Kontrolli vastutajad ja tähtajad — seejärel kopeeri kanalisse või meilile.",
