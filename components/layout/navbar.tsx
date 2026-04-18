@@ -29,8 +29,7 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 const marketingAnchors = [
-  { href: "/#product", label: "Toode" },
-  { href: "/#how", label: "Kuidas see töötab" },
+  { href: "/#product", label: "Töövoog" },
   { href: "/#benefits", label: "Miks Doviqo" },
 ] as const;
 

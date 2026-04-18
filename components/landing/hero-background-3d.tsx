@@ -82,9 +82,9 @@ function CinematicCamera({ quality }: { quality: Quality }) {
   useFrame(({ camera, clock }) => {
     const t = clock.elapsedTime;
     camera.position.set(
-      base.current.x + Math.sin(t * 0.165) * 0.52 * mul,
-      base.current.y + Math.cos(t * 0.118) * 0.28 * mul,
-      base.current.z + Math.sin(t * 0.088) * 0.38 * mul,
+      base.current.x + Math.sin(t * 0.22) * 0.58 * mul,
+      base.current.y + Math.cos(t * 0.152) * 0.34 * mul,
+      base.current.z + Math.sin(t * 0.112) * 0.44 * mul,
     );
     look.current.set(
       0.15 + Math.sin(t * 0.072) * 0.14 * mul,
@@ -349,9 +349,9 @@ function LuminousTori({
     if (!gr) return;
     const t = clock.elapsedTime;
     const s = isLow ? 0.65 : 1;
-    gr.rotation.y = t * 0.11 * s;
-    gr.rotation.x = 0.25 + Math.sin(t * 0.09) * 0.06 * s;
-    gr.rotation.z = Math.sin(t * 0.065) * 0.12 * s;
+    gr.rotation.y = t * 0.16 * s;
+    gr.rotation.x = 0.25 + Math.sin(t * 0.12) * 0.08 * s;
+    gr.rotation.z = Math.sin(t * 0.088) * 0.15 * s;
   });
 
   return (
@@ -476,7 +476,7 @@ function SceneContent({ quality }: { quality: Quality }) {
 
   const sparkPrimary = isLow ? 55 : isMedium ? 85 : 120;
   const sparkSecondary = isLow ? 35 : isMedium ? 55 : 85;
-  const fogDensity = isLow ? 0.028 : 0.02;
+  const fogDensity = isLow ? 0.024 : 0.014;
 
   return (
     <>
@@ -515,10 +515,10 @@ function SceneContent({ quality }: { quality: Quality }) {
 
       <group ref={flowGroupRef}>
         <Float
-          speed={1.85}
-          rotationIntensity={0.14}
-          floatIntensity={0.55}
-          floatingRange={[-0.32, 0.32]}
+          speed={2.45}
+          rotationIntensity={0.22}
+          floatIntensity={0.62}
+          floatingRange={[-0.38, 0.38]}
         >
           <group>
             <FlowRibbon
@@ -533,8 +533,8 @@ function SceneContent({ quality }: { quality: Quality }) {
               position={[0.35, 0.72, 0.35]}
               rotation={[0.42, 0.16, -0.24]}
               phase={0}
-              speed={1.12}
-              waveScale={1.22}
+              speed={1.52}
+              waveScale={1.28}
               normalEvery={2}
             />
             <FlowRibbon
@@ -549,8 +549,8 @@ function SceneContent({ quality }: { quality: Quality }) {
               position={[-0.35, -0.48, -0.08]}
               rotation={[-0.38, -0.24, 0.45]}
               phase={2.2}
-              speed={0.98}
-              waveScale={1.14}
+              speed={1.28}
+              waveScale={1.18}
               normalEvery={2}
             />
             {!isLow ? (
@@ -566,8 +566,8 @@ function SceneContent({ quality }: { quality: Quality }) {
                 position={[0.05, 0.08, -0.62]}
                 rotation={[0.22, 0.55, 0.2]}
                 phase={4.5}
-                speed={0.82}
-                waveScale={1.02}
+                speed={1.1}
+                waveScale={1.08}
                 normalEvery={3}
               />
             ) : null}
@@ -584,8 +584,8 @@ function SceneContent({ quality }: { quality: Quality }) {
                 position={[-0.12, 0.88, -0.42]}
                 rotation={[0.58, -0.26, 0.14]}
                 phase={1.1}
-                speed={0.68}
-                waveScale={0.98}
+                speed={0.92}
+                waveScale={1.02}
                 normalEvery={3}
               />
             ) : null}
@@ -599,7 +599,7 @@ function SceneContent({ quality }: { quality: Quality }) {
           size={particleSize}
           opacity={isLow ? 0.52 : 0.68}
           zSpread={4}
-          driftSpeed={1.15}
+          driftSpeed={1.55}
         />
         <FlowParticleField
           count={particleSecondary}
@@ -608,15 +608,15 @@ function SceneContent({ quality }: { quality: Quality }) {
           size={particleSize * 1.35}
           opacity={isLow ? 0.34 : 0.46}
           zSpread={2.8}
-          driftSpeed={0.98}
+          driftSpeed={1.28}
         />
 
         <Sparkles
           count={sparkPrimary}
           scale={11}
           size={3.2}
-          speed={0.62}
-          opacity={isMedium ? 0.55 : 0.65}
+          speed={1.05}
+          opacity={isMedium ? 0.58 : 0.72}
           color={BRAND.violetGlow}
         />
         {!isLow ? (
@@ -624,8 +624,8 @@ function SceneContent({ quality }: { quality: Quality }) {
             count={sparkSecondary}
             scale={8.5}
             size={2.4}
-            speed={0.55}
-            opacity={0.42}
+            speed={0.92}
+            opacity={0.5}
             color={BRAND.cyanBright}
           />
         ) : null}

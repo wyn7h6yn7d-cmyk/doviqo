@@ -5,7 +5,7 @@
 export const siteMeta = {
   title: "Doviqo — koosoleku järgne täitmine",
   description:
-    "Koosoleku järeltegevus brauseris: proovi Doviqo Studiot — tegevused, vastutajad, tähtajad, järelkiri. Interaktiivne demo; fookus on täitmisel, mitte märkmete kogumisel.",
+    "Koosoleku järel ei pea sa käsitsi kokku võtma — Doviqo Studio teeb järelsisust tegevuskava ja järelkirja. Proovi brauseris; märkmed jäävad mujale, selgus saab siit.",
   keywords: [
     "koosolek",
     "järeltegevus",
@@ -24,7 +24,6 @@ export const nav = {
   links: [
     { href: "/studio", label: "Studiot demo" },
     { href: "#product", label: "Töövoog" },
-    { href: "#how", label: "Kuidas see töötab" },
     { href: "#benefits", label: "Miks Doviqo" },
   ] as const,
   studioCta: "Proovi Studiot",
@@ -39,17 +38,13 @@ export const nav = {
 
 export const hero = {
   eyebrow: "Interaktiivne demo · Doviqo Studio",
-  headline: "Koosoleku lõpus algab järeltegevus — mitte „kokkuvõtte“ kirjutamine",
+  headline: "Koosoleku lõpus ei ole küsimus „märkmetes“, vaid „mis edasi?“",
   subheadline:
-    "Doviqo muudab järelsisu tegevusteks, vastutuseks, tähtaegadeks ja kanalisse minevaks tekstiks. Ei ole märkmete hoidla: sama loogika töötab Studiot demos — kleebi oma tekst, näed kohe planni.",
-  clarification:
-    "Sisend on koosoleku järelsisu (üleskirjutus, punktid, lõik). Väljund on töö, mida muidu teeksid käsitsi: plaan, mis on valmis saatmiseks.",
-  demoCallout:
-    "Studiot demo näitab toodet kohe: üks klõps, oma järelsisu, päris struktuur — pole ainult turundustekst.",
-  primaryCta: "Proovi Doviqo Studiot",
+    "Doviqo teeb järelsisust tegevused, vastutajad, tähtajad ja saatmisvalmis järelkirja. Märkmed jäävad rakendustesse; siin näed kohe, mis töö käima läheb — proovi Studiot.",
+  primaryCta: "Ava Doviqo Studio",
   secondaryCta: "Ootenimekiri",
   helper:
-    "Studio demo avaneb kohe ja töötab ainult brauseris. Ootenimekiri on eraldi: uudised tulevase täisversiooni kohta.",
+    "Studio töötab kohe brauseris. Ootenimekiri annab teada, kui täisversioon valmis on.",
 } as const;
 
 export const heroPreview = {
@@ -85,10 +80,10 @@ Siin on kokkulepitud järgmised sammud, vastutajad ja tähtajad — järgmine sa
 
 export const productProof = {
   id: "product",
-  eyebrow: "Demoga tõestatud töövoog",
-  title: "Studiot avades näed sama loogikat oma tekstiga",
+  eyebrow: "Üks töövoog, päris väljund",
+  title: "Sisend → tegevuskava ja järelkiri — Studiod",
   lead:
-    "Avalehel on staatiline näidis; /studio demos paned pärisjärelsisu ja näed kohe kokkuvõtet, tegevusi, tähtaegu ja järelkirja. See on järeltegevuse tööriist — mitte koosoleku „märkmete“ kogumise moodul.",
+    "Studios valid konteksti, paned sisse järelsisu ja saad kohe struktuuri: see, mida tiim pärast koosolekut nagunii teeb — ainult kiiremini kui käsitsi.",
   inputStep: {
     label: "Järelsisu",
     body: "Üleskirjutus, bulletid või lõik dokumendist — nii nagu see koosoleku järel kätte saad.",

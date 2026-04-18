@@ -14,10 +14,10 @@ export const studioEmotionalPillars = [
 ] as const;
 
 export const studioUi = {
-  studioEyebrow: "Koosoleku järgne tegevuse komandokeskus",
+  studioEyebrow: "Koosoleku järgne komandokeskus",
   productName: "Doviqo Studio",
   workspaceSubtitle:
-    "Üks töövoog: sisendist saad kohe tegevused, vastutuse, tähtajad ja kanalisse mineva teksti — nagu pärast koosolekut järeltegevust planeerides.",
+    "Mitte märkmete kast — vaid järeltegevuse selgus: kontekst, sisend, struktuur ja koopia kanalisse. Siin näed, kes teeb, mis ja millal.",
 
   demoBadge: "Interaktiivne demo",
   demoNotice:
@@ -28,18 +28,29 @@ export const studioUi = {
 
   workflowAria: "Koosoleku töövoog ja tegevuste lõuend",
 
-  meetingBarTitle: "Millise koosoleku järeltegevust koostad?",
+  workflowStripTitle: "Viis sammu — siit algab järeltegevus",
+  workflowStripHint:
+    "Ülemine rida on sinu juhend: samast tekstist tuleb konteksti järgi erinev rõhk ja järelkirja toon.",
+  workflowStepLabels: [
+    "Kontekst",
+    "Sisend",
+    "Teisendus",
+    "Struktuur",
+    "Kanalisse",
+  ] as const,
+
+  meetingBarTitle: "Millise koosoleku järgi koostad plaani?",
   meetingBarHint:
     "Kontekst muudab kokkuvõtte rõhku, järelkirja tooni ja seda, mis tähtis tundub — vali enne teisendust.",
   meetingTypeFooterNote:
     "Muudad konteksti uuesti, kui sama tekst peaks kõlama teisiti (nt kliendile vs tiimile).",
 
-  intakeRailTitle: "Koosoleku järelsisu",
-  stepInput: "Aseta siia järelsisu",
-  inputLabel: "Koosoleku järelsisu",
-  inputLabelLong: "Koosoleku järelsisu — punktid, üleskirjutus või lõik",
+  intakeRailTitle: "Koosoleku sissevõtt",
+  stepInput: "Lisa koosoleku sisu",
+  inputLabel: "Koosoleku sisend",
+  inputLabelLong: "Lisa koosoleku sisu — punktid, üleskirjutus või lõik",
   inputHint:
-    "Kleebi päris järelsisu: oluline on, mis peale koosolekut tehtud saab — mitte ilusad laused. Doviqo tõstab välja tegevused ja tähtajad.",
+    "Kleebi märkmed või üleskirjutus. Doviqo teeb neist järgmised sammud: tegevused, vastutajad, tähtajad ja valmis järeltekst — mitte ümberkirjutus.",
 
   transformZoneTitle: "Teisendus täitmiseks",
   transformZoneHint:
@@ -56,8 +67,8 @@ export const studioUi = {
 - tiimile lühike järelteavitus pärast plokki
 - järgmises sprindis võtame onboarding’u parandused ette`,
 
-  processBtn: "Koosta järgmised sammud",
-  processing: "Koostan järgmisi samme…",
+  processBtn: "Loo tegevuskava",
+  processing: "Teen järelsisust tegevuskava…",
   resetBtn: "Alusta uuesti",
 
   meetingTypeLabel: "Koosoleku kontekst",
@@ -68,9 +79,9 @@ export const studioUi = {
   sampleSectionLead:
     "Konteksti valik laeb näidise — asenda oma pärisjärelsisuga, et näha täpset väljundit.",
 
-  outputTitle: "Väljund: tee järeltegevus nähtavaks",
+  outputTitle: "Järeltegevuse väljund",
   outputHint:
-    "Siin on kohe kasutatav plaan: kopeeri kanalisse, tiimile või meilile — vähem käsitsi järelsõnumi kirjutamist pärast koosolekut.",
+    "Peamine tulu on siin: kokkuvõte, otsused, tegevused, vastutus, tähtajad ja järelkiri — ühest vaatest kopeeritav kanalisse või meilile.",
 
   resultStatusBadge: "Järeltegevuse plaan valmis",
   transformStripLabel: "Kohe kasutatav väljund",
@@ -125,13 +136,14 @@ export const studioUi = {
   quickActionsLabel: "Kiirkopeerimine",
   workflowMoreChannels: "Lisa kanal",
 
-  emptyTitle: "Siia tuleb järeltegevuse plaan",
+  emptyTitle: "Valmis järeltegevuse paan — ootab sinu sisendit",
   emptyBody:
-    "Vali ülal koosoleku kontekst, kleebi järelsisu ja vajuta „Koosta järgmised sammud“ — siia tekivad kokkuvõte, tegevused, vastutajad, tähtajad ja järelkiri. See on interaktiivne demo: sama loogika töötab sinu tekstiga.",
+    "Ülal valid koha ja tooni, vasakule paned koosoleku sisu, seejärel „Loo tegevuskava“. Siia tekivad plokid allpool — sama demo loogika sinu tekstiga.",
+  emptyChipsLead: "Siia tekib struktuur:",
 
-  loadingTitle: "Koostan järgmisi samme…",
+  loadingTitle: "Järjestan järeltegevuse…",
   loadingHint:
-    "Eraldame tegevused, vastutajad ja tähtajad; paneme kokku kokkuvõtte ja järelkirja.",
+    "Eraldame olulise, paneme paika vastutuse ja tähtajad, lõime saatmisvalmis järelteksti.",
   loadingStep1: "Tegevused ja vastutajad",
   loadingStep2: "Tähtajad ja struktuur",
   loadingStep3: "Kokkuvõte ja järelkiri",

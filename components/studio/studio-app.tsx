@@ -343,6 +343,30 @@ function EmptyExecutionCanvas() {
           </p>
         </div>
 
+        <div className="relative mx-auto mt-8 w-full max-w-4xl">
+          <p className="text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--foreground-subtle)]">
+            {t.emptyChipsLead}
+          </p>
+          <div className="mt-3 flex flex-wrap justify-center gap-2">
+            {[
+              t.sectionKokkuvote,
+              t.sectionOtsused,
+              t.sectionTegevused,
+              t.sectionVastutajad,
+              t.sectionTahtajad,
+              t.sectionLahtised,
+              t.sectionJarelkiri,
+            ].map((label) => (
+              <span
+                key={label}
+                className="rounded-full border border-[rgb(var(--accent)/0.22)] bg-[color-mix(in_srgb,var(--surface-raised)_55%,transparent)] px-3 py-1 text-[11px] font-medium text-[var(--foreground-muted)] shadow-[inset_0_1px_0_rgb(255,255,255,0.04)]"
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+
         <div className="relative mx-auto mt-10 w-full max-w-4xl flex-1 space-y-3 sm:space-y-4">
           <OutputSkeletonBlock label={t.sectionKokkuvote} icon={<IconSummary />}>
             <SkeletonLine className="w-[94%]" />
@@ -419,6 +443,95 @@ function EmptyExecutionCanvas() {
   );
 }
 
+function WorkflowProgressStrip({
+  input,
+  loading,
+  result,
+}: {
+  input: string;
+  loading: boolean;
+  result: StudioTulemus | null;
+}) {
+  const hasIn = input.trim().length > 0;
+
+  const stepStatus = (i: number): "done" | "current" | "upcoming" => {
+    if (result) {
+      if (i < 4) return "done";
+      return "current";
+    }
+    if (loading) {
+      if (i < 2) return "done";
+      if (i === 2) return "current";
+      return "upcoming";
+    }
+    if (hasIn) {
+      if (i < 2) return "done";
+      if (i === 2) return "current";
+      return "upcoming";
+    }
+    if (i === 0) return "done";
+    if (i === 1) return "current";
+    return "upcoming";
+  };
+
+  const labels = t.workflowStepLabels;
+
+  return (
+    <div className="border-b border-[var(--border-strong)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface)_42%,transparent)_0%,transparent_72%)]">
+      <SectionContainer className="py-4 sm:py-5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--accent-bright))]">
+          {t.workflowStripTitle}
+        </p>
+        <p className="mt-1.5 max-w-3xl text-[12px] leading-relaxed text-[var(--foreground-subtle)] sm:text-[13px]">
+          {t.workflowStripHint}
+        </p>
+        <ol
+          className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5"
+          aria-label={t.workflowStripTitle}
+        >
+          {labels.map((label, i) => {
+            const st = stepStatus(i);
+            return (
+              <li
+                key={label}
+                className="flex min-h-[3.25rem] flex-col gap-2 rounded-xl border border-[color-mix(in_srgb,var(--border)_70%,transparent)] bg-[color-mix(in_srgb,var(--bg-elevated)_50%,transparent)] p-3"
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className={cn(
+                      "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold transition duration-300",
+                      st === "done" &&
+                        "border-[rgb(var(--accent-cyan)/0.45)] bg-[rgb(var(--accent)/0.2)] text-[rgb(var(--accent-bright))]",
+                      st === "current" &&
+                        "border-[rgb(var(--accent-cyan)/0.55)] bg-[rgb(var(--accent-cyan)/0.12)] text-[var(--fg)] shadow-[0_0_28px_-8px_rgb(var(--accent-cyan)/0.42)]",
+                      st === "upcoming" &&
+                        "border-[var(--border)] bg-[var(--surface-raised)] text-[var(--foreground-subtle)]",
+                    )}
+                  >
+                    {st === "done" ? "✓" : i + 1}
+                  </span>
+                  <span
+                    className={cn(
+                      "text-[12px] font-semibold leading-snug sm:text-[13px]",
+                      st === "current"
+                        ? "text-[var(--fg)]"
+                        : st === "done"
+                          ? "text-[var(--foreground-muted)]"
+                          : "text-[var(--foreground-subtle)]",
+                    )}
+                  >
+                    {label}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </SectionContainer>
+    </div>
+  );
+}
+
 function MeetingTypeSelector({
   value,
   onChange,
@@ -489,9 +602,11 @@ function MeetingTypeSelector({
 function QuickCopyActions({
   result,
   exportAll,
+  onReset,
 }: {
   result: StudioTulemus;
   exportAll: string;
+  onReset?: () => void;
 }) {
   const slack = useMemo(() => formatSlackExport(result), [result]);
   const emailReady = useMemo(() => formatEmailReadyExport(result), [result]);
@@ -568,6 +683,19 @@ function QuickCopyActions({
           className="sm:max-w-md"
         />
       </div>
+
+      {onReset ? (
+        <div className="mt-5 flex justify-end border-t border-[color-mix(in_srgb,var(--border)_55%,transparent)] pt-4">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onReset}
+            className="min-h-11 min-w-[12.5rem]"
+          >
+            {t.resetBtn}
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -628,8 +756,7 @@ export function StudioApp() {
     [result],
   );
 
-  const hasSuccess =
-    result !== null && result.tegevused.length > 0 && !loading;
+  const hasResult = result !== null && !loading;
 
   return (
     <div className="relative flex min-h-screen flex-col bg-[var(--bg-deep)]">
@@ -700,7 +827,13 @@ export function StudioApp() {
         </SectionContainer>
       </section>
 
-      <div className="relative z-10 flex flex-1 flex-col lg:grid lg:min-h-0 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)] lg:items-stretch xl:grid-cols-[minmax(300px,400px)_minmax(0,1fr)]">
+      <WorkflowProgressStrip
+        input={input}
+        loading={loading}
+        result={result}
+      />
+
+      <div className="relative z-10 flex flex-1 flex-col lg:grid lg:min-h-0 lg:grid-cols-[minmax(280px,0.36fr)_minmax(0,1fr)] lg:items-stretch xl:grid-cols-[minmax(300px,0.34fr)_minmax(0,1fr)]">
         <motion.aside
           className="studio-intake-rail flex w-full flex-col border-b border-[var(--border)] lg:shrink-0 lg:border-b-0 lg:border-r"
           initial={reduce ? false : { opacity: 0, y: 10 }}
@@ -850,7 +983,7 @@ export function StudioApp() {
                   >
                     <LoadingPanel loadCycle={loadCycle} />
                   </motion.div>
-                ) : hasSuccess && result ? (
+                ) : hasResult && result ? (
                   <motion.div
                     key="result"
                     className="flex max-h-[min(78vh,1200px)] flex-1 flex-col overflow-y-auto overflow-x-hidden p-4 sm:p-6"
@@ -863,7 +996,11 @@ export function StudioApp() {
                     <TransformStrip result={result} />
 
                     <motion.div className="mt-6" variants={itemVariants}>
-                      <QuickCopyActions result={result} exportAll={exportAll} />
+                      <QuickCopyActions
+                        result={result}
+                        exportAll={exportAll}
+                        onReset={resetAll}
+                      />
                     </motion.div>
 
                     <motion.div className="mt-6" variants={itemVariants}>
@@ -874,7 +1011,7 @@ export function StudioApp() {
                         copyLabel={t.copyKokkuvote}
                         copySuccessLabel={t.copiedKokkuvote}
                       >
-                        <p className="whitespace-pre-wrap text-[15px] leading-[1.65] text-[var(--foreground-muted)]">
+                        <p className="whitespace-pre-wrap text-[16px] leading-[1.65] text-[var(--foreground-muted)]">
                           {result.kokkuvote}
                         </p>
                       </PremiumResultCard>

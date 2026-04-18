@@ -43,7 +43,7 @@ export function HeroSection() {
       )}
 
       <div
-        className="pointer-events-none absolute inset-0 -z-[1] bg-gradient-to-r from-[var(--bg-deep)] via-[color-mix(in_srgb,var(--bg-deep)_58%,transparent)] to-[color-mix(in_srgb,var(--bg-deep)_22%,transparent)] sm:from-[var(--bg-deep)] sm:via-[color-mix(in_srgb,var(--bg-deep)_46%,transparent)] sm:to-[color-mix(in_srgb,var(--bg-deep)_8%,transparent)] lg:via-[color-mix(in_srgb,var(--bg-deep)_34%,transparent)] lg:to-[color-mix(in_srgb,var(--bg-deep)_5%,transparent)] xl:to-[color-mix(in_srgb,var(--bg-deep)_3%,transparent)]"
+        className="pointer-events-none absolute inset-0 -z-[1] bg-gradient-to-r from-[var(--bg-deep)] via-[color-mix(in_srgb,var(--bg-deep)_52%,transparent)] to-[color-mix(in_srgb,var(--bg-deep)_14%,transparent)] sm:from-[var(--bg-deep)] sm:via-[color-mix(in_srgb,var(--bg-deep)_40%,transparent)] sm:to-[color-mix(in_srgb,var(--bg-deep)_4%,transparent)] lg:via-[color-mix(in_srgb,var(--bg-deep)_28%,transparent)] lg:to-[color-mix(in_srgb,var(--bg-deep)_2%,transparent)] xl:to-transparent"
         aria-hidden
       />
       <div
@@ -94,35 +94,6 @@ export function HeroSection() {
               >
                 {hero.subheadline}
               </motion.p>
-
-              <motion.p
-                className="mt-4 text-pretty text-[14px] leading-[1.5] text-[var(--foreground-muted)] sm:text-[15px]"
-                initial={reduce ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: DURATION.hero,
-                  ease: EASE_PREMIUM,
-                  delay: 0.11,
-                }}
-              >
-                {hero.clarification}
-              </motion.p>
-
-              <motion.div
-                className="mt-6 rounded-xl border border-[rgb(var(--accent)/0.28)] bg-[linear-gradient(135deg,rgb(var(--accent)/0.12)_0%,color-mix(in_srgb,var(--surface)_55%,transparent)_100%)] px-4 py-3 shadow-[0_0_40px_-20px_rgb(var(--accent)/0.35)] sm:px-5 sm:py-3.5"
-                initial={reduce ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: DURATION.hero,
-                  ease: EASE_PREMIUM,
-                  delay: 0.115,
-                }}
-                role="note"
-              >
-                <p className="text-[13px] font-medium leading-snug text-[var(--fg)] sm:text-[14px]">
-                  {hero.demoCallout}
-                </p>
-              </motion.div>
 
               <motion.div
                 className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"

@@ -10,14 +10,14 @@
 
   /* Pinnad: astmeid näha — violet-sinine kallak, mitte üks sõõm */
   --surface: #0e1524;
-  --surface-raised: #131d2f;
+  --surface-raised: #141f34;
   --surface-muted: #1a2538;
   --surface-highlight: #1f2d44;
 
   --fg: #f0f5fc;
   --fg-hover: #ffffff;
-  --foreground-muted: #b4c5db;
-  --foreground-subtle: #8a9eb8;
+  --foreground-muted: #bccfe6;
+  --foreground-subtle: #92a6bf;
 
   /* Servad: peen indigo/violet läige + loetav eraldus */
   --border: rgb(99 102 241 / 0.14);
