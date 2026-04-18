@@ -9,6 +9,26 @@ import {
 } from "@react-three/drei";
 import * as THREE from "three";
 
+/**
+ * Värvid peavad käima kokku `app/globals.css` `:root`-iga (violett + tsüaan, sügav slate).
+ * Uuenda mõlemat koos, kui brändi toone muudad.
+ */
+const BRAND = {
+  bgDeep: "#05060a",
+  slate: "#0f172a",
+  surfaceIndigo: "#1e1b4b",
+  violet: "#8b5cf6",
+  violetDeep: "#6d28d9",
+  violetBright: "#a78bfa",
+  violetGlow: "#c4b5fd",
+  violetMist: "#ddd6fe",
+  cyan: "#22d3ee",
+  cyanBright: "#67e8f9",
+  cyanMist: "#a5f3fc",
+  indigo: "#6366f1",
+  indigoGlow: "#a5b4fc",
+} as const;
+
 /** Deterministic noise — stable across renders. */
 function frac01(n: number) {
   return n - Math.floor(n);
@@ -292,9 +312,9 @@ function DriftingLights() {
 
   return (
     <>
-      <pointLight ref={a} color="#ddd6fe" distance={18} decay={2} />
-      <pointLight ref={b} color="#67e8f9" distance={16} decay={2} />
-      <pointLight ref={c} color="#a78bfa" distance={12} decay={2} />
+      <pointLight ref={a} color={BRAND.violetMist} distance={18} decay={2} />
+      <pointLight ref={b} color={BRAND.cyanBright} distance={16} decay={2} />
+      <pointLight ref={c} color={BRAND.violetBright} distance={12} decay={2} />
     </>
   );
 }
@@ -332,25 +352,30 @@ function SceneContent({ quality }: { quality: Quality }) {
     <>
       <CinematicCamera quality={quality} />
 
-      <fogExp2 attach="fog" args={["#0a0c14", isLow ? 0.038 : 0.032]} />
+      <fogExp2 attach="fog" args={[BRAND.bgDeep, isLow ? 0.04 : 0.034]} />
 
       <ambientLight intensity={isLow ? 0.22 : 0.3} />
       <directionalLight
         position={[5, 7, 8]}
         intensity={isLow ? 0.42 : 0.58}
-        color="#e9d5ff"
+        color={BRAND.violetGlow}
       />
       <directionalLight
         position={[-6, -3, -5]}
         intensity={0.34}
-        color="#5eead4"
+        color={BRAND.cyan}
       />
       <DriftingLights />
 
       {!isLow ? (
-        <DepthVeil z={-3.6} color="#1e1b4b" opacity={0.1} scale={1.05} />
+        <DepthVeil
+          z={-3.6}
+          color={BRAND.surfaceIndigo}
+          opacity={0.1}
+          scale={1.05}
+        />
       ) : null}
-      <DepthVeil z={-4.8} color="#0f172a" opacity={0.065} />
+      <DepthVeil z={-4.8} color={BRAND.slate} opacity={0.065} />
 
       <group ref={groupRef}>
         <Float
@@ -365,8 +390,8 @@ function SceneContent({ quality }: { quality: Quality }) {
               height={1.55}
               wSeg={ribbonSegs.w}
               hSeg={ribbonSegs.h}
-              color="#6d28d9"
-              emissive="#c4b5fd"
+              color={BRAND.violetDeep}
+              emissive={BRAND.violetGlow}
               opacity={isLow ? 0.58 : 0.64}
               position={[0.25, 0.62, 0.2]}
               rotation={[0.4, 0.14, -0.22]}
@@ -380,8 +405,8 @@ function SceneContent({ quality }: { quality: Quality }) {
               height={1.35}
               wSeg={ribbonSegs.w}
               hSeg={ribbonSegs.h}
-              color="#0e7490"
-              emissive="#22d3ee"
+              color="#155e75"
+              emissive={BRAND.cyan}
               opacity={isLow ? 0.48 : 0.55}
               position={[-0.28, -0.42, -0.15]}
               rotation={[-0.35, -0.2, 0.42]}
@@ -396,8 +421,8 @@ function SceneContent({ quality }: { quality: Quality }) {
                 height={1.1}
                 wSeg={ribbonSegs.w}
                 hSeg={ribbonSegs.h}
-                color="#8b5cf6"
-                emissive="#ddd6fe"
+                color={BRAND.violet}
+                emissive={BRAND.violetMist}
                 opacity={0.42}
                 position={[0.02, 0.05, -0.55]}
                 rotation={[0.18, 0.5, 0.18]}
@@ -413,8 +438,8 @@ function SceneContent({ quality }: { quality: Quality }) {
                 height={0.92}
                 wSeg={Math.max(28, ribbonSegs.w - 6)}
                 hSeg={ribbonSegs.h}
-                color="#6366f1"
-                emissive="#a5b4fc"
+                color={BRAND.indigo}
+                emissive={BRAND.indigoGlow}
                 opacity={0.36}
                 position={[-0.08, 0.78, -0.38]}
                 rotation={[0.55, -0.22, 0.12]}
@@ -430,7 +455,7 @@ function SceneContent({ quality }: { quality: Quality }) {
         <FlowParticleField
           count={particlePrimary}
           spread={8.8}
-          color="#ddd6fe"
+          color={BRAND.violetMist}
           size={particleSize}
           opacity={isLow ? 0.45 : 0.58}
           zSpread={3.6}
@@ -439,7 +464,7 @@ function SceneContent({ quality }: { quality: Quality }) {
         <FlowParticleField
           count={particleSecondary}
           spread={6.8}
-          color="#a5f3fc"
+          color={BRAND.cyanMist}
           size={particleSize * 1.4}
           opacity={isLow ? 0.28 : 0.38}
           zSpread={2.4}
@@ -453,7 +478,7 @@ function SceneContent({ quality }: { quality: Quality }) {
             size={2.4}
             speed={0.25}
             opacity={isMedium ? 0.45 : 0.55}
-            color="#c4b5fd"
+            color={BRAND.violetGlow}
           />
         ) : null}
         {!isLow ? (
@@ -463,7 +488,7 @@ function SceneContent({ quality }: { quality: Quality }) {
             size={1.8}
             speed={0.2}
             opacity={0.35}
-            color="#67e8f9"
+            color={BRAND.cyanBright}
           />
         ) : null}
       </group>
