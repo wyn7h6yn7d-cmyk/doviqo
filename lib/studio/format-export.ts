@@ -25,10 +25,26 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
     })
     .join("\n\n");
 
+  const otsusedBlock =
+    r.otsused.length > 0
+      ? ["", "Otsused", "—", r.otsused.map((x) => `• ${x}`).join("\n")]
+      : [];
+
+  const lahtisedBlock =
+    r.lahtisedKusimused.length > 0
+      ? [
+          "",
+          "Lahtised küsimused",
+          "—",
+          r.lahtisedKusimused.join("\n"),
+        ]
+      : [];
+
   return [
     "Kokkuvõte",
     "—",
     r.kokkuvote || "—",
+    ...otsusedBlock,
     "",
     "Tegevused",
     "—",
@@ -41,6 +57,7 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
     "Tähtajad",
     "—",
     tahtajad || "—",
+    ...lahtisedBlock,
     "",
     "Kirja teema",
     "—",
@@ -49,9 +66,6 @@ export function formatStudioPlainExport(r: StudioTulemus): string {
     "Järelkiri",
     "—",
     r.jarelkiri,
-    ...(r.lahtisedKusimused.length
-      ? ["", "Lahtised küsimused", "—", r.lahtisedKusimused.join("\n")]
-      : []),
   ].join("\n");
 }
 
@@ -60,12 +74,17 @@ export function formatSlackExport(r: StudioTulemus): string {
   const lines = [
     `*Kokkuvõte*\n${r.kokkuvote || "—"}`,
     "",
+  ];
+  if (r.otsused.length) {
+    lines.push("*Otsused*", ...r.otsused.map((o) => `• ${o}`), "");
+  }
+  lines.push(
     "*Tegevused*",
     ...r.tegevused.map(
       (row) =>
         `• ${row.kirjeldus} _(${row.vastutaja} · ${row.tahtaeg})_`,
     ),
-  ];
+  );
   if (r.lahtisedKusimused.length) {
     lines.push("", "*Lahtised küsimused*", ...r.lahtisedKusimused.map((q) => `• ${q}`));
   }
@@ -127,4 +146,8 @@ export function formatTahtajadPlain(r: StudioTulemus): string {
       return `${g.tahtaeg}\n${lines}`;
     })
     .join("\n\n");
+}
+
+export function formatOtsusedPlain(r: StudioTulemus): string {
+  return r.otsused.map((x) => `• ${x}`).join("\n");
 }

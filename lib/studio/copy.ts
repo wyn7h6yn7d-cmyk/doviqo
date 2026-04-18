@@ -84,6 +84,7 @@ export const studioUi = {
     "Algne järelsisu, millest plaan tekkis — võrdle ridahaaval, kui vaja.",
 
   sectionKokkuvote: "Kokkuvõte",
+  sectionOtsused: "Otsused",
   sectionTegevused: "Tegevused",
   sectionVastutajad: "Vastutajad",
   sectionTahtajad: "Tähtajad",
@@ -98,6 +99,8 @@ export const studioUi = {
   copy: "Kopeeri",
   copySection: "Kopeeri see plokk",
   copyKokkuvote: "Kopeeri kokkuvõte",
+  copyOtsused: "Kopeeri otsused",
+  copyLahtised: "Kopeeri lahtised küsimused",
   copyAll: "Kopeeri kõik",
   copyJarelkiri: "Kopeeri järelkiri",
   copySubject: "Kopeeri teema",

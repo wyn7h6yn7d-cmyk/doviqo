@@ -374,24 +374,143 @@ function filtreeriTegevuseRead(merged: string[]): string[] {
   return filtered.length > 0 ? filtered : merged;
 }
 
-/** Lahtised küsimused / kinnitust vajavad punktid — teksti skaneeringust (demo). */
-function extractLahtisedKusimused(mergedLines: string[]): string[] {
-  const out: string[] = [];
+/**
+ * Otsused (kokkulepped, ajajoondused) ja lahtised küsimused — teksti ja tooni põhjal.
+ * Küsimused klassifitseeritakse enne otsuseid, et vältida kattumist.
+ */
+function extractOtsusedJaLahtised(
+  mergedLines: string[],
+  tone: MeetingToneId,
+): { otsused: string[]; lahtisedKusimused: string[] } {
+  const otsused: string[] = [];
+  const lahtised: string[] = [];
+  const seenO = new Set<string>();
+  const seenQ = new Set<string>();
+
+  const norm = (s: string) => s.replace(/\s+/g, " ").trim();
+
+  const pushO = (raw: string) => {
+    const x = norm(raw.replace(/^[\s\-–—•*]+/, ""));
+    if (x.length < 8 || seenO.has(x)) return;
+    seenO.add(x);
+    otsused.push(x);
+  };
+  const pushQ = (raw: string) => {
+    const x = norm(raw.replace(/^[\s\-–—•*]+/, ""));
+    if (x.length < 6 || seenQ.has(x)) return;
+    seenQ.add(x);
+    lahtised.push(x);
+  };
+
   for (const line of mergedLines) {
-    const t = line.trim();
-    if (t.length < 4 || t.length > 320) continue;
-    if (t.includes("?")) {
-      out.push(t.replace(/^[\s\-–—•*]+/, ""));
+    if (onTyhiVoiPais(line)) continue;
+    const t = normalizeLine(line);
+    if (t.length < 6 || t.length > 360) continue;
+
+    if (isAssignedActionLine(line)) {
       continue;
     }
-    if (
-      /\b(vaja kinnitada|kas integratsioon|kas .* jääb)\b/i.test(t) ||
-      /\b(kas |miks |kuidas |millal )\b/i.test(t)
-    ) {
-      out.push(t.replace(/^[\s\-–—•*]+/, ""));
+
+    const low = t.toLowerCase();
+
+    if (isOpenQuestionLine(t, low)) {
+      pushQ(t);
+      continue;
+    }
+
+    if (isDecisionLine(t, low, tone)) {
+      pushO(t);
     }
   }
-  return [...new Set(out)].slice(0, 8);
+
+  return {
+    otsused: otsused.slice(0, 10),
+    lahtisedKusimused: lahtised.slice(0, 10),
+  };
+}
+
+/** Rida, millest tuleb ülesanne (nimi + tegevusverb) — selliseid ei loeta otsuseks. */
+function isAssignedActionLine(line: string): boolean {
+  const t = line.trim();
+  const n = leiaEesnimi(t);
+  if (
+    n &&
+    /\b(teeb|saadab|vaatab|lõpetab|kontrollib|koostab|kirjutab|uurib|valmistab|annab|korraldab|kannab)\b/i.test(
+      t,
+    )
+  ) {
+    return true;
+  }
+  return /^[-–—•*]?\s*[A-ZÕÄÖÜ][a-zõäöü'-]{2,}\s+[—–\-:].+\b(teeb|saadab|vaatab|lõpetab|kontrollib|koostab)\b/i.test(
+    t,
+  );
+}
+
+function isOpenQuestionLine(t: string, low: string): boolean {
+  if (t.includes("?")) return true;
+  if (
+    /\b(vaja kinnitada|vaja täpsust|vaja kontrollida|vaja otsustada|täpsustada|pole veel kindel|pole kindel|selgub alles|selgitada)\b/i.test(
+      low,
+    )
+  ) {
+    return true;
+  }
+  if (/^(kas |miks |kuidas |millal |millises )\b/i.test(low)) return true;
+  if (/\b(kas integratsioon|kas jääb|kas onboarding)\b/i.test(low)) return true;
+  return false;
+}
+
+function isDecisionLine(t: string, low: string, tone: MeetingToneId): boolean {
+  if (
+    /\b(otsustati|kokku lepitud|kinnitatud|kinnitus|fikseeritud|üksmeelne|kokkulepe|kokkulepp)\b/i.test(
+      low,
+    )
+  ) {
+    return true;
+  }
+  if (/^otsus\s*[—–\-:]/i.test(t.trim())) return true;
+  if (/\b(vastu võetud|vastuvõetud)\b/i.test(low)) return true;
+  if (/\b(jääb|jäävad)\b.*\b(faasi|scope|bundle|versiooni)\b/i.test(low)) {
+    return true;
+  }
+  if (/\b(lükkub|lükatakse)\b.*\b(nädal|kuu|sprint|nädalasse|nädalas)\b/i.test(low)) {
+    return true;
+  }
+  if (/\b(prioriteet on|fookus on|strategiline suund)\b/i.test(low)) return true;
+  if (/\b(otsus\s+võiks|otsus\s+tuleb|otsustatakse hiljemalt)\b/i.test(low)) {
+    return true;
+  }
+  if (
+    /\b(järgmises\s+(?:sprindis|nädalas|voorus))\b/i.test(low) &&
+    /\b(võtame|teeme|põhifookus)\b/i.test(low)
+  ) {
+    return true;
+  }
+
+  if (
+    tone === "project-status" &&
+    /\b(launch|käivit|release)\b/i.test(low) &&
+    /\b(kuupäev|nihk|paika|ajakava)\b/i.test(low) &&
+    !t.includes("?")
+  ) {
+    return true;
+  }
+  if (
+    tone === "sales-call" &&
+    /\b(materjal|hind|etapp|protsess)\b/i.test(low) &&
+    /\b(kinnit|kokkulepe|järgmine kontakt)\b/i.test(low)
+  ) {
+    return true;
+  }
+  if (
+    tone === "client-meeting" &&
+    /\b(ulatus|maht|faasis|järgmine etapp)\b/i.test(low) &&
+    !/\?/.test(t)
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 export type ProcessMeetingNotesOptions = {
@@ -412,6 +531,7 @@ export function processMeetingNotes(
       kokkuvote: "",
       jarelkiri: "",
       emailTeema: "",
+      otsused: [],
       lahtisedKusimused: [],
       summary: {
         rawLineCount: 0,
@@ -430,7 +550,7 @@ export function processMeetingNotes(
 
   const split = trimmed.split(/\r?\n/);
   const merged = liidaRead(split);
-  const lahtisedKusimused = extractLahtisedKusimused(merged);
+  const { otsused, lahtisedKusimused } = extractOtsusedJaLahtised(merged, tone);
   const linesToUse = filtreeriTegevuseRead(merged);
 
   const tegevused: TegevusRida[] = [];
@@ -470,6 +590,7 @@ export function processMeetingNotes(
     kokkuvote,
     jarelkiri,
     emailTeema,
+    otsused,
     lahtisedKusimused,
     summary,
   };

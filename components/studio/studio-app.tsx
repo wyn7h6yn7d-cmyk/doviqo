@@ -19,6 +19,7 @@ import {
   formatTahtajadPlain,
   formatTeamBriefExport,
   formatTegevusedPlain,
+  formatOtsusedPlain,
   formatVastutajadPlain,
 } from "@/lib/studio/format-export";
 import { presetIdToMeetingTone } from "@/lib/studio/preset-tone";
@@ -102,6 +103,15 @@ function IconHelp() {
     <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
       <path d="M9.09 9a3 3 0 115.83 1c0 2-3 2-3 4M12 17h.01" strokeLinecap="round" />
       <circle cx="12" cy="12" r="10" />
+    </svg>
+  );
+}
+function IconDecision() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+      <path d="M12 3v3M12 18v3M3 12h3M18 12h3" strokeLinecap="round" />
+      <circle cx="12" cy="12" r="4" />
+      <path d="M19 5l-2 2M5 19l2-2M19 19l-2-2M5 5l2 2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -333,6 +343,11 @@ function EmptyExecutionCanvas() {
             <SkeletonLine className="w-[62%]" />
           </OutputSkeletonBlock>
 
+          <OutputSkeletonBlock label={t.sectionOtsused} icon={<IconDecision />}>
+            <SkeletonLine className="w-[86%]" />
+            <SkeletonLine className="w-[72%]" />
+          </OutputSkeletonBlock>
+
           <OutputSkeletonBlock label={t.sectionTegevused} icon={<IconTasks />}>
             <div className="space-y-2">
               {(["w-[93%]", "w-[76%]", "w-[84%]", "w-[58%]"] as const).map((w, i) => (
@@ -360,6 +375,11 @@ function EmptyExecutionCanvas() {
               <SkeletonLine className="w-[72%]" />
             </OutputSkeletonBlock>
           </div>
+
+          <OutputSkeletonBlock label={t.sectionLahtised} icon={<IconHelp />}>
+            <SkeletonLine className="w-[80%]" />
+            <SkeletonLine className="w-[70%]" />
+          </OutputSkeletonBlock>
 
           <OutputSkeletonBlock label={t.sectionJarelkiri} icon={<IconMail />}>
             <SkeletonLine className="w-[40%]" />
@@ -446,6 +466,7 @@ function QuickCopyActions({ result }: { result: StudioTulemus }) {
   const slack = useMemo(() => formatSlackExport(result), [result]);
   const emailBody = useMemo(() => formatEmailBodyExport(result), [result]);
   const team = useMemo(() => formatTeamBriefExport(result), [result]);
+  const otsusedPlain = useMemo(() => formatOtsusedPlain(result), [result]);
 
   return (
     <div
@@ -463,6 +484,14 @@ function QuickCopyActions({ result }: { result: StudioTulemus }) {
           size="md"
           className="rounded-lg border border-[rgb(var(--accent)/0.25)] bg-[rgb(var(--accent)/0.08)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.14)]"
         />
+        {result.otsused.length > 0 ? (
+          <StudioCopyButton
+            text={otsusedPlain}
+            label={t.copyOtsused}
+            size="md"
+            className="rounded-lg border border-[rgb(var(--accent)/0.25)] bg-[rgb(var(--accent)/0.08)] px-3 py-2 text-[var(--fg)] hover:bg-[rgb(var(--accent)/0.14)]"
+          />
+        ) : null}
         <StudioCopyButton
           text={result.jarelkiri}
           label={t.copyJarelkiri}
@@ -811,6 +840,32 @@ export function StudioApp() {
                       </PremiumResultCard>
                     </motion.div>
 
+                    {result.otsused.length > 0 ? (
+                      <motion.div className="mt-6" variants={itemVariants}>
+                        <PremiumResultCard
+                          title={t.sectionOtsused}
+                          icon={<IconDecision />}
+                          copyText={formatOtsusedPlain(result)}
+                          copyLabel={t.copyOtsused}
+                        >
+                          <ul className="space-y-3">
+                            {result.otsused.map((o) => (
+                              <li
+                                key={o}
+                                className="flex gap-3 text-[15px] leading-relaxed text-[var(--foreground-muted)]"
+                              >
+                                <span
+                                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[rgb(var(--accent-cyan))]"
+                                  aria-hidden
+                                />
+                                <span className="min-w-0 text-[var(--fg)]">{o}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </PremiumResultCard>
+                      </motion.div>
+                    ) : null}
+
                     <motion.div className="mt-6" variants={itemVariants}>
                       <PremiumResultCard
                         title={t.sectionTegevused}
@@ -918,6 +973,7 @@ export function StudioApp() {
                           title={t.sectionLahtised}
                           icon={<IconHelp />}
                           copyText={result.lahtisedKusimused.join("\n")}
+                          copyLabel={t.copyLahtised}
                         >
                           <ul className="list-disc space-y-2 pl-5 text-[14px] leading-relaxed text-[var(--foreground-muted)]">
                             {result.lahtisedKusimused.map((q) => (

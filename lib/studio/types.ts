@@ -39,6 +39,8 @@ export type StudioTulemus = {
   jarelkiri: string;
   /** Soovitatud e-kirja teema (eraldi kopeeritav). */
   emailTeema: string;
+  /** Koosolekust eraldatud otsused / kokkulepped (mitte ülesanne kellelegi). */
+  otsused: string[];
   /** Tekstist tuvastatud lahtised küsimused (kui ühtegi pole — tühi). */
   lahtisedKusimused: string[];
   summary: TransformSummary;
